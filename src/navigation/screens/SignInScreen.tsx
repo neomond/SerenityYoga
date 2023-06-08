@@ -19,6 +19,7 @@ import {signInSchema, signInInitialValues} from '../../schema/authSchema';
 const SignInScreen = ({navigation}: any) => {
   const dispatch = useDispatch<AppDispatch>();
   const token = useSelector((state: RootState) => state.authSlice.token);
+
   const handleSignIn = (values: any) => {
     const {email, password} = values;
     const user: Auth = {

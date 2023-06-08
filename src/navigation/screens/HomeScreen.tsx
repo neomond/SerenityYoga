@@ -6,60 +6,74 @@ import {
   Text,
   View,
 } from 'react-native';
-import React from 'react';
+import React, {useEffect} from 'react';
 import LinearGradient from 'react-native-linear-gradient';
+import {useDispatch, useSelector} from 'react-redux';
+import {fetchCategories} from '../../redux/slices/CategoriesSlice';
+import {AppDispatch, RootState} from '../../redux';
 
-const DATA = [
-  {
-    category: 'Try this',
-    data: [
-      {
-        key: '1',
-        title: 'Item 1',
-        duration: '25:00',
-        image: require('../../assets/imgsample.png'),
-      },
-      {
-        key: '2',
-        title: 'Item 2',
-        duration: '25:00',
-        image: require('../../assets/imgsample.png'),
-      },
-      {
-        key: '3',
-        title: 'Item 3',
-        duration: '25:00',
-        image: require('../../assets/imgsample.png'),
-      },
-    ],
-  },
-  {
-    category: 'Meditate',
-    data: [
-      {
-        key: '4',
-        title: 'Item 4',
-        duration: '25:00',
-        image: require('../../assets/imgsample.png'),
-      },
-      {
-        key: '5',
-        title: 'Item 5',
-        duration: '25:00',
-        image: require('../../assets/imgsample.png'),
-      },
-      {
-        key: '6',
-        title: 'Item 6',
-        duration: '25:00',
-        image: require('../../assets/imgsample.png'),
-      },
-    ],
-  },
-];
+// const DATA = [
+//   {
+//     category: 'Try this',
+//     data: [
+//       {
+//         key: '1',
+//         title: 'Item 1',
+//         duration: '25:00',
+//         image: require('../../assets/imgsample.png'),
+//       },
+//       {
+//         key: '2',
+//         title: 'Item 2',
+//         duration: '25:00',
+//         image: require('../../assets/imgsample.png'),
+//       },
+//       {
+//         key: '3',
+//         title: 'Item 3',
+//         duration: '25:00',
+//         image: require('../../assets/imgsample.png'),
+//       },
+//     ],
+//   },
+//   {
+//     category: 'Meditate',
+//     data: [
+//       {
+//         key: '4',
+//         title: 'Item 4',
+//         duration: '25:00',
+//         image: require('../../assets/imgsample.png'),
+//       },
+//       {
+//         key: '5',
+//         title: 'Item 5',
+//         duration: '25:00',
+//         image: require('../../assets/imgsample.png'),
+//       },
+//       {
+//         key: '6',
+//         title: 'Item 6',
+//         duration: '25:00',
+//         image: require('../../assets/imgsample.png'),
+//       },
+//     ],
+//   },
+// ];
 
 const HomeScreen = () => {
-  const renderItem = ({item}: any) => (
+  const dispatch = useDispatch<AppDispatch>();
+  const {categories} = useSelector((state: RootState) => state.categoriesSlice);
+  const isLoading = useSelector(
+    (state: RootState) => state.categoriesSlice.loading,
+  );
+
+  useEffect(() => {
+    dispatch(fetchCategories());
+  }, [dispatch]);
+  console.log(categories);
+
+  const renderItem = ({item}: {item: any}) => (
     <View style={styles.renderItemCont}>
       <View style={styles.renderItemContSecond}>
         <Text style={styles.categoryHeader}>{item.category}</Text>
@@ -78,6 +92,15 @@ const HomeScreen = () => {
       </ScrollView>
     </View>
   );
+
+  if (isLoading) {
+    // Render a loading indicator while the API call is in progress
+    return (
+      <View>
+        <Text>Loading...</Text>
+      </View>
+    );
+  }
 
   return (
     <LinearGradient
@@ -101,12 +124,16 @@ const HomeScreen = () => {
         <Text style={styles.categoryText}>😄 Happiness</Text>
       </ScrollView>
       <View style={styles.primaryContent}>
-        <FlatList
-          data={DATA}
-          renderItem={renderItem}
-          keyExtractor={item => item.category}
-          //   stickyHeaderIndices={[0]}
-        />
+        {categories.length > 0 ? (
+          <FlatList
+            data={categories}
+            renderItem={renderItem}
+            keyExtractor={item => item.category}
+            //   stickyHeaderIndices={[0]}
+          />
+        ) : (
+          <Text>No categories found.</Text>
+        )}
       </View>
     </LinearGradient>
   );
