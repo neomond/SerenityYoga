@@ -1,10 +1,4 @@
-import {
-  StyleSheet,
-  TouchableOpacity,
-  View,
-  Text,
-  TextInput,
-} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import React, {useState} from 'react';
 import LinearGradient from 'react-native-linear-gradient';
 import {OnboardingStepOne} from '../../components/onboarding/OnboardingStepOne';
@@ -20,6 +14,7 @@ const Onboarding = () => {
     age: '',
     weight: '',
   });
+
   const handleNextStep = () => {
     setStep(step + 1);
   };

@@ -12,7 +12,7 @@ export const OnboardingStepOne = ({
   handleNextStep,
 }: any) => {
   return (
-    <View>
+    <View style={styles.onboardingStep1Container}>
       <Text style={styles.secondaryContent}>Hey, What's your name?</Text>
       <View style={styles.thirdContent}>
         <TextInput
@@ -32,6 +32,9 @@ export const OnboardingStepOne = ({
 };
 
 const styles = StyleSheet.create({
+  onboardingStep1Container: {
+    paddingBottom: 50,
+  },
   secondaryContent: {
     textAlign: 'center',
     fontSize: 18,
@@ -52,13 +55,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     columnGap: 15,
-    // marginTop: '100%',
+    marginTop: '100%',
   },
   nextBtn: {
     borderRadius: 30,
     borderWidth: 1,
-    paddingVertical: 12,
-    width: 150,
+    paddingVertical: 15,
+    width: 250,
     backgroundColor: '#815CFF',
     borderColor: '#815CFF',
     alignItems: 'center',

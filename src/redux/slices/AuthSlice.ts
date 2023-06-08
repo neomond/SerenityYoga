@@ -55,7 +55,7 @@ export const signupUser = createAsyncThunk(
         email,
         password,
       });
-      return response.data.token;
+      return response.data;
     } catch (error: any) {
       if (error.response) {
         return rejectWithValue(error.response.data.error);
