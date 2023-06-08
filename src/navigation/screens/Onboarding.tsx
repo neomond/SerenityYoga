@@ -7,6 +7,9 @@ import {
 } from 'react-native';
 import React, {useState} from 'react';
 import LinearGradient from 'react-native-linear-gradient';
+import {OnboardingStepOne} from '../../components/onboarding/OnboardingStepOne';
+import {OnboardingStepTwo} from '../../components/onboarding/OnboardingStepTwo';
+import {OnboardingStepThree} from '../../components/onboarding/OnboardingStepThree';
 
 const Onboarding = () => {
   const [step, setStep] = useState(1);
@@ -31,97 +34,6 @@ const Onboarding = () => {
     }));
   };
 
-  const OnboardingStepOne = () => {
-    return (
-      <View>
-        <Text style={styles.secondaryContent}>Hey, What's your name?</Text>
-        <View style={styles.thirdContent}>
-          <TextInput
-            placeholder="Name"
-            style={styles.step1field}
-            value={userData.name}
-            onChangeText={value => handleInputChange('name', value)}
-          />
-          <View style={styles.step1btns}>
-            <TouchableOpacity style={styles.nextBtn} onPress={handleNextStep}>
-              <Text style={styles.textColor}>Continue</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </View>
-    );
-  };
-
-  const OnboardingStepTwo = () => {
-    return (
-      <View>
-        <Text style={styles.secondaryContent}>Hey, What's your name?</Text>
-        <View style={styles.thirdContent}>
-          <TextInput
-            placeholder="Name"
-            style={styles.step1field}
-            value={userData.name}
-            onChangeText={value => handleInputChange('name', value)}
-          />
-          <TextInput
-            placeholder="Name"
-            style={styles.step1field}
-            value={userData.name}
-            onChangeText={value => handleInputChange('name', value)}
-          />
-          <View style={styles.step1btns}>
-            <TouchableOpacity
-              style={styles.backBtn}
-              onPress={handlePreviousStep}>
-              <Text>Back</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.nextBtn} onPress={handleNextStep}>
-              <Text style={styles.textColor}>Continue</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </View>
-    );
-  };
-
-  const OnboardingStepThree = () => {
-    return (
-      <View>
-        <Text style={styles.secondaryContent}>Hey, What's your name?</Text>
-        <View style={styles.thirdContent}>
-          <TextInput
-            placeholder="Name"
-            style={styles.step1field}
-            value={userData.name}
-            onChangeText={value => handleInputChange('name', value)}
-          />
-          <TextInput
-            placeholder="Name"
-            style={styles.step1field}
-            value={userData.name}
-            onChangeText={value => handleInputChange('name', value)}
-          />
-          <TextInput
-            placeholder="Name"
-            style={styles.step1field}
-            value={userData.name}
-            onChangeText={value => handleInputChange('name', value)}
-          />
-          <View style={styles.step1btns}>
-            <TouchableOpacity
-              style={styles.backBtn}
-              onPress={handlePreviousStep}>
-              <Text>Back</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.nextBtn} onPress={handleNextStep}>
-              <Text style={styles.textColor}>Continue</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </View>
-    );
-  };
-
   const renderStepFour = () => {
     // gather data
   };
@@ -129,11 +41,31 @@ const Onboarding = () => {
   const renderStep = () => {
     switch (step) {
       case 1:
-        return OnboardingStepOne();
+        return (
+          <OnboardingStepOne
+            userData={userData}
+            handleInputChange={handleInputChange}
+            handleNextStep={handleNextStep}
+          />
+        );
       case 2:
-        return OnboardingStepTwo();
+        return (
+          <OnboardingStepTwo
+            userData={userData}
+            handleInputChange={handleInputChange}
+            handlePreviousStep={handlePreviousStep}
+            handleNextStep={handleNextStep}
+          />
+        );
       case 3:
-        return OnboardingStepThree();
+        return (
+          <OnboardingStepThree
+            userData={userData}
+            handleInputChange={handleInputChange}
+            handlePreviousStep={handlePreviousStep}
+            handleNextStep={handleNextStep}
+          />
+        );
       case 4:
         return renderStepFour();
       default:
