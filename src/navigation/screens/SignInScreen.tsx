@@ -10,28 +10,15 @@ import LinearGradient from 'react-native-linear-gradient';
 import SvgFacebook from '../../assets/Facebook';
 import SvgGoogle from '../../assets/Google';
 import {Auth} from '../../models/Auth';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {loginUser} from '../../redux/slices/AuthSlice';
-import {AppDispatch} from '../../redux';
-import {Formik, useFormik} from 'formik';
+import {AppDispatch, RootState} from '../../redux';
+import {Formik} from 'formik';
 import {signInSchema, signInInitialValues} from '../../schema/authSchema';
 
 const SignInScreen = ({navigation}: any) => {
   const dispatch = useDispatch<AppDispatch>();
-
-  //   const formik = useFormik({
-  //     initialValues: signInInitialValues,
-  //     validationSchema: signInSchema,
-  //     onSubmit: values => {
-  //       const user: Auth = {
-  //         email: values.email,
-  //         password: values.password,
-  //         confirmPassword: undefined,
-  //       };
-  //       dispatch(loginUser(user));
-  //       navigation.navigate('Onboarding');
-  //     },
-  //   });
+  const token = useSelector((state: RootState) => state.authSlice.token);
   const handleSignIn = (values: any) => {
     const {email, password} = values;
     const user: Auth = {
@@ -43,6 +30,7 @@ const SignInScreen = ({navigation}: any) => {
 
     dispatch(loginUser(user));
     navigation.navigate('Home');
+    console.log('tooookeeen', token);
   };
 
   return (
@@ -91,6 +79,7 @@ const SignInScreen = ({navigation}: any) => {
               <Text style={styles.forgotPasswordBtn}>Forgot Password?</Text>
             </TouchableOpacity>
             <TouchableOpacity
+              onPress={formik.handleSubmit}
               style={[styles.signInBtn, {backgroundColor: '#8866ff'}]}>
               <Text style={styles.labelText}>Sign In</Text>
             </TouchableOpacity>
@@ -216,3 +205,17 @@ const styles = StyleSheet.create({
     marginLeft: 15,
   },
 });
+
+//   const formik = useFormik({
+//     initialValues: signInInitialValues,
+//     validationSchema: signInSchema,
+//     onSubmit: values => {
+//       const user: Auth = {
+//         email: values.email,
+//         password: values.password,
+//         confirmPassword: undefined,
+//       };
+//       dispatch(loginUser(user));
+//       navigation.navigate('Onboarding');
+//     },
+//   });

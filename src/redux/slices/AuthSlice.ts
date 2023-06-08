@@ -1,7 +1,8 @@
-import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
+import {createSlice, createAsyncThunk, PayloadAction} from '@reduxjs/toolkit';
 import axios from 'axios';
 import {RootState} from '..';
 import {Auth} from '../../models/Auth';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 interface InitialStateType {
   loading: 'rejected' | 'fulfilled' | 'pending' | null;
@@ -18,22 +19,6 @@ const initialState: InitialStateType = {
   user: null,
   token: null,
 };
-
-// axios.interceptors.request.use(config => {
-//   const token = ''; // from storage ?????
-//   if (token) {
-//     config.headers.Authorization = `Bearer ${token}`;
-//   }
-//   return config;
-// });
-
-// const token = useSelector(state => state.auth.token);
-
-// useEffect(() => {
-//   if (!token) {
-//     navigation.navigate('Login');
-//   }
-// }, [token]);
 
 export const loginUser = createAsyncThunk(
   'auth/login',
@@ -90,37 +75,46 @@ const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {},
-  extraReducers: builder => {
+  extraReducers: (builder: any) => {
     //-------FOR LOGIN---------
     builder
-      .addCase(loginUser.pending, state => {
+      .addCase(loginUser.pending, (state: InitialStateType) => {
         state.loading = 'pending';
         state.error = null;
       })
-      .addCase(loginUser.fulfilled, (state, action) => {
-        state.loading = 'fulfilled';
-        state.error = null;
-        state.token = action.payload;
-      })
-      .addCase(loginUser.rejected, (state, action) => {
+      .addCase(
+        loginUser.fulfilled,
+        async (state: InitialStateType, action: any) => {
+          state.loading = 'fulfilled';
+          state.error = null;
+          state.token = action.payload;
+          // kind of added token here ???
+          try {
+            await AsyncStorage.setItem('token', action.payload);
+          } catch (error) {
+            console.log('Error storing token in AsyncStorage:', error);
+          }
+        },
+      )
+      .addCase(loginUser.rejected, (state: InitialStateType, action: any) => {
         state.loading = 'rejected';
         state.error = action.error.message;
         state.token = null;
       });
     //-------FOR SIGN UP---------
     builder
-      .addCase(signupUser.pending, state => {
+      .addCase(signupUser.pending, (state: any) => {
         state.loading = 'pending';
         state.error = null;
       })
-      .addCase(signupUser.fulfilled, (state, action) => {
+      .addCase(signupUser.fulfilled, (state: InitialStateType, action: any) => {
         state.loading = 'fulfilled';
         state.error = null;
         console.log('full');
 
         state.token = action.payload;
       })
-      .addCase(signupUser.rejected, (state, action) => {
+      .addCase(signupUser.rejected, (state: InitialStateType, action: any) => {
         state.loading = 'rejected';
         state.error = action.error;
         console.log('errrrr', action.payload);
@@ -134,3 +128,19 @@ const authSlice = createSlice({
 export const getAuth = (state: RootState) => state.authSlice.user;
 
 export default authSlice.reducer;
+
+// axios.interceptors.request.use(config => {
+//   const token = ''; // from storage ?????
+//   if (token) {
+//     config.headers.Authorization = `Bearer ${token}`;
+//   }
+//   return config;
+// });
+
+// const token = useSelector(state => state.auth.token);
+
+// useEffect(() => {
+//   if (!token) {
+//     navigation.navigate('Login');
+//   }
+// }, [token]);
