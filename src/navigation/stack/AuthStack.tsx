@@ -16,7 +16,7 @@ const Stack = createNativeStackNavigator<AuthenticationStackParamList>();
 const AuthStack: React.FC = () => {
   return (
     <Stack.Navigator initialRouteName="Login">
-      <Stack.Screen
+      {/* <Stack.Screen
         name="Login"
         component={SignInScreen}
         options={{headerShown: false}}
@@ -30,7 +30,7 @@ const AuthStack: React.FC = () => {
         name="Onboarding"
         component={Onboarding}
         options={{headerShown: false}}
-      />
+      /> */}
       <Stack.Screen
         name="Home"
         component={HomeScreen}
