@@ -5,12 +5,11 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useState} from 'react';
 import LinearGradient from 'react-native-linear-gradient';
 import SvgFacebook from '../../assets/Facebook';
 import SvgGoogle from '../../assets/Google';
-import {AppDispatch} from '../../redux';
-import {useDispatch} from 'react-redux';
+import {AppDispatch, RootState} from '../../redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {Formik} from 'formik';
 import {Auth} from '../../models/Auth';
 import {signupUser} from '../../redux/slices/AuthSlice';
@@ -18,6 +17,8 @@ import {signUpInitialValues, signUpSchema} from '../../schema/authSchema';
 
 const SignUpScreen = ({navigation}: any) => {
   const dispatch = useDispatch<AppDispatch>();
+  const error = useSelector((state: RootState) => state.authSlice.error);
+  console.log('scfe', error);
 
   const handleSignUp = (values: any) => {
     const {email, password, confirmPassword} = values;
@@ -26,7 +27,10 @@ const SignUpScreen = ({navigation}: any) => {
       password,
       confirmPassword,
     };
+    console.log('geldim ', user);
+
     dispatch(signupUser(user));
+    navigation.navigate('Home');
   };
 
   return (
@@ -57,6 +61,7 @@ const SignUpScreen = ({navigation}: any) => {
               {formik.touched.email && formik.errors.email && (
                 <Text style={styles.errorText}>{formik.errors.email}</Text>
               )}
+              {error && <Text style={styles.errorText}>{error.error}</Text>}
               <TextInput
                 style={styles.input}
                 placeholder="Password"

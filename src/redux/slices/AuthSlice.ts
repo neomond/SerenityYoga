@@ -19,6 +19,22 @@ const initialState: InitialStateType = {
   token: null,
 };
 
+// axios.interceptors.request.use(config => {
+//   const token = ''; // from storage ?????
+//   if (token) {
+//     config.headers.Authorization = `Bearer ${token}`;
+//   }
+//   return config;
+// });
+
+// const token = useSelector(state => state.auth.token);
+
+// useEffect(() => {
+//   if (!token) {
+//     navigation.navigate('Login');
+//   }
+// }, [token]);
+
 export const loginUser = createAsyncThunk(
   'auth/login',
   async (
@@ -26,7 +42,7 @@ export const loginUser = createAsyncThunk(
     {rejectWithValue},
   ) => {
     try {
-      const response = await axios.post('http://localhost:8080/login', {
+      const response = await axios.post('http://localhost:8080/auth/login', {
         email,
         password,
       });
@@ -51,14 +67,19 @@ export const signupUser = createAsyncThunk(
       return rejectWithValue('Passwords do not match');
     }
     try {
-      const response = await axios.post('http://localhost:8080/signup', {
-        email,
-        password,
-      });
+      console.log('atdim');
+      const response = await axios.post(
+        'http://localhost:8080/api/auth/signup',
+        {
+          email,
+          password,
+        },
+      );
+
       return response.data;
     } catch (error: any) {
-      if (error.response) {
-        return rejectWithValue(error.response.data.error);
+      if (error) {
+        return rejectWithValue(error.response.data);
       }
       return rejectWithValue('Signup failed');
     }
@@ -95,10 +116,15 @@ const authSlice = createSlice({
       .addCase(signupUser.fulfilled, (state, action) => {
         state.loading = 'fulfilled';
         state.error = null;
+        console.log('full');
+
         state.token = action.payload;
       })
       .addCase(signupUser.rejected, (state, action) => {
         state.loading = 'rejected';
+        state.error = action.error;
+        console.log('errrrr', action.payload);
+
         state.error = action.payload || 'Signup failed';
         state.token = null;
       });

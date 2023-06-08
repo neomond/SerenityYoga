@@ -13,24 +13,37 @@ import {Auth} from '../../models/Auth';
 import {useDispatch} from 'react-redux';
 import {loginUser} from '../../redux/slices/AuthSlice';
 import {AppDispatch} from '../../redux';
-import {useFormik} from 'formik';
+import {Formik, useFormik} from 'formik';
 import {signInSchema, signInInitialValues} from '../../schema/authSchema';
 
 const SignInScreen = ({navigation}: any) => {
   const dispatch = useDispatch<AppDispatch>();
 
-  const formik = useFormik({
-    initialValues: signInInitialValues,
-    validationSchema: signInSchema,
-    onSubmit: values => {
-      const user: Auth = {
-        email: values.email,
-        password: values.password,
-        confirmPassword: undefined,
-      };
-      dispatch(loginUser(user));
-    },
-  });
+  //   const formik = useFormik({
+  //     initialValues: signInInitialValues,
+  //     validationSchema: signInSchema,
+  //     onSubmit: values => {
+  //       const user: Auth = {
+  //         email: values.email,
+  //         password: values.password,
+  //         confirmPassword: undefined,
+  //       };
+  //       dispatch(loginUser(user));
+  //       navigation.navigate('Onboarding');
+  //     },
+  //   });
+  const handleSignIn = (values: any) => {
+    const {email, password} = values;
+    const user: Auth = {
+      email,
+      password,
+      confirmPassword: undefined,
+    };
+    console.log('geldim ', user);
+
+    dispatch(loginUser(user));
+    navigation.navigate('Home');
+  };
 
   return (
     <LinearGradient
@@ -38,63 +51,74 @@ const SignInScreen = ({navigation}: any) => {
       start={{x: 0, y: 0}}
       end={{x: 1, y: 0}}
       style={styles.linearGradient}>
-      <View style={styles.primaryContent}>
-        <Text style={styles.primaryText}>Welcome!</Text>
-        <Text style={styles.secondaryText}>Do not have an account yet?</Text>
-        <TouchableOpacity onPress={() => navigation.navigate('Register')}>
-          <Text style={styles.signUpBtn}>Sign up</Text>
-        </TouchableOpacity>
-        <View>
-          <TextInput
-            style={styles.input}
-            placeholder="Email"
-            value={formik.values.email}
-            onChangeText={formik.handleChange('email')}
-            onBlur={formik.handleBlur('email')}
-          />
-          {formik.touched.email && formik.errors.email && (
-            <Text style={styles.errorText}>{formik.errors.email}</Text>
-          )}
-          <TextInput
-            style={styles.input}
-            placeholder="Password"
-            secureTextEntry={true}
-            value={formik.values.password}
-            onChangeText={formik.handleChange('password')}
-            onBlur={formik.handleBlur('password')}
-          />
-          {formik.touched.password && formik.errors.password && (
-            <Text style={styles.errorText}>{formik.errors.password}</Text>
-          )}
-        </View>
-        <TouchableOpacity onPress={() => navigation.navigate('Onboarding')}>
-          <Text style={styles.forgotPasswordBtn}>Forgot Password?</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.signInBtn, {backgroundColor: '#8866ff'}]}>
-          <Text style={styles.labelText}>Sign In</Text>
-        </TouchableOpacity>
-        <View style={styles.borderContainer}>
-          <View style={styles.border} />
-          <Text style={styles.borderText}>Or With</Text>
-          <View style={styles.border} />
-        </View>
-        <TouchableOpacity
-          style={[styles.signInBtn, {backgroundColor: '#1977f2'}]}
-          onPress={() => navigation.navigate('Register')}>
-          <SvgFacebook style={{marginRight: 50}} />
-          <Text style={styles.labelTextSocial}>Login With Facebook</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[
-            styles.signInBtn,
-            {backgroundColor: '#fff', borderWidth: 0.5},
-          ]}
-          onPress={() => navigation.navigate('Register')}>
-          <SvgGoogle style={{marginRight: 60}} />
-          <Text style={styles.labelTextSocialSecond}>Login With Google</Text>
-        </TouchableOpacity>
-      </View>
+      <Formik
+        initialValues={signInInitialValues}
+        validationSchema={signInSchema}
+        onSubmit={handleSignIn}>
+        {formik => (
+          <View style={styles.primaryContent}>
+            <Text style={styles.primaryText}>Welcome!</Text>
+            <Text style={styles.secondaryText}>
+              Do not have an account yet?
+            </Text>
+            <TouchableOpacity onPress={() => navigation.navigate('Register')}>
+              <Text style={styles.signUpBtn}>Sign up</Text>
+            </TouchableOpacity>
+            <View>
+              <TextInput
+                style={styles.input}
+                placeholder="Email"
+                value={formik.values.email}
+                onChangeText={formik.handleChange('email')}
+                onBlur={formik.handleBlur('email')}
+              />
+              {formik.touched.email && formik.errors.email && (
+                <Text style={styles.errorText}>{formik.errors.email}</Text>
+              )}
+              <TextInput
+                style={styles.input}
+                placeholder="Password"
+                secureTextEntry={true}
+                value={formik.values.password}
+                onChangeText={formik.handleChange('password')}
+                onBlur={formik.handleBlur('password')}
+              />
+              {formik.touched.password && formik.errors.password && (
+                <Text style={styles.errorText}>{formik.errors.password}</Text>
+              )}
+            </View>
+            <TouchableOpacity onPress={() => navigation.navigate('Onboarding')}>
+              <Text style={styles.forgotPasswordBtn}>Forgot Password?</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.signInBtn, {backgroundColor: '#8866ff'}]}>
+              <Text style={styles.labelText}>Sign In</Text>
+            </TouchableOpacity>
+            <View style={styles.borderContainer}>
+              <View style={styles.border} />
+              <Text style={styles.borderText}>Or With</Text>
+              <View style={styles.border} />
+            </View>
+            <TouchableOpacity
+              style={[styles.signInBtn, {backgroundColor: '#1977f2'}]}
+              onPress={() => navigation.navigate('Register')}>
+              <SvgFacebook style={{marginRight: 50}} />
+              <Text style={styles.labelTextSocial}>Login With Facebook</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[
+                styles.signInBtn,
+                {backgroundColor: '#fff', borderWidth: 0.5},
+              ]}
+              onPress={() => navigation.navigate('Register')}>
+              <SvgGoogle style={{marginRight: 60}} />
+              <Text style={styles.labelTextSocialSecond}>
+                Login With Google
+              </Text>
+            </TouchableOpacity>
+          </View>
+        )}
+      </Formik>
     </LinearGradient>
   );
 };
