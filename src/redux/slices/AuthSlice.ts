@@ -12,7 +12,7 @@ interface InitialStateType {
   token: string | null;
 }
 
-const initialState: InitialStateType = {
+const initialState: any = {
   loading: null,
   users: [],
   error: null,
@@ -64,6 +64,7 @@ export const signupUser = createAsyncThunk(
           password,
         },
       );
+      console.log('sa;a', response.data);
 
       return response.data;
     } catch (error: any) {
@@ -82,32 +83,23 @@ const authSlice = createSlice({
   extraReducers: (builder: any) => {
     //-------FOR LOGIN---------
     builder
-      .addCase(loginUser.pending, (state: InitialStateType) => {
+      .addCase(loginUser.pending, (state: any) => {
         state.loading = 'pending';
-        state.error = null;
       })
-      .addCase(
-        loginUser.fulfilled,
-        async (state: InitialStateType, action: any) => {
-          state.loading = 'fulfilled';
-          state.error = null;
-          state.token = action.payload;
-          console.log('gledimmmmm', action.payload);
-
-          state.user = action.payload.user; // kind of added token here ???
-          try {
-            await AsyncStorage.setItem(
-              'token',
-              JSON.stringify(action.payload.token),
-            );
-          } catch (error) {
-            console.log('Error storing token in AsyncStorage:', error);
-          }
-        },
-      )
-      .addCase(loginUser.rejected, (state: InitialStateType, action: any) => {
+      .addCase(loginUser.fulfilled, (state: any, action: any) => {
+        state.loading = 'fulfilled';
+        state.token = action.payload.token;
+        state.user = action.payload.user; // kind of added token here ???
+        try {
+          AsyncStorage.setItem('token', JSON.stringify(action.payload.token));
+        } catch (error) {
+          console.log('Error storing token in AsyncStorage:', error);
+        }
+      })
+      .addCase(loginUser.rejected, (state: any, action: any) => {
         state.loading = 'rejected';
         state.error = action.error;
+
         console.log('err', state.error);
 
         state.token = null;

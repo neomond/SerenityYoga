@@ -4,6 +4,7 @@ import {
   ScrollView,
   StyleSheet,
   Text,
+  TouchableOpacity,
   View,
 } from 'react-native';
 import React, {useEffect} from 'react';
@@ -27,7 +28,9 @@ const HomeScreen = () => {
     <View style={styles.renderItemCont}>
       <View style={styles.renderItemContSecond}>
         <Text style={styles.categoryHeader}>{item.category}</Text>
-        <Text style={styles.categoryHeaderSecond}>View All</Text>
+        <TouchableOpacity>
+          <Text style={styles.categoryHeaderSecond}>View All</Text>
+        </TouchableOpacity>
       </View>
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>
         {item.data.map((dataItem: any) => (

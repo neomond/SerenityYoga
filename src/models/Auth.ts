@@ -1,5 +1,5 @@
 export type Auth = {
   email: string;
   password: number;
-  confirmPassword: string | any;
+  confirmPassword: string | any | undefined;
 };
