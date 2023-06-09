@@ -12,8 +12,12 @@ import LinearGradient from 'react-native-linear-gradient';
 import {useDispatch, useSelector} from 'react-redux';
 import {fetchCategories} from '../../redux/slices/CategoriesSlice';
 import {AppDispatch, RootState} from '../../redux';
+import {ActivityIndicator} from 'react-native-paper';
+import SvgProfile from '../../assets/Profile';
+import SvgDuration from '../../assets/DurationIcon';
+import SvgLikeIcon from '../../assets/LikeIcon';
 
-const HomeScreen = () => {
+const HomeScreen = ({navigation}: any) => {
   const dispatch = useDispatch<AppDispatch>();
   const {categories} = useSelector((state: RootState) => state.categoriesSlice);
   const isLoading = useSelector(
@@ -37,9 +41,13 @@ const HomeScreen = () => {
           <View key={dataItem.key} style={styles.imageContainer}>
             <Image source={{uri: dataItem.image}} style={styles.image} />
             <Text style={styles.imageTitle}>{dataItem.title}</Text>
-            <Text style={[styles.imageTitle, {top: 10}]}>
-              {dataItem.duration}
-            </Text>
+            <View style={styles.imageContentTop}>
+              <View style={styles.imageContentSubtop}>
+                <SvgDuration />
+                <Text style={styles.titleColor}>{dataItem.duration}</Text>
+              </View>
+              <SvgLikeIcon />
+            </View>
           </View>
         ))}
       </ScrollView>
@@ -49,17 +57,22 @@ const HomeScreen = () => {
   if (isLoading) {
     return (
       <View>
-        <Text>Loading...</Text>
+        <ActivityIndicator />
       </View>
     );
   }
 
   return (
     <LinearGradient
-      colors={['#8866ff', '#a177f8', '#c47afb', '#d287fe']}
-      start={{x: 0, y: 0}}
+      colors={['#c47afb', '#A07AFA', '#8380fb', '#8866ff']}
+      start={{x: 0, y: 0.2}}
       end={{x: 1, y: 0}}
       style={styles.linearGradient}>
+      <TouchableOpacity
+        onPress={() => navigation.navigate('ProfileScreen')}
+        style={styles.profileStyle}>
+        <SvgProfile stroke="#E5DEFF" fill="transparent" />
+      </TouchableOpacity>
       <Text style={styles.headerText}>Welcome, Nazrin!</Text>
       <Text style={styles.subheaderText}>How are you feeling today?</Text>
       <View>
@@ -96,8 +109,26 @@ export default HomeScreen;
 
 const styles = StyleSheet.create({
   linearGradient: {
-    paddingTop: 150,
+    paddingTop: 90,
   },
+  profileStyle: {
+    marginBottom: 25,
+    marginLeft: 20,
+    borderRadius: 55,
+    borderWidth: 1,
+    paddingHorizontal: 10,
+    paddingVertical: 9,
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: 45,
+    backgroundColor: 'rgba(255,255,255, 0.2)',
+    borderColor: 'rgba(255,255,255, 0.1)',
+  },
+  titleColor: {
+    color: '#fff',
+    fontSize: 14,
+  },
+
   primaryContent: {
     rowGap: 8,
     borderTopLeftRadius: 30,
@@ -132,8 +163,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     paddingVertical: 10,
     paddingHorizontal: 15,
-    backgroundColor: 'rgba(255,255,255, 0.3)',
-    borderColor: 'rgba(255,255,255, 0.1)',
+    backgroundColor: 'rgba(255,255,255, 0.2)',
+    borderColor: 'rgba(255,255,255, 0)',
     borderRadius: 20,
     overflow: 'hidden',
   },
@@ -142,7 +173,7 @@ const styles = StyleSheet.create({
   },
   image: {
     width: 280,
-    height: 150,
+    height: 160,
     borderRadius: 10,
   },
   imageTitle: {
@@ -152,6 +183,20 @@ const styles = StyleSheet.create({
     left: 15,
     color: '#fff',
     fontWeight: '500',
+    alignItems: 'center',
+  },
+  imageContentTop: {
+    flexDirection: 'row',
+    position: 'absolute',
+    alignItems: 'center',
+    top: 15,
+    left: 15,
+    columnGap: 160,
+  },
+  imageContentSubtop: {
+    flexDirection: 'row',
+    columnGap: 3,
+    alignItems: 'center',
   },
   sectionHeader: {
     fontSize: 18,

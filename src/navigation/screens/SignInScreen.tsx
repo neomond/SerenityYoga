@@ -29,7 +29,7 @@ const SignInScreen = ({navigation}: any) => {
     };
 
     dispatch(loginUser(user)).then(() => {
-      navigation.navigate('Home');
+      navigation.navigate('HomeMain');
     });
   };
 

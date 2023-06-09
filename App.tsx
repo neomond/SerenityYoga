@@ -7,13 +7,15 @@ import {HomeStackNavigator} from './src/navigation/stack/HomeStack';
 import {ProfileStackNavigator} from './src/navigation/stack/ProfileStack';
 import {SaveStackNavigator} from './src/navigation/stack/SaveStack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import SvgHome from './src/assets/HomeIcon';
+import SvgHomeIcon from './src/assets/HomeIcon';
+import SvgSaveIcon from './src/assets/SaveIcon';
+import SvgProfile from './src/assets/Profile';
 
 type RootStackParamList = {
-  Auth: undefined;
-  Home: undefined;
-  Profile: undefined;
-  Save: undefined;
+  AuthMain: undefined;
+  HomeMain: undefined;
+  ProfileMain: undefined;
+  SaveMain: undefined;
 };
 
 type BottomTabParamList = {
@@ -28,12 +30,50 @@ const Tab = createBottomTabNavigator<BottomTabParamList>();
 const HomeTabNavigator: React.FC = () => {
   return (
     <Tab.Navigator
-      screenOptions={({route}) => ({
+      screenOptions={() => ({
+        tabBarStyle: {
+          borderTopWidth: 0,
+        },
+        tabBarActiveTintColor: '#815CFF',
+        tabBarInactiveTintColor: '#444444',
         headerShown: false,
       })}>
-      <Tab.Screen name="Home" component={HomeStackNavigator} />
-      <Tab.Screen name="Profile" component={ProfileStackNavigator} />
-      <Tab.Screen name="Save" component={SaveStackNavigator} />
+      <Tab.Screen
+        name="Home"
+        options={{
+          tabBarIcon: ({focused}: any) => (
+            <SvgHomeIcon
+              stroke={focused ? '#815CFF' : '#444444'}
+              fill={focused ? '#E5DEFF' : '#fff'}
+            />
+          ),
+        }}
+        component={HomeStackNavigator}
+      />
+      {/* <Tab.Screen
+        name="Profile"
+        options={{
+          tabBarIcon: ({focused}: any) => (
+            <SvgProfile
+              stroke={focused ? '#815CFF' : '#444444'}
+              fill={focused ? '#E5DEFF' : '#fff'}
+            />
+          ),
+        }}
+        component={ProfileStackNavigator}
+      /> */}
+      <Tab.Screen
+        name="Save"
+        options={{
+          tabBarIcon: ({focused}: any) => (
+            <SvgSaveIcon
+              stroke={focused ? '#815CFF' : '#444444'}
+              fill={focused ? '#E5DEFF' : '#fff'}
+            />
+          ),
+        }}
+        component={SaveStackNavigator}
+      />
     </Tab.Navigator>
   );
 };
@@ -44,14 +84,14 @@ const App: React.FC = () => {
   return (
     <Provider store={store}>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="Auth">
-          <Stack.Screen
-            name="Auth"
+        <Stack.Navigator initialRouteName="AuthMain">
+          {/* <Stack.Screen
+            name="AuthMain"
             component={AuthStack}
             options={{headerShown: false}}
-          />
+          /> */}
           <Stack.Screen
-            name="Home"
+            name="HomeMain"
             component={HomeTabNavigator}
             options={{headerShown: false}}
           />

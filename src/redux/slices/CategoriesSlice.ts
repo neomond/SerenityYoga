@@ -27,10 +27,13 @@ const initialState: CategoriesState = {
   error: null,
 };
 
+// for home ----- 192.168.0.106
+// for codeaca ---- 192.168.10.32
+
 export const fetchCategories = createAsyncThunk('api/categories', async () => {
   try {
     const response = await axios.get(
-      'http://192.168.10.32:8080/api/categories',
+      'http://192.168.0.106:8080/api/categories',
     );
     return response.data;
   } catch (error) {
