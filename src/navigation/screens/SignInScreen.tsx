@@ -27,11 +27,9 @@ const SignInScreen = ({navigation}: any) => {
       password,
       confirmPassword: undefined,
     };
-    console.log('geldim ', user);
 
     dispatch(loginUser(user));
-    navigation.navigate('Home');
-    console.log('tooookeeen', token);
+    // navigation.navigate('Home');
   };
 
   return (

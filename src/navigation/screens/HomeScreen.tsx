@@ -12,55 +12,6 @@ import {useDispatch, useSelector} from 'react-redux';
 import {fetchCategories} from '../../redux/slices/CategoriesSlice';
 import {AppDispatch, RootState} from '../../redux';
 
-// const DATA = [
-//   {
-//     category: 'Try this',
-//     data: [
-//       {
-//         key: '1',
-//         title: 'Item 1',
-//         duration: '25:00',
-//         image: require('../../assets/imgsample.png'),
-//       },
-//       {
-//         key: '2',
-//         title: 'Item 2',
-//         duration: '25:00',
-//         image: require('../../assets/imgsample.png'),
-//       },
-//       {
-//         key: '3',
-//         title: 'Item 3',
-//         duration: '25:00',
-//         image: require('../../assets/imgsample.png'),
-//       },
-//     ],
-//   },
-//   {
-//     category: 'Meditate',
-//     data: [
-//       {
-//         key: '4',
-//         title: 'Item 4',
-//         duration: '25:00',
-//         image: require('../../assets/imgsample.png'),
-//       },
-//       {
-//         key: '5',
-//         title: 'Item 5',
-//         duration: '25:00',
-//         image: require('../../assets/imgsample.png'),
-//       },
-//       {
-//         key: '6',
-//         title: 'Item 6',
-//         duration: '25:00',
-//         image: require('../../assets/imgsample.png'),
-//       },
-//     ],
-//   },
-// ];
-
 const HomeScreen = () => {
   const dispatch = useDispatch<AppDispatch>();
   const {categories} = useSelector((state: RootState) => state.categoriesSlice);
@@ -71,7 +22,6 @@ const HomeScreen = () => {
   useEffect(() => {
     dispatch(fetchCategories());
   }, [dispatch]);
-  console.log(categories);
 
   const renderItem = ({item}: {item: any}) => (
     <View style={styles.renderItemCont}>
@@ -82,7 +32,7 @@ const HomeScreen = () => {
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>
         {item.data.map((dataItem: any) => (
           <View key={dataItem.key} style={styles.imageContainer}>
-            <Image source={dataItem.image} style={styles.image} />
+            <Image source={{uri: dataItem.image}} style={styles.image} />
             <Text style={styles.imageTitle}>{dataItem.title}</Text>
             <Text style={[styles.imageTitle, {top: 10}]}>
               {dataItem.duration}
@@ -94,7 +44,6 @@ const HomeScreen = () => {
   );
 
   if (isLoading) {
-    // Render a loading indicator while the API call is in progress
     return (
       <View>
         <Text>Loading...</Text>
@@ -110,26 +59,27 @@ const HomeScreen = () => {
       style={styles.linearGradient}>
       <Text style={styles.headerText}>Welcome, Nazrin!</Text>
       <Text style={styles.subheaderText}>How are you feeling today?</Text>
-      <ScrollView
-        style={styles.scrollCategories}
-        showsHorizontalScrollIndicator={false}
-        horizontal={true}>
-        <Text style={styles.categoryText}>🤯 Stress</Text>
-        <Text style={styles.categoryText}>🥵 Anxiety</Text>
-        <Text style={styles.categoryText}>😖 Depression</Text>
-        <Text style={styles.categoryText}>😨 Fear</Text>
-        <Text style={styles.categoryText}>😢 Sadness</Text>
-        <Text style={styles.categoryText}>😡 Anger</Text>
-        <Text style={styles.categoryText}>😌 Calmness</Text>
-        <Text style={styles.categoryText}>😄 Happiness</Text>
-      </ScrollView>
+      <View>
+        <ScrollView
+          style={styles.scrollCategories}
+          showsHorizontalScrollIndicator={false}
+          horizontal={true}>
+          <Text style={styles.categoryText}>🤯 Stress</Text>
+          <Text style={styles.categoryText}>🥵 Anxiety</Text>
+          <Text style={styles.categoryText}>😖 Depression</Text>
+          <Text style={styles.categoryText}>😨 Fear</Text>
+          <Text style={styles.categoryText}>😢 Sadness</Text>
+          <Text style={styles.categoryText}>😡 Anger</Text>
+          <Text style={styles.categoryText}>😌 Calmness</Text>
+          <Text style={styles.categoryText}>😄 Happiness</Text>
+        </ScrollView>
+      </View>
       <View style={styles.primaryContent}>
         {categories.length > 0 ? (
           <FlatList
             data={categories}
             renderItem={renderItem}
-            keyExtractor={item => item.category}
-            //   stickyHeaderIndices={[0]}
+            keyExtractor={item => item._id}
           />
         ) : (
           <Text>No categories found.</Text>

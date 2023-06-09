@@ -23,15 +23,20 @@ const initialState: InitialStateType = {
 export const loginUser = createAsyncThunk(
   'auth/login',
   async (
-    {email, password}: {email: string; password: string},
+    {email, password}: {email: string; password: number},
     {rejectWithValue},
   ) => {
     try {
-      const response = await axios.post('http://localhost:8080/auth/login', {
-        email,
-        password,
-      });
-      return response.data.token;
+      console.log('bezdm', email + password);
+      const response = await axios.post(
+        'http://localhost:8080/api/auth/login',
+        {
+          email,
+          password,
+        },
+      );
+
+      return response.data;
     } catch (error: any) {
       return rejectWithValue(error.response.data.error);
     }
@@ -45,14 +50,13 @@ export const signupUser = createAsyncThunk(
       email,
       password,
       confirmPassword,
-    }: {email: string; password: string; confirmPassword: string},
+    }: {email: string; password: number; confirmPassword: number},
     {rejectWithValue},
   ) => {
     if (password !== confirmPassword) {
       return rejectWithValue('Passwords do not match');
     }
     try {
-      console.log('atdim');
       const response = await axios.post(
         'http://localhost:8080/api/auth/signup',
         {
@@ -88,9 +92,14 @@ const authSlice = createSlice({
           state.loading = 'fulfilled';
           state.error = null;
           state.token = action.payload;
-          // kind of added token here ???
+          console.log('gledimmmmm', action.payload);
+
+          state.user = action.payload.user; // kind of added token here ???
           try {
-            await AsyncStorage.setItem('token', action.payload);
+            await AsyncStorage.setItem(
+              'token',
+              JSON.stringify(action.payload.token),
+            );
           } catch (error) {
             console.log('Error storing token in AsyncStorage:', error);
           }
@@ -98,7 +107,9 @@ const authSlice = createSlice({
       )
       .addCase(loginUser.rejected, (state: InitialStateType, action: any) => {
         state.loading = 'rejected';
-        state.error = action.error.message;
+        state.error = action.error;
+        console.log('err', state.error);
+
         state.token = null;
       });
     //-------FOR SIGN UP---------
@@ -110,7 +121,6 @@ const authSlice = createSlice({
       .addCase(signupUser.fulfilled, (state: InitialStateType, action: any) => {
         state.loading = 'fulfilled';
         state.error = null;
-        console.log('full');
 
         state.token = action.payload;
       })

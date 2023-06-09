@@ -3,6 +3,7 @@ import axios from 'axios';
 import {RootState} from '..';
 
 interface Category {
+  _id: string;
   category: string;
   data: DataItem[];
 }
@@ -28,7 +29,9 @@ const initialState: CategoriesState = {
 
 export const fetchCategories = createAsyncThunk('api/categories', async () => {
   try {
-    const response = await axios.get('http://localhost:8080/api/categories');
+    const response = await axios.get(
+      'http://192.168.10.32:8080/api/categories',
+    );
     return response.data;
   } catch (error) {
     console.error('Error fetching categories:', error);
@@ -50,7 +53,6 @@ const categoriesSlice = createSlice({
         state.categories = action.payload;
         state.loading = false;
         state.error = null;
-        console.log('kkkkk');
       })
       .addCase(fetchCategories.rejected, (state, action) => {
         state.loading = false;

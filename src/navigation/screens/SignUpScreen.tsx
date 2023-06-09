@@ -18,7 +18,6 @@ import {signUpInitialValues, signUpSchema} from '../../schema/authSchema';
 const SignUpScreen = ({navigation}: any) => {
   const dispatch = useDispatch<AppDispatch>();
   const error = useSelector((state: RootState) => state.authSlice.error);
-  console.log('scfe', error);
 
   const handleSignUp = (values: any) => {
     const {email, password, confirmPassword} = values;
@@ -27,7 +26,6 @@ const SignUpScreen = ({navigation}: any) => {
       password,
       confirmPassword,
     };
-    console.log('geldim ', user);
 
     dispatch(signupUser(user));
     navigation.navigate('Home');
