@@ -16,6 +16,7 @@ import {ActivityIndicator} from 'react-native-paper';
 import SvgProfile from '../../assets/Profile';
 import SvgDuration from '../../assets/DurationIcon';
 import SvgLikeIcon from '../../assets/LikeIcon';
+import SvgNotifications from '../../assets/Notification';
 
 const HomeScreen = ({navigation}: any) => {
   const dispatch = useDispatch<AppDispatch>();
@@ -32,7 +33,7 @@ const HomeScreen = ({navigation}: any) => {
     <View style={styles.renderItemCont}>
       <View style={styles.renderItemContSecond}>
         <Text style={styles.categoryHeader}>{item.category}</Text>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('DetailsScreen')}>
           <Text style={styles.categoryHeaderSecond}>View All</Text>
         </TouchableOpacity>
       </View>
@@ -68,11 +69,16 @@ const HomeScreen = ({navigation}: any) => {
       start={{x: 0, y: 0.2}}
       end={{x: 1, y: 0}}
       style={styles.linearGradient}>
-      <TouchableOpacity
-        onPress={() => navigation.navigate('ProfileScreen')}
-        style={styles.profileStyle}>
-        <SvgProfile stroke="#E5DEFF" fill="transparent" />
-      </TouchableOpacity>
+      <View style={styles.iconsHeader}>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('ProfileScreen')}
+          style={styles.profileStyle}>
+          <SvgProfile stroke="#E5DEFF" fill="transparent" />
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.bellStyle}>
+          <SvgNotifications />
+        </TouchableOpacity>
+      </View>
       <Text style={styles.headerText}>Welcome, Nazrin!</Text>
       <Text style={styles.subheaderText}>How are you feeling today?</Text>
       <View>
@@ -114,15 +120,34 @@ const styles = StyleSheet.create({
   profileStyle: {
     marginBottom: 25,
     marginLeft: 20,
-    borderRadius: 55,
+    borderRadius: 80,
     borderWidth: 1,
-    paddingHorizontal: 10,
-    paddingVertical: 9,
+    paddingHorizontal: 8,
+    paddingVertical: 7,
     alignItems: 'center',
     justifyContent: 'center',
     width: 45,
     backgroundColor: 'rgba(255,255,255, 0.2)',
     borderColor: 'rgba(255,255,255, 0.1)',
+  },
+  bellStyle: {
+    marginBottom: 25,
+    marginLeft: 20,
+    borderRadius: 80,
+    borderWidth: 1,
+    paddingHorizontal: 8,
+    paddingVertical: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: 45,
+    backgroundColor: 'rgba(255,255,255, 0.2)',
+    borderColor: 'rgba(255,255,255, 0.1)',
+    marginRight: 20,
+  },
+  iconsHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   titleColor: {
     color: '#fff',
@@ -182,8 +207,15 @@ const styles = StyleSheet.create({
     bottom: 15,
     left: 15,
     color: '#fff',
-    fontWeight: '500',
+    fontWeight: '600',
     alignItems: 'center',
+    backgroundColor: 'rgba(229,222,255, 0.2)',
+    borderColor: 'rgba(229,222,255, 0)',
+    borderRadius: 5,
+    borderWidth: 1,
+    paddingVertical: 2,
+    paddingHorizontal: 8,
+    overflow: 'hidden',
   },
   imageContentTop: {
     flexDirection: 'row',

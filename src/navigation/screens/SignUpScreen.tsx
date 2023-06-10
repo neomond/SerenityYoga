@@ -26,9 +26,15 @@ const SignUpScreen = ({navigation}: any) => {
       password,
       confirmPassword,
     };
-
-    dispatch(signupUser(user));
-    navigation.navigate('Home');
+    dispatch(signupUser(user))
+      .unwrap()
+      .then((data: any) => {
+        console.log('Signup successful:', data);
+        navigation.navigate('HomeMain');
+      })
+      .catch((error: any) => {
+        console.log('Signup failed:', error);
+      });
   };
 
   return (

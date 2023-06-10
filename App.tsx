@@ -50,18 +50,7 @@ const HomeTabNavigator: React.FC = () => {
         }}
         component={HomeStackNavigator}
       />
-      {/* <Tab.Screen
-        name="Profile"
-        options={{
-          tabBarIcon: ({focused}: any) => (
-            <SvgProfile
-              stroke={focused ? '#815CFF' : '#444444'}
-              fill={focused ? '#E5DEFF' : '#fff'}
-            />
-          ),
-        }}
-        component={ProfileStackNavigator}
-      /> */}
+
       <Tab.Screen
         name="Save"
         options={{
@@ -85,11 +74,11 @@ const App: React.FC = () => {
     <Provider store={store}>
       <NavigationContainer>
         <Stack.Navigator initialRouteName="AuthMain">
-          {/* <Stack.Screen
+          <Stack.Screen
             name="AuthMain"
             component={AuthStack}
             options={{headerShown: false}}
-          /> */}
+          />
           <Stack.Screen
             name="HomeMain"
             component={HomeTabNavigator}

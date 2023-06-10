@@ -10,9 +10,9 @@ import LinearGradient from 'react-native-linear-gradient';
 import SvgFacebook from '../../assets/Facebook';
 import SvgGoogle from '../../assets/Google';
 import {Auth} from '../../models/Auth';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch} from 'react-redux';
 import {loginUser} from '../../redux/slices/AuthSlice';
-import {AppDispatch, RootState} from '../../redux';
+import {AppDispatch} from '../../redux';
 import {Formik} from 'formik';
 import {signInSchema, signInInitialValues} from '../../schema/authSchema';
 
@@ -28,10 +28,17 @@ const SignInScreen = ({navigation}: any) => {
       confirmPassword: '',
     };
 
-    dispatch(loginUser(user)).then(() => {
-      navigation.navigate('HomeMain');
-    });
+    dispatch(loginUser(user))
+      .unwrap()
+      .then(() => {
+        navigation.navigate('HomeMain');
+      })
+      .catch((error: any) => {
+        console.log('Login failed:', error);
+      });
   };
+
+  //   By using the .unwrap() method after dispatching the loginUser action, you can access the fulfilled value of the action, or catch any rejected value (in this case, the error from the server). Inside the catch block, you can handle the rejected login request appropriately, such as displaying an error message to the user or performing any other necessary actions.
 
   return (
     <LinearGradient

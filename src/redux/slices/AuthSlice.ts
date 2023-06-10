@@ -113,7 +113,7 @@ const authSlice = createSlice({
       .addCase(signupUser.fulfilled, (state: InitialStateType, action: any) => {
         state.loading = 'fulfilled';
         state.error = null;
-
+        //   state.user = action.payload;
         state.token = action.payload;
       })
       .addCase(signupUser.rejected, (state: InitialStateType, action: any) => {
@@ -130,19 +130,3 @@ const authSlice = createSlice({
 export const getAuth = (state: RootState) => state.authSlice.user;
 
 export default authSlice.reducer;
-
-// axios.interceptors.request.use(config => {
-//   const token = ''; // from storage ?????
-//   if (token) {
-//     config.headers.Authorization = `Bearer ${token}`;
-//   }
-//   return config;
-// });
-
-// const token = useSelector(state => state.auth.token);
-
-// useEffect(() => {
-//   if (!token) {
-//     navigation.navigate('Login');
-//   }
-// }, [token]);

@@ -27,8 +27,9 @@ const initialState: CategoriesState = {
   error: null,
 };
 
+// ipconfig getifaddr en0
 // for home ----- 192.168.0.106
-// for codeaca ---- 192.168.10.32
+// for codeaca ----192.168.10.32
 
 export const fetchCategories = createAsyncThunk('api/categories', async () => {
   try {
