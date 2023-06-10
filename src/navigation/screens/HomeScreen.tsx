@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import LinearGradient from 'react-native-linear-gradient';
 import {useDispatch, useSelector} from 'react-redux';
 import {fetchCategories} from '../../redux/slices/CategoriesSlice';
@@ -19,6 +19,10 @@ import SvgLikeIcon from '../../assets/LikeIcon';
 import SvgNotifications from '../../assets/Notification';
 
 const HomeScreen = ({navigation}: any) => {
+  const [isLiked, setIsLiked] = useState(false);
+  const handlePress = () => {
+    setIsLiked(!isLiked);
+  };
   const dispatch = useDispatch<AppDispatch>();
   const {categories} = useSelector((state: RootState) => state.categoriesSlice);
   const isLoading = useSelector(
@@ -47,7 +51,12 @@ const HomeScreen = ({navigation}: any) => {
                 <SvgDuration />
                 <Text style={styles.titleColor}>{dataItem.duration}</Text>
               </View>
-              <SvgLikeIcon />
+              <TouchableOpacity onPress={handlePress}>
+                <SvgLikeIcon
+                  fill={isLiked ? '#815cff' : 'transparent'}
+                  stroke={isLiked ? '#815cff' : '#fff'}
+                />
+              </TouchableOpacity>
             </View>
           </View>
         ))}
