@@ -1,7 +1,10 @@
-import {configureStore} from '@reduxjs/toolkit';
+import {configureStore, getDefaultMiddleware} from '@reduxjs/toolkit';
 import AuthSlice from './slices/AuthSlice';
 import CategoriesSlice from './slices/CategoriesSlice';
 import LikedItemsSlice from './slices/LikedItemsSlice';
+const middleware = getDefaultMiddleware({
+  serializableCheck: false, // Disable serializable state check
+});
 
 const store = configureStore({
   reducer: {
@@ -9,6 +12,7 @@ const store = configureStore({
     categoriesSlice: CategoriesSlice,
     likedItemsSlice: LikedItemsSlice,
   },
+  middleware,
 });
 
 export default store;

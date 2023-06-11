@@ -5,28 +5,49 @@ import {
   TouchableOpacity,
   View,
   Image,
+  FlatList,
 } from 'react-native';
 import React, {useState} from 'react';
 import SvgBack from '../../assets/BackIcon';
 import SvgLikeIcon from '../../assets/LikeIcon';
 import SvgDownload from '../../assets/DownloadIcon';
-import {useSelector} from 'react-redux';
-import {RootState} from '../../redux';
+import {useDispatch, useSelector} from 'react-redux';
+import {AppDispatch, RootState} from '../../redux';
+import {removeItem} from '../../redux/slices/LikedItemsSlice';
 
 const SaveScreen = ({navigation}: any) => {
+  const dispatch = useDispatch<AppDispatch>();
   const [isLiked, setIsLiked] = useState(false);
-  const handlePress = () => {
-    setIsLiked(!isLiked);
-  };
+
   const likedItems = useSelector(
     (state: RootState) => state.likedItemsSlice.likedItems,
   );
 
-  //   <View>
-  //   {likedItems.map((item) => (
-  //     <Text key={item.key}>{item.title}</Text>
-  //   ))}
-  // </View>
+  const handleRemove = (item: any) => {
+    setIsLiked(!isLiked);
+    dispatch(removeItem(item.key));
+  };
+
+  const renderItem = ({item}: {item: any}) => (
+    <View key={item.key} style={styles.favoritesItem}>
+      <Image style={styles.imageFav} source={{uri: item.image}} />
+      <View style={styles.favoritesItemSecondary}>
+        <Text style={styles.textFav}>{item.title}</Text>
+        <View style={styles.favoritesItemSecondaryBottom}>
+          <TouchableOpacity style={styles.btnFav}>
+            <Text>Play</Text>
+          </TouchableOpacity>
+          <TouchableOpacity>
+            <SvgDownload />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => handleRemove(item)}>
+            <SvgLikeIcon fill="#815cff" />
+          </TouchableOpacity>
+        </View>
+      </View>
+    </View>
+  );
+
   return (
     <SafeAreaView style={styles.wrapper}>
       <View style={styles.favoritesMainContent}>
@@ -36,35 +57,11 @@ const SaveScreen = ({navigation}: any) => {
         <Text style={styles.textMain}>Favorites</Text>
         <Text>✨</Text>
       </View>
-      <View>
-        <View style={styles.renderItemContSecond}>
-          <Text style={styles.categoryHeader}>Yoga</Text>
-          <TouchableOpacity
-            onPress={() => navigation.navigate('DetailsScreen')}>
-            <Text style={styles.categoryHeaderSecond}>View All</Text>
-          </TouchableOpacity>
-        </View>
-        <View style={styles.favoritesItem}>
-          <Image
-            style={styles.imageFav}
-            source={require('../../assets/test.png')}
-          />
-          <View style={styles.favoritesItemSecondary}>
-            <Text style={styles.textFav}>Morning Yoga</Text>
-            <View style={styles.favoritesItemSecondaryBottom}>
-              <TouchableOpacity style={styles.btnFav}>
-                <Text>Play</Text>
-              </TouchableOpacity>
-              <TouchableOpacity>
-                <SvgDownload />
-              </TouchableOpacity>
-              <TouchableOpacity onPress={handlePress}>
-                <SvgLikeIcon fill={isLiked ? '#815cff' : 'transparent'} />
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
-      </View>
+      <FlatList
+        data={likedItems}
+        renderItem={renderItem}
+        keyExtractor={item => item.key}
+      />
     </SafeAreaView>
   );
 };
@@ -109,7 +106,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     borderBottomColor: '#f0f0f0',
     borderBottomWidth: 1.2,
-    paddingBottom: 25,
+    paddingBottom: 20,
+    paddingTop: 25,
   },
   imageFav: {
     width: 150,

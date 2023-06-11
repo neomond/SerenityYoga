@@ -17,20 +17,55 @@ import SvgProfile from '../../assets/Profile';
 import SvgDuration from '../../assets/DurationIcon';
 import SvgLikeIcon from '../../assets/LikeIcon';
 import SvgNotifications from '../../assets/Notification';
+import {
+  addItem,
+  removeItem,
+  setLikedItems,
+} from '../../redux/slices/LikedItemsSlice';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const HomeScreen = ({navigation}: any) => {
-  const [isLiked, setIsLiked] = useState(false);
-  const handlePress = () => {
-    setIsLiked(!isLiked);
-  };
   const dispatch = useDispatch<AppDispatch>();
   const {categories} = useSelector((state: RootState) => state.categoriesSlice);
+  const likedItems = useSelector(
+    (state: RootState) => state.likedItemsSlice.likedItems,
+  );
   const isLoading = useSelector(
     (state: RootState) => state.categoriesSlice.loading,
   );
 
+  const handlePress = (dataItem: any) => {
+    const isLiked = likedItems.some(item => item.key === dataItem.key);
+    if (isLiked) {
+      dispatch(removeItem(dataItem.key));
+      AsyncStorage.setItem(
+        'likedItems',
+        JSON.stringify(likedItems.filter(item => item.key !== dataItem.key)),
+      ).catch(error => console.log('Error removing item:', error));
+    } else {
+      dispatch(addItem(dataItem));
+      AsyncStorage.setItem(
+        'likedItems',
+        JSON.stringify([...likedItems, dataItem]),
+      ).catch(error => console.log('Error adding item:', error));
+    }
+  };
+
   useEffect(() => {
     dispatch(fetchCategories());
+
+    const loadLikedItems = async () => {
+      try {
+        const savedItems = await AsyncStorage.getItem('likedItems');
+        if (savedItems) {
+          dispatch(setLikedItems(JSON.parse(savedItems)));
+        }
+      } catch (error) {
+        console.log('Error loading liked items:', error);
+      }
+    };
+
+    loadLikedItems();
   }, [dispatch]);
 
   const renderItem = ({item}: {item: any}) => {
@@ -44,24 +79,27 @@ const HomeScreen = ({navigation}: any) => {
           </TouchableOpacity>
         </View>
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-          {item.data.map((dataItem: any) => (
-            <View key={dataItem.key} style={styles.imageContainer}>
-              <Image source={{uri: dataItem.image}} style={styles.image} />
-              <Text style={styles.imageTitle}>{dataItem.title}</Text>
-              <View style={styles.imageContentTop}>
-                <View style={styles.imageContentSubtop}>
-                  <SvgDuration />
-                  <Text style={styles.titleColor}>{dataItem.duration}</Text>
+          {item.data.map((dataItem: any) => {
+            const isLiked = likedItems.some(item => item.key === dataItem.key);
+            return (
+              <View key={dataItem.key} style={styles.imageContainer}>
+                <Image source={{uri: dataItem.image}} style={styles.image} />
+                <Text style={styles.imageTitle}>{dataItem.title}</Text>
+                <View style={styles.imageContentTop}>
+                  <View style={styles.imageContentSubtop}>
+                    <SvgDuration />
+                    <Text style={styles.titleColor}>{dataItem.duration}</Text>
+                  </View>
+                  <TouchableOpacity onPress={() => handlePress(dataItem)}>
+                    <SvgLikeIcon
+                      fill={isLiked ? '#815cff' : 'transparent'}
+                      stroke={isLiked ? '#815cff' : '#fff'}
+                    />
+                  </TouchableOpacity>
                 </View>
-                <TouchableOpacity onPress={handlePress}>
-                  <SvgLikeIcon
-                  // fill={isLiked ? '#815cff' : 'transparent'}
-                  // stroke={isLiked ? '#815cff' : '#fff'}
-                  />
-                </TouchableOpacity>
               </View>
-            </View>
-          ))}
+            );
+          })}
         </ScrollView>
       </View>
     );

@@ -6,6 +6,7 @@ interface Category {
   _id: string;
   category: string;
   data: DataItem[];
+  likedItems: DataItem[];
 }
 
 interface DataItem {
@@ -29,7 +30,7 @@ const initialState: CategoriesState = {
 
 // ipconfig getifaddr en0
 // for home ----- 192.168.0.106
-// for codeaca ----192.168.10.32
+// for codeaca ---- 192.168.10.32
 
 export const fetchCategories = createAsyncThunk('api/categories', async () => {
   try {
@@ -61,7 +62,24 @@ export const fetchCategoryById = createAsyncThunk(
 const categoriesSlice = createSlice({
   name: 'categories',
   initialState,
-  reducers: {},
+  reducers: {
+    addItemToLikedItems: (state, action) => {
+      const {categoryId, item} = action.payload;
+      const category = state.categories.find(c => c._id === categoryId);
+      if (category) {
+        category.likedItems.push(item);
+      }
+    },
+    removeItemFromLikedItems: (state, action) => {
+      const {categoryId, itemId} = action.payload;
+      const category = state.categories.find(c => c._id === categoryId);
+      if (category) {
+        category.likedItems = category.likedItems.filter(
+          item => item.key !== itemId,
+        );
+      }
+    },
+  },
   extraReducers: builder => {
     builder
       .addCase(fetchCategories.pending, state => {
@@ -84,7 +102,7 @@ const categoriesSlice = createSlice({
       })
       .addCase(fetchCategoryById.fulfilled, (state, action) => {
         state.loading = false;
-        // state.category = action.payload;
+        state.categories = action.payload;
       })
       .addCase(fetchCategoryById.rejected, (state, action) => {
         state.loading = false;
@@ -92,6 +110,9 @@ const categoriesSlice = createSlice({
       });
   },
 });
+
+export const {addItemToLikedItems, removeItemFromLikedItems} =
+  categoriesSlice.actions;
 
 export const getCategories = (state: RootState) =>
   state.categoriesSlice.categories;
