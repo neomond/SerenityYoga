@@ -14,6 +14,8 @@ import SvgDownload from '../../assets/DownloadIcon';
 import {useDispatch, useSelector} from 'react-redux';
 import {AppDispatch, RootState} from '../../redux';
 import {removeItem} from '../../redux/slices/LikedItemsSlice';
+import SvgFlower from '../../assets/Flower';
+import SvgDuration from '../../assets/DurationIcon';
 
 const SaveScreen = ({navigation}: any) => {
   const dispatch = useDispatch<AppDispatch>();
@@ -30,6 +32,10 @@ const SaveScreen = ({navigation}: any) => {
 
   const renderItem = ({item}: {item: any}) => (
     <View key={item.key} style={styles.favoritesItem}>
+      <View style={styles.imageContentSubtop}>
+        <SvgDuration />
+        <Text style={styles.titleColor}>{item.duration}</Text>
+      </View>
       <Image style={styles.imageFav} source={{uri: item.image}} />
       <View style={styles.favoritesItemSecondary}>
         <Text style={styles.textFav}>{item.title}</Text>
@@ -57,11 +63,20 @@ const SaveScreen = ({navigation}: any) => {
         <Text style={styles.textMain}>Favorites</Text>
         <Text>✨</Text>
       </View>
-      <FlatList
-        data={likedItems}
-        renderItem={renderItem}
-        keyExtractor={item => item.key}
-      />
+      {likedItems.length > 0 ? (
+        <FlatList
+          data={likedItems}
+          renderItem={renderItem}
+          keyExtractor={item => item.key}
+        />
+      ) : (
+        <View style={styles.noItemsContainer}>
+          <View style={styles.flowerIcon}>
+            <SvgFlower />
+          </View>
+          <Text style={styles.noItemsText}>No items in favorites.</Text>
+        </View>
+      )}
     </SafeAreaView>
   );
 };
@@ -117,6 +132,10 @@ const styles = StyleSheet.create({
   textFav: {
     fontSize: 16,
   },
+  titleColor: {
+    color: '#fff',
+    fontSize: 14,
+  },
   btnFav: {
     borderRadius: 25,
     paddingVertical: 8,
@@ -132,5 +151,31 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     columnGap: 10,
+  },
+  noItemsContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  noItemsText: {
+    fontSize: 16,
+    color: '#815CFF',
+    fontWeight: '600',
+  },
+  flowerIcon: {
+    width: 100,
+    height: 100,
+    position: 'absolute',
+    top: 50,
+    left: 0,
+  },
+  imageContentSubtop: {
+    flexDirection: 'row',
+    columnGap: 3,
+    alignItems: 'center',
+    position: 'absolute',
+    top: 35,
+    left: 10,
+    zIndex: 1,
   },
 });
