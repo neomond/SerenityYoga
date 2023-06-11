@@ -43,6 +43,21 @@ export const fetchCategories = createAsyncThunk('api/categories', async () => {
   }
 });
 
+export const fetchCategoryById = createAsyncThunk(
+  'api/categories/fetchById',
+  async categoryId => {
+    try {
+      const response = await axios.get(
+        `http://192.168.0.106:8080/api/categories/${categoryId}`,
+      );
+      return response.data;
+    } catch (error) {
+      console.error(`Error fetching category with ID ${categoryId}:`, error);
+      throw error;
+    }
+  },
+);
+
 const categoriesSlice = createSlice({
   name: 'categories',
   initialState,
@@ -61,6 +76,19 @@ const categoriesSlice = createSlice({
       .addCase(fetchCategories.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+      });
+    builder
+      .addCase(fetchCategoryById.pending, state => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchCategoryById.fulfilled, (state, action) => {
+        state.loading = false;
+        // state.category = action.payload;
+      })
+      .addCase(fetchCategoryById.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
       });
   },
 });

@@ -33,36 +33,39 @@ const HomeScreen = ({navigation}: any) => {
     dispatch(fetchCategories());
   }, [dispatch]);
 
-  const renderItem = ({item}: {item: any}) => (
-    <View style={styles.renderItemCont}>
-      <View style={styles.renderItemContSecond}>
-        <Text style={styles.categoryHeader}>{item.category}</Text>
-        <TouchableOpacity onPress={() => navigation.navigate('DetailsScreen')}>
-          <Text style={styles.categoryHeaderSecond}>View All</Text>
-        </TouchableOpacity>
-      </View>
-      <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-        {item.data.map((dataItem: any) => (
-          <View key={dataItem.key} style={styles.imageContainer}>
-            <Image source={{uri: dataItem.image}} style={styles.image} />
-            <Text style={styles.imageTitle}>{dataItem.title}</Text>
-            <View style={styles.imageContentTop}>
-              <View style={styles.imageContentSubtop}>
-                <SvgDuration />
-                <Text style={styles.titleColor}>{dataItem.duration}</Text>
+  const renderItem = ({item}: {item: any}) => {
+    return (
+      <View style={styles.renderItemCont}>
+        <View style={styles.renderItemContSecond}>
+          <Text style={styles.categoryHeader}>{item.category}</Text>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('DetailsScreen')}>
+            <Text style={styles.categoryHeaderSecond}>View All</Text>
+          </TouchableOpacity>
+        </View>
+        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+          {item.data.map((dataItem: any) => (
+            <View key={dataItem.key} style={styles.imageContainer}>
+              <Image source={{uri: dataItem.image}} style={styles.image} />
+              <Text style={styles.imageTitle}>{dataItem.title}</Text>
+              <View style={styles.imageContentTop}>
+                <View style={styles.imageContentSubtop}>
+                  <SvgDuration />
+                  <Text style={styles.titleColor}>{dataItem.duration}</Text>
+                </View>
+                <TouchableOpacity onPress={handlePress}>
+                  <SvgLikeIcon
+                  // fill={isLiked ? '#815cff' : 'transparent'}
+                  // stroke={isLiked ? '#815cff' : '#fff'}
+                  />
+                </TouchableOpacity>
               </View>
-              <TouchableOpacity onPress={handlePress}>
-                <SvgLikeIcon
-                  fill={isLiked ? '#815cff' : 'transparent'}
-                  stroke={isLiked ? '#815cff' : '#fff'}
-                />
-              </TouchableOpacity>
             </View>
-          </View>
-        ))}
-      </ScrollView>
-    </View>
-  );
+          ))}
+        </ScrollView>
+      </View>
+    );
+  };
 
   if (isLoading) {
     return (

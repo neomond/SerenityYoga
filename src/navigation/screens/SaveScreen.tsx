@@ -10,12 +10,23 @@ import React, {useState} from 'react';
 import SvgBack from '../../assets/BackIcon';
 import SvgLikeIcon from '../../assets/LikeIcon';
 import SvgDownload from '../../assets/DownloadIcon';
+import {useSelector} from 'react-redux';
+import {RootState} from '../../redux';
 
 const SaveScreen = ({navigation}: any) => {
   const [isLiked, setIsLiked] = useState(false);
   const handlePress = () => {
     setIsLiked(!isLiked);
   };
+  const likedItems = useSelector(
+    (state: RootState) => state.likedItemsSlice.likedItems,
+  );
+
+  //   <View>
+  //   {likedItems.map((item) => (
+  //     <Text key={item.key}>{item.title}</Text>
+  //   ))}
+  // </View>
   return (
     <SafeAreaView style={styles.wrapper}>
       <View style={styles.favoritesMainContent}>

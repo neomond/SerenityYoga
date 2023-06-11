@@ -4,12 +4,12 @@ import {Provider} from 'react-redux';
 import store from './src/redux';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {HomeStackNavigator} from './src/navigation/stack/HomeStack';
-import {ProfileStackNavigator} from './src/navigation/stack/ProfileStack';
 import {SaveStackNavigator} from './src/navigation/stack/SaveStack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import SvgHomeIcon from './src/assets/HomeIcon';
 import SvgSaveIcon from './src/assets/SaveIcon';
-import SvgProfile from './src/assets/Profile';
+import SplashScreen from 'react-native-splash-screen';
+import {useEffect} from 'react';
 
 type RootStackParamList = {
   AuthMain: undefined;
@@ -66,10 +66,15 @@ const HomeTabNavigator: React.FC = () => {
     </Tab.Navigator>
   );
 };
+
 // Nazrin@test.com
 // 123456
 
 const App: React.FC = () => {
+  useEffect(() => {
+    SplashScreen.hide();
+  }, []);
+
   return (
     <Provider store={store}>
       <NavigationContainer>
