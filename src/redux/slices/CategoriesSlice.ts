@@ -2,7 +2,7 @@ import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
 import axios from 'axios';
 import {RootState} from '..';
 
-interface Category {
+export interface Category {
   _id: string;
   category: string;
   data: DataItem[];

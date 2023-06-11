@@ -53,7 +53,6 @@ const HomeScreen = ({navigation}: any) => {
 
   useEffect(() => {
     dispatch(fetchCategories());
-
     const loadLikedItems = async () => {
       try {
         const savedItems = await AsyncStorage.getItem('likedItems');
@@ -64,7 +63,6 @@ const HomeScreen = ({navigation}: any) => {
         console.log('Error loading liked items:', error);
       }
     };
-
     loadLikedItems();
   }, [dispatch]);
 
@@ -74,7 +72,9 @@ const HomeScreen = ({navigation}: any) => {
         <View style={styles.renderItemContSecond}>
           <Text style={styles.categoryHeader}>{item.category}</Text>
           <TouchableOpacity
-            onPress={() => navigation.navigate('DetailsScreen')}>
+            onPress={() =>
+              navigation.navigate('DetailsScreen', {category: item})
+            }>
             <Text style={styles.categoryHeaderSecond}>View All</Text>
           </TouchableOpacity>
         </View>
@@ -190,6 +190,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     width: 45,
+    fontWeight: '700',
     backgroundColor: 'rgba(255,255,255, 0.2)',
     borderColor: 'rgba(255,255,255, 0.1)',
     marginRight: 20,

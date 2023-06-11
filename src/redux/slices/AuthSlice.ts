@@ -27,7 +27,7 @@ export const loginUser = createAsyncThunk(
     {rejectWithValue},
   ) => {
     try {
-      console.log('bezdm', email + password);
+      console.log('teeestt', email + password);
       const response = await axios.post(
         'http://localhost:8080/api/auth/login',
         {
@@ -89,7 +89,7 @@ const authSlice = createSlice({
       .addCase(loginUser.fulfilled, (state: any, action: any) => {
         state.loading = 'fulfilled';
         state.token = action.payload.token;
-        state.user = action.payload.user; // kind of added token here ???
+        state.user = action.payload.user;
         try {
           AsyncStorage.setItem('token', JSON.stringify(action.payload.token));
         } catch (error) {
@@ -99,9 +99,7 @@ const authSlice = createSlice({
       .addCase(loginUser.rejected, (state: any, action: any) => {
         state.loading = 'rejected';
         state.error = action.error;
-
         console.log('err', state.error);
-
         state.token = null;
       });
     //-------FOR SIGN UP---------

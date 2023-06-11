@@ -115,7 +115,7 @@ const styles = StyleSheet.create({
     borderRadius: 15,
   },
   textFav: {
-    fontSize: 18,
+    fontSize: 16,
   },
   btnFav: {
     borderRadius: 25,

@@ -1,6 +1,7 @@
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import HomeScreen from '../screens/HomeScreen';
 import ProfileScreen from '../screens/ProfileScreen';
+import DetailsScreen from '../screens/DetailsScreen';
 
 type HomeStackParamList = {
   HomeScreen: undefined;
@@ -25,7 +26,7 @@ export const HomeStackNavigator: React.FC = () => {
       />
       <HomeStack.Screen
         name="DetailsScreen"
-        component={ProfileScreen}
+        component={DetailsScreen}
         options={{headerShown: false}}
       />
     </HomeStack.Navigator>
