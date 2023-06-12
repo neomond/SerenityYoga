@@ -7,7 +7,7 @@ import {
   Image,
   FlatList,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import SvgBack from '../../assets/BackIcon';
 import SvgLikeIcon from '../../assets/LikeIcon';
 import SvgDownload from '../../assets/DownloadIcon';
@@ -19,6 +19,25 @@ import SvgDuration from '../../assets/DurationIcon';
 import {DataItem} from '../../redux/slices/CategoriesSlice';
 import SvgCloseIcon from '../../assets/CloseIcon';
 import LinearGradient from 'react-native-linear-gradient';
+import SvgPause from '../../assets/PauseIcon';
+
+// const tracks = [
+//   {
+//     id: '1',
+//     url: require('../../assets/tracks/meditation1.mp3'),
+//     title: 'Blues Beat',r
+//   },
+//   {
+//     id: '2',
+//   url: require('../../assets/tracks/meditation2.mp3'),
+//     title: 'Country Song',
+//   },
+//   {
+//     id: '3',
+//   url: require('../../assets/tracks/meditation3.mp3'),
+//     title: 'Country Song',
+//   },
+// ];
 
 const SaveScreen = ({navigation}: any) => {
   const dispatch = useDispatch<AppDispatch>();
@@ -76,7 +95,7 @@ const SaveScreen = ({navigation}: any) => {
           start={{x: 0, y: 0.2}}
           end={{x: 1, y: 0}}
           style={styles.playerContainer}>
-          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+          <View style={styles.playerLeftStyles}>
             <Image
               style={styles.playerImage}
               source={{uri: selectedItem.image}}
@@ -86,9 +105,14 @@ const SaveScreen = ({navigation}: any) => {
               <Text>{selectedItem.duration}</Text>
             </View>
           </View>
-          <TouchableOpacity onPress={handleClosePlayer}>
-            <SvgCloseIcon stroke="#000" />
-          </TouchableOpacity>
+          <View style={styles.playerCondStyles}>
+            <TouchableOpacity>
+              <SvgPause />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={handleClosePlayer}>
+              <SvgCloseIcon stroke="#000" />
+            </TouchableOpacity>
+          </View>
         </LinearGradient>
       );
     }
@@ -239,4 +263,6 @@ const styles = StyleSheet.create({
     marginRight: 8,
     borderRadius: 8,
   },
+  playerCondStyles: {flexDirection: 'row', alignItems: 'center', columnGap: 10},
+  playerLeftStyles: {flexDirection: 'row', alignItems: 'center', columnGap: 2},
 });

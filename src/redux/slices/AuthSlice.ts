@@ -118,7 +118,6 @@ const authSlice = createSlice({
         state.loading = 'rejected';
         state.error = action.error;
         console.log('errrrr', action.payload);
-
         state.error = action.payload || 'Signup failed';
         state.token = null;
       });
