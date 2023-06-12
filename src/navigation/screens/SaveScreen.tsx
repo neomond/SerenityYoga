@@ -20,6 +20,8 @@ import {DataItem} from '../../redux/slices/CategoriesSlice';
 import SvgCloseIcon from '../../assets/CloseIcon';
 import LinearGradient from 'react-native-linear-gradient';
 import SvgPause from '../../assets/PauseIcon';
+import Slider from '@react-native-community/slider';
+
 import TrackPlayer, {
   Capability,
   State,
@@ -30,31 +32,30 @@ import TrackPlayer, {
   useTrackPlayerEvents,
   PlaybackState,
 } from 'react-native-track-player';
-import {tracks} from '../../models/tracks';
+import tracks from '../../models/tracks';
 import SvgPlay from '../../assets/PlayIcon';
 
-const setUpPlayer = async () => {
-  await TrackPlayer.setupPlayer();
-  await TrackPlayer.add(tracks);
-};
+// const setUpPlayer = async () => {
+//   await TrackPlayer.setupPlayer();
+//   await TrackPlayer.add(tracks);
+// };
 
-const togglePlayback = async (playbackState: any) => {
-  const currentTrack = await TrackPlayer.getCurrentTrack();
-  console.log(currentTrack);
-  if (currentTrack != null) {
-    if (playbackState == State.Paused) {
-      await TrackPlayer.play();
-    } else {
-      await TrackPlayer.pause();
-    }
-  }
-};
-
+//?????? check if player has already been initialized before calling TrackPlayer.setupPlayer():
+let isPlayerInitialized = false;
 const SaveScreen = ({navigation}: any) => {
   /////////////////PLAYER
   const playbackState = usePlaybackState();
   const progress = useProgress();
   const [pause, setPause] = useState('paused');
+  const [sliderValue, setSliderValue] = useState(0);
+
+  const setUpPlayer = async () => {
+    if (!isPlayerInitialized) {
+      await TrackPlayer.setupPlayer();
+      isPlayerInitialized = true;
+    }
+    await TrackPlayer.add(tracks);
+  };
 
   useEffect(() => {
     setUpPlayer();
@@ -83,12 +84,17 @@ const SaveScreen = ({navigation}: any) => {
     dispatch(removeItem(item.key));
   };
 
-  const handlePlay = (item: any) => {
+  const handlePlay = async (item: any) => {
     setSelectedItem(item);
+    await TrackPlayer.reset();
+    await TrackPlayer.add(tracks);
+    await TrackPlayer.play();
+    setPause('playing');
   };
 
   const handleClosePlayer = () => {
     setSelectedItem(null);
+    TrackPlayer.stop();
   };
 
   const renderItem = ({item}: {item: any}) => (
@@ -104,7 +110,7 @@ const SaveScreen = ({navigation}: any) => {
           <TouchableOpacity
             style={styles.btnFav}
             onPress={() => handlePlay(item)}>
-            <Text>Play</Text>
+            <Text>{pause === 'paused' ? 'Play' : 'Pause'}</Text>
           </TouchableOpacity>
           <TouchableOpacity>
             <SvgDownload />
@@ -126,6 +132,18 @@ const SaveScreen = ({navigation}: any) => {
           start={{x: 0, y: 0.2}}
           end={{x: 1, y: 0}}
           style={styles.playerContainer}>
+          <Slider
+            style={styles.progressBar}
+            value={progress.position}
+            minimumValue={0}
+            maximumValue={progress.duration}
+            minimumTrackTintColor="#B39FF8"
+            maximumTrackTintColor="#E5DEFF"
+            onSlidingComplete={async value => {
+              await TrackPlayer.seekTo(value);
+            }}
+          />
+
           <View style={styles.playerLeftStyles}>
             <Image
               style={styles.playerImage}
@@ -133,7 +151,6 @@ const SaveScreen = ({navigation}: any) => {
             />
             <View>
               <Text>{selectedItem.title}</Text>
-              <Text>{selectedItem.duration}</Text>
             </View>
           </View>
           <View style={styles.playerCondStyles}>
@@ -293,6 +310,12 @@ const styles = StyleSheet.create({
     height: 40,
     marginRight: 8,
     borderRadius: 8,
+  },
+  progressBar: {
+    width: '110%',
+    position: 'absolute',
+    flexDirection: 'row',
+    top: -20,
   },
   playerCondStyles: {flexDirection: 'row', alignItems: 'center', columnGap: 10},
   playerLeftStyles: {flexDirection: 'row', alignItems: 'center', columnGap: 2},
