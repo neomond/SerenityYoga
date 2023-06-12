@@ -20,26 +20,56 @@ import {DataItem} from '../../redux/slices/CategoriesSlice';
 import SvgCloseIcon from '../../assets/CloseIcon';
 import LinearGradient from 'react-native-linear-gradient';
 import SvgPause from '../../assets/PauseIcon';
+import TrackPlayer, {
+  Capability,
+  State,
+  Event,
+  usePlaybackState,
+  RepeatMode,
+  useProgress,
+  useTrackPlayerEvents,
+  PlaybackState,
+} from 'react-native-track-player';
+import {tracks} from '../../models/tracks';
+import SvgPlay from '../../assets/PlayIcon';
 
-// const tracks = [
-//   {
-//     id: '1',
-//     url: require('../../assets/tracks/meditation1.mp3'),
-//     title: 'Blues Beat',r
-//   },
-//   {
-//     id: '2',
-//   url: require('../../assets/tracks/meditation2.mp3'),
-//     title: 'Country Song',
-//   },
-//   {
-//     id: '3',
-//   url: require('../../assets/tracks/meditation3.mp3'),
-//     title: 'Country Song',
-//   },
-// ];
+const setUpPlayer = async () => {
+  await TrackPlayer.setupPlayer();
+  await TrackPlayer.add(tracks);
+};
+
+const togglePlayback = async (playbackState: any) => {
+  const currentTrack = await TrackPlayer.getCurrentTrack();
+  console.log(currentTrack);
+  if (currentTrack != null) {
+    if (playbackState == State.Paused) {
+      await TrackPlayer.play();
+    } else {
+      await TrackPlayer.pause();
+    }
+  }
+};
 
 const SaveScreen = ({navigation}: any) => {
+  /////////////////PLAYER
+  const playbackState = usePlaybackState();
+  const progress = useProgress();
+  const [pause, setPause] = useState('paused');
+
+  useEffect(() => {
+    setUpPlayer();
+  }, []);
+
+  const togglePause = () => {
+    if (pause == 'paused') {
+      TrackPlayer.play();
+      setPause('playing');
+    } else {
+      TrackPlayer.pause();
+      setPause('paused');
+    }
+  };
+  /////////////////PLAYER
   const dispatch = useDispatch<AppDispatch>();
   const [isLiked, setIsLiked] = useState(false);
   const [selectedItem, setSelectedItem] = useState<DataItem | null>(null);
@@ -87,6 +117,7 @@ const SaveScreen = ({navigation}: any) => {
     </View>
   );
 
+  //////////// FOR PLAYER
   const renderPlayer = () => {
     if (selectedItem) {
       return (
@@ -106,8 +137,8 @@ const SaveScreen = ({navigation}: any) => {
             </View>
           </View>
           <View style={styles.playerCondStyles}>
-            <TouchableOpacity>
-              <SvgPause />
+            <TouchableOpacity onPress={togglePause}>
+              {pause == 'paused' ? <SvgPlay /> : <SvgPause />}
             </TouchableOpacity>
             <TouchableOpacity onPress={handleClosePlayer}>
               <SvgCloseIcon stroke="#000" />
