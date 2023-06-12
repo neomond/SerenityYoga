@@ -107,7 +107,13 @@ const HomeScreen = ({navigation}: any) => {
 
   if (isLoading) {
     return (
-      <View>
+      <View
+        style={{
+          flex: 1,
+          alignItems: 'center',
+          justifyContent: 'center',
+          backgroundColor: '#fff',
+        }}>
         <ActivityIndicator />
       </View>
     );
@@ -154,7 +160,10 @@ const HomeScreen = ({navigation}: any) => {
             keyExtractor={item => item._id}
           />
         ) : (
-          <Text>No categories found.</Text>
+          <Text
+            style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+            No categories found.
+          </Text>
         )}
       </View>
     </LinearGradient>

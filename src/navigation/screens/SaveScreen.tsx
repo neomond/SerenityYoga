@@ -16,10 +16,14 @@ import {AppDispatch, RootState} from '../../redux';
 import {removeItem} from '../../redux/slices/LikedItemsSlice';
 import SvgFlower from '../../assets/Flower';
 import SvgDuration from '../../assets/DurationIcon';
+import {DataItem} from '../../redux/slices/CategoriesSlice';
+import SvgCloseIcon from '../../assets/CloseIcon';
+import LinearGradient from 'react-native-linear-gradient';
 
 const SaveScreen = ({navigation}: any) => {
   const dispatch = useDispatch<AppDispatch>();
   const [isLiked, setIsLiked] = useState(false);
+  const [selectedItem, setSelectedItem] = useState<DataItem | null>(null);
 
   const likedItems = useSelector(
     (state: RootState) => state.likedItemsSlice.likedItems,
@@ -28,6 +32,14 @@ const SaveScreen = ({navigation}: any) => {
   const handleRemove = (item: any) => {
     setIsLiked(!isLiked);
     dispatch(removeItem(item.key));
+  };
+
+  const handlePlay = (item: any) => {
+    setSelectedItem(item);
+  };
+
+  const handleClosePlayer = () => {
+    setSelectedItem(null);
   };
 
   const renderItem = ({item}: {item: any}) => (
@@ -40,7 +52,9 @@ const SaveScreen = ({navigation}: any) => {
       <View style={styles.favoritesItemSecondary}>
         <Text style={styles.textFav}>{item.title}</Text>
         <View style={styles.favoritesItemSecondaryBottom}>
-          <TouchableOpacity style={styles.btnFav}>
+          <TouchableOpacity
+            style={styles.btnFav}
+            onPress={() => handlePlay(item)}>
             <Text>Play</Text>
           </TouchableOpacity>
           <TouchableOpacity>
@@ -53,6 +67,33 @@ const SaveScreen = ({navigation}: any) => {
       </View>
     </View>
   );
+
+  const renderPlayer = () => {
+    if (selectedItem) {
+      return (
+        <LinearGradient
+          colors={['#E5DEFF', '#E5DEFF', '#B39FF8', '#815cff']}
+          start={{x: 0, y: 0.2}}
+          end={{x: 1, y: 0}}
+          style={styles.playerContainer}>
+          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+            <Image
+              style={styles.playerImage}
+              source={{uri: selectedItem.image}}
+            />
+            <View>
+              <Text>{selectedItem.title}</Text>
+              <Text>{selectedItem.duration}</Text>
+            </View>
+          </View>
+          <TouchableOpacity onPress={handleClosePlayer}>
+            <SvgCloseIcon stroke="#000" />
+          </TouchableOpacity>
+        </LinearGradient>
+      );
+    }
+    return null;
+  };
 
   return (
     <SafeAreaView style={styles.wrapper}>
@@ -77,6 +118,7 @@ const SaveScreen = ({navigation}: any) => {
           <Text style={styles.noItemsText}>No items in favorites.</Text>
         </View>
       )}
+      {renderPlayer()}
     </SafeAreaView>
   );
 };
@@ -177,5 +219,24 @@ const styles = StyleSheet.create({
     top: 35,
     left: 10,
     zIndex: 1,
+  },
+  playerContainer: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: '#fff',
+    padding: 16,
+    borderTopWidth: 1,
+    borderTopColor: '#ccc',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  playerImage: {
+    width: 40,
+    height: 40,
+    marginRight: 8,
+    borderRadius: 8,
   },
 });

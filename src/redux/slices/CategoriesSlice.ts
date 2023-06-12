@@ -9,7 +9,7 @@ export interface Category {
   likedItems: DataItem[];
 }
 
-interface DataItem {
+export interface DataItem {
   key: string;
   title: string;
   duration: string;
@@ -29,13 +29,11 @@ const initialState: CategoriesState = {
 };
 
 // ipconfig getifaddr en0
-// for home ----- 192.168.0.106
-// for codeaca ---- 192.168.10.32
 
 export const fetchCategories = createAsyncThunk('api/categories', async () => {
   try {
     const response = await axios.get(
-      'http://192.168.0.106:8080/api/categories',
+      'http://192.168.10.54:8080/api/categories',
     );
     return response.data;
   } catch (error) {
@@ -49,7 +47,7 @@ export const fetchCategoryById = createAsyncThunk(
   async categoryId => {
     try {
       const response = await axios.get(
-        `http://192.168.0.106:8080/api/categories/${categoryId}`,
+        `http://192.168.10.54:8080/api/categories/${categoryId}`,
       );
       return response.data;
     } catch (error) {
