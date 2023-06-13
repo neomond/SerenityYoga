@@ -1,5 +1,5 @@
 # SerenityYoga
-Yoga app in react native
+Yoga app written in react native. Application has video of yoga sessions, music tracker for meditation and description for each session item.
 
 <img src="https://github.com/neomond/SerenityYoga/assets/92153363/3355d0fc-5d23-4215-8db0-a4c02628f58c" width="200" height="450">
 <img src="https://github.com/neomond/SerenityYoga/assets/92153363/c810ab18-54c2-4776-a1e6-34acb74152b6" width="200" height="450">
@@ -10,9 +10,9 @@ Yoga app in react native
 
 
 ## Built With
-React Native
-React 
-JavaScript
-Node.js
-Express.js
-MongoDB
+###React Native
+###React 
+###JavaScript
+###Node.js
+###Express.js
+###MongoDB
