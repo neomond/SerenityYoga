@@ -1,8 +1,6 @@
 # SerenityYoga
 Yoga app in react native
 
-
-![Simulator Screen Shot - iPhone 14 Pro - 2023-06-13 at 11 54 52]<img src="[https://github.com/neomond/SerenityYoga/assets/92153363/3355d0fc-5d23-4215-8db0-a4c02628f58c](https://github.com/neomond/SerenityYoga/assets/92153363/3355d0fc-5d23-4215-8db0-a4c02628f58c)" width="200" height="450">
 ![Simulator Screen Shot - iPhone 14 Pro - 2023-06-13 at 11 54 52]<img src="https://github.com/neomond/SerenityYoga/assets/92153363/3355d0fc-5d23-4215-8db0-a4c02628f58c" width="200" height="450">
 
 ![Simulator Screen Shot - iPhone 14 Pro - 2023-06-13 at 11 55 13](https://github.com/neomond/SerenityYoga/assets/92153363/c810ab18-54c2-4776-a1e6-34acb74152b6)
