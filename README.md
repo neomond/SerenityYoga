@@ -10,9 +10,9 @@ Yoga app written in react native. Application has video of yoga sessions, music 
 
 
 ## Built With
-###React Native
-###React 
-###JavaScript
-###Node.js
-###Express.js
-###MongoDB
+### React Native
+### React 
+### JavaScript
+### Node.js
+### Express.js
+### MongoDB
