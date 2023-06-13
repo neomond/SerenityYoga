@@ -46,7 +46,7 @@ const DetailsScreen = ({route, navigation}: any) => {
         <Image source={{uri: item.image}} style={styles.categoryImages} />
         <Text style={styles.imageTitle}>{item.title}</Text>
         <TouchableOpacity style={styles.playBtn}>
-          <Text>Play</Text>
+          <Text style={{fontSize: 14}}>More Info</Text>
         </TouchableOpacity>
 
         <View style={styles.imageContentTop}>

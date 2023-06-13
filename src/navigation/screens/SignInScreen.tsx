@@ -5,7 +5,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React from 'react';
+import React, {useState} from 'react';
 import LinearGradient from 'react-native-linear-gradient';
 import SvgFacebook from '../../assets/Facebook';
 import SvgGoogle from '../../assets/Google';
@@ -18,6 +18,8 @@ import {signInSchema, signInInitialValues} from '../../schema/authSchema';
 
 const SignInScreen = ({navigation}: any) => {
   const dispatch = useDispatch<AppDispatch>();
+  const [error, setError] = useState('');
+
   //const token = useSelector((state: RootState) => state.authSlice.token);
 
   const handleSignIn = (values: any) => {
@@ -35,6 +37,7 @@ const SignInScreen = ({navigation}: any) => {
       })
       .catch((error: any) => {
         console.log('Login failed:', error);
+        setError('User not found');
       });
   };
 
@@ -81,6 +84,7 @@ const SignInScreen = ({navigation}: any) => {
               {formik.touched.password && formik.errors.password && (
                 <Text style={styles.errorText}>{formik.errors.password}</Text>
               )}
+              {error ? <Text style={styles.errorText}>{error}</Text> : null}
             </View>
             <TouchableOpacity onPress={() => navigation.navigate('Onboarding')}>
               <Text style={styles.forgotPasswordBtn}>Forgot Password?</Text>

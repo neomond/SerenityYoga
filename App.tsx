@@ -1,7 +1,7 @@
 import {NavigationContainer} from '@react-navigation/native';
 import AuthStack from './src/navigation/stack/AuthStack';
-import {Provider} from 'react-redux';
-import store from './src/redux';
+import {Provider, useSelector} from 'react-redux';
+import store, {RootState} from './src/redux';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {HomeStackNavigator} from './src/navigation/stack/HomeStack';
 import {SaveStackNavigator} from './src/navigation/stack/SaveStack';
@@ -21,7 +21,7 @@ type RootStackParamList = {
 type BottomTabParamList = {
   Home: undefined;
   Profile: undefined;
-  Save: undefined;
+  Liked: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -52,7 +52,7 @@ const HomeTabNavigator: React.FC = () => {
       />
 
       <Tab.Screen
-        name="Save"
+        name="Liked"
         options={{
           tabBarIcon: ({focused}: any) => (
             <SvgSaveIcon

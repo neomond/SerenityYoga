@@ -79,7 +79,11 @@ export const signupUser = createAsyncThunk(
 const authSlice = createSlice({
   name: 'auth',
   initialState,
-  reducers: {},
+  reducers: {
+    setAuthenticated: (state, action) => {
+      state.isAuthenticated = action.payload;
+    },
+  },
   extraReducers: (builder: any) => {
     //-------FOR LOGIN---------
     builder
@@ -92,6 +96,7 @@ const authSlice = createSlice({
         state.user = action.payload.user;
         try {
           AsyncStorage.setItem('token', JSON.stringify(action.payload.token));
+          console.log('stooorrring');
         } catch (error) {
           console.log('Error storing token in AsyncStorage:', error);
         }
@@ -125,5 +130,5 @@ const authSlice = createSlice({
 });
 
 export const getAuth = (state: RootState) => state.authSlice.user;
-
+export const {setAuthenticated} = authSlice.actions;
 export default authSlice.reducer;
