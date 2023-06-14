@@ -20,7 +20,7 @@ export const OnboardingStepThree = ({
         <SvgLogo fontSize={24} />
       </View>
       <Text style={styles.secondaryContent}>
-        Please, tell us more about yourself{' '}
+        Please, tell us more about yourself
       </Text>
       <View style={styles.thirdContent}>
         <TextInput
