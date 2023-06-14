@@ -96,6 +96,7 @@ const styles = StyleSheet.create({
     paddingVertical: 60,
     paddingBottom: 200,
     flexDirection: 'column',
+    height: '100%',
   },
   secondaryContent: {
     textAlign: 'center',

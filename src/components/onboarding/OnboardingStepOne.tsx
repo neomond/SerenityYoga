@@ -4,7 +4,9 @@ import {
   TextInput,
   TouchableOpacity,
   StyleSheet,
+  Image,
 } from 'react-native';
+import SvgLogo from '../../assets/Logo';
 
 export const OnboardingStepOne = ({
   userData,
@@ -13,6 +15,9 @@ export const OnboardingStepOne = ({
 }: any) => {
   return (
     <View style={styles.onboardingStep1Container}>
+      <View style={styles.tinyLogo}>
+        <SvgLogo fontSize={24} />
+      </View>
       <Text style={styles.secondaryContent}>Hey, What's your name?</Text>
       <View style={styles.thirdContent}>
         <TextInput
@@ -55,7 +60,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     columnGap: 15,
-    marginTop: '100%',
+    marginTop: '80%',
   },
   nextBtn: {
     borderRadius: 30,
@@ -69,5 +74,11 @@ const styles = StyleSheet.create({
   textColor: {
     color: '#fff',
     fontWeight: '500',
+  },
+  tinyLogo: {
+    paddingBottom: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+    textAlign: 'center',
   },
 });

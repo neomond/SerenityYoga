@@ -6,6 +6,7 @@ import {
   TextInput,
 } from 'react-native';
 import React from 'react';
+import SvgLogo from '../../assets/Logo';
 
 export const OnboardingStepThree = ({
   userData,
@@ -15,14 +16,13 @@ export const OnboardingStepThree = ({
 }: any) => {
   return (
     <View>
-      <Text style={styles.secondaryContent}>Hey, What's your name?</Text>
+      <View style={styles.tinyLogo}>
+        <SvgLogo fontSize={24} />
+      </View>
+      <Text style={styles.secondaryContent}>
+        Please, tell us more about yourself{' '}
+      </Text>
       <View style={styles.thirdContent}>
-        <TextInput
-          placeholder="Name"
-          style={styles.step1field}
-          value={userData.name}
-          onChangeText={value => handleInputChange('name', value)}
-        />
         <TextInput
           placeholder="Name"
           style={styles.step1field}
@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
     marginBottom: 30,
   },
   thirdContent: {
-    rowGap: 100,
+    rowGap: 20,
   },
   step1field: {
     height: 55,
@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     columnGap: 15,
-    // marginTop: '100%',
+    marginTop: '50%',
   },
   nextBtn: {
     borderRadius: 30,
@@ -90,5 +90,11 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     width: 150,
     alignItems: 'center',
+  },
+  tinyLogo: {
+    paddingBottom: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+    textAlign: 'center',
   },
 });
