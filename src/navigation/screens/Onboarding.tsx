@@ -76,8 +76,8 @@ const Onboarding = ({navigation}: any) => {
       style={styles.linearGradient}>
       <TouchableOpacity
         onPress={() => navigation.navigate('HomeMain')}
-        style={{marginBottom: 15, marginRight: 25, alignItems: 'flex-end'}}>
-        <Text style={styles.textColor}>Skip</Text>
+        style={styles.skipOnbMain}>
+        <Text style={styles.skipOnbText}>Skip</Text>
       </TouchableOpacity>
       <View style={styles.primaryContent}>{renderStep() as any}</View>
     </LinearGradient>
@@ -144,4 +144,6 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontWeight: '500',
   },
+  skipOnbMain: {marginBottom: 15, marginRight: 25, alignItems: 'flex-end'},
+  skipOnbText: {color: '#fff', fontWeight: '400', fontSize: 16},
 });
