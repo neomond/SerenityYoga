@@ -74,6 +74,7 @@ const styles = StyleSheet.create({
   textColor: {
     color: '#fff',
     fontWeight: '500',
+    fontSize: 16,
   },
   tinyLogo: {
     paddingBottom: 20,

@@ -1,11 +1,11 @@
-import {StyleSheet, View} from 'react-native';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React, {useState} from 'react';
 import LinearGradient from 'react-native-linear-gradient';
 import {OnboardingStepOne} from '../../components/onboarding/OnboardingStepOne';
 import {OnboardingStepTwo} from '../../components/onboarding/OnboardingStepTwo';
 import {OnboardingStepThree} from '../../components/onboarding/OnboardingStepThree';
 
-const Onboarding = () => {
+const Onboarding = ({navigation}: any) => {
   const [step, setStep] = useState(1);
   const [userData, setUserData] = useState({
     name: '',
@@ -74,6 +74,11 @@ const Onboarding = () => {
       start={{x: 0, y: 0}}
       end={{x: 1, y: 0}}
       style={styles.linearGradient}>
+      <TouchableOpacity
+        onPress={() => navigation.navigate('HomeMain')}
+        style={{marginBottom: 15, marginRight: 25, alignItems: 'flex-end'}}>
+        <Text style={styles.textColor}>Skip</Text>
+      </TouchableOpacity>
       <View style={styles.primaryContent}>{renderStep() as any}</View>
     </LinearGradient>
   );
@@ -83,7 +88,7 @@ export default Onboarding;
 
 const styles = StyleSheet.create({
   linearGradient: {
-    paddingTop: 100,
+    paddingTop: 80,
   },
   primaryContent: {
     paddingHorizontal: 18,
@@ -118,7 +123,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     columnGap: 15,
-    // marginTop: '100%',
   },
   backBtn: {
     borderRadius: 30,

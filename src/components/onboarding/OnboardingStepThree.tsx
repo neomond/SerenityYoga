@@ -5,8 +5,9 @@ import {
   View,
   TextInput,
 } from 'react-native';
-import React from 'react';
+import React, {useState} from 'react';
 import SvgLogo from '../../assets/Logo';
+import AgePicker from '../helpers/AgePicker';
 
 export const OnboardingStepThree = ({
   userData,
@@ -14,6 +15,10 @@ export const OnboardingStepThree = ({
   handlePreviousStep,
   handleNextStep,
 }: any) => {
+  const [age, setAge] = useState<string>('');
+  const handleAgeChange = (value: string) => {
+    setAge(value);
+  };
   return (
     <View>
       <View style={styles.tinyLogo}>
@@ -23,17 +28,19 @@ export const OnboardingStepThree = ({
         Please, tell us more about yourself
       </Text>
       <View style={styles.thirdContent}>
+        {/* <AgePicker value={age} onChange={handleAgeChange} /> */}
+        <AgePicker value={age} onChange={handleAgeChange} />
+
         <TextInput
-          placeholder="Name"
+          placeholder="Weight"
           style={styles.step1field}
           value={userData.name}
-          onChangeText={value => handleInputChange('name', value)}
         />
         <TextInput
-          placeholder="Name"
+          placeholder="Height"
           style={styles.step1field}
           value={userData.name}
-          onChangeText={value => handleInputChange('name', value)}
+          keyboardType="numeric"
         />
         <View style={styles.step1btns}>
           <TouchableOpacity style={styles.backBtn} onPress={handlePreviousStep}>

@@ -62,9 +62,9 @@ export const OnboardingStepTwo = ({
           </View>
         </View>
         <View style={styles.step1btns}>
-          {/* <TouchableOpacity style={styles.backBtn} onPress={handlePreviousStep}>
+          <TouchableOpacity style={styles.backBtn} onPress={handlePreviousStep}>
             <Text>Back</Text>
-          </TouchableOpacity> */}
+          </TouchableOpacity>
           <TouchableOpacity style={styles.nextBtn} onPress={handleNextStep}>
             <Text style={styles.textColor}>Continue</Text>
           </TouchableOpacity>
@@ -91,10 +91,10 @@ const styles = StyleSheet.create({
     paddingLeft: 15,
   },
   step1btns: {
-    flexDirection: 'row',
+    flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
-    columnGap: 15,
+    rowGap: 15,
   },
   nextBtn: {
     borderRadius: 30,
@@ -114,7 +114,7 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     borderWidth: 1,
     paddingVertical: 12,
-    width: 150,
+    width: '100%',
     alignItems: 'center',
   },
   tinyLogo: {
