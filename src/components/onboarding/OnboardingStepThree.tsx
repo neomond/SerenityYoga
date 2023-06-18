@@ -58,7 +58,7 @@ export const OnboardingStepThree = ({
 const styles = StyleSheet.create({
   secondaryContent: {
     textAlign: 'center',
-    fontSize: 18,
+    fontSize: 22,
     fontWeight: '600',
     marginBottom: 30,
   },

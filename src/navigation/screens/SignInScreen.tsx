@@ -86,7 +86,7 @@ const SignInScreen = ({navigation}: any) => {
               )}
               {error ? <Text style={styles.errorText}>{error}</Text> : null}
             </View>
-            <TouchableOpacity onPress={() => navigation.navigate('Onboarding')}>
+            <TouchableOpacity onPress={() => navigation.navigate('ForgotPwd')}>
               <Text style={styles.forgotPasswordBtn}>Forgot Password?</Text>
             </TouchableOpacity>
             <TouchableOpacity

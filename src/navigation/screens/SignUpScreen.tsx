@@ -30,7 +30,7 @@ const SignUpScreen = ({navigation}: any) => {
       .unwrap()
       .then((data: any) => {
         console.log('Signup successful:', data);
-        navigation.navigate('HomeMain');
+        navigation.navigate('Onboarding');
       })
       .catch((error: any) => {
         console.log('Signup failed:', error);

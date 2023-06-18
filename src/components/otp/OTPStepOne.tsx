@@ -4,47 +4,50 @@ import {
   TextInput,
   TouchableOpacity,
   StyleSheet,
-  Image,
 } from 'react-native';
 import SvgLogo from '../../assets/Logo';
 
-export const OnboardingStepOne = ({
+export const OTPStepOne = ({
   userData,
   handleInputChange,
   handleNextStep,
 }: any) => {
   return (
-    <View style={styles.onboardingStep1Container}>
+    <View style={styles.step1Container}>
       <View style={styles.tinyLogo}>
         <SvgLogo fontSize={24} />
       </View>
-      <Text style={styles.secondaryContent}>Hey, What's your name?</Text>
-      <View style={styles.thirdContent}>
+      <View style={{marginTop: 100}}>
+        <Text style={styles.secondaryContent}>Forgot Password</Text>
+        <Text style={styles.textSecondary}>
+          Enter your email so we can send you a password
+        </Text>
+
         <TextInput
-          placeholder="Name"
+          placeholder="Email"
           style={styles.step1field}
           value={userData.name}
           onChangeText={value => handleInputChange('name', value)}
         />
-        <View style={styles.step1btns}>
-          <TouchableOpacity style={styles.nextBtn} onPress={handleNextStep}>
-            <Text style={styles.textColor}>Continue</Text>
-          </TouchableOpacity>
-        </View>
+      </View>
+      <View style={styles.step1btns}>
+        <TouchableOpacity style={styles.nextBtn} onPress={handleNextStep}>
+          <Text style={styles.textColor}>Send a code</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  onboardingStep1Container: {
-    paddingBottom: 50,
+  step1Container: {
+    flex: 1,
   },
   secondaryContent: {
     textAlign: 'center',
-    fontSize: 22,
+    fontSize: 24,
     fontWeight: '600',
-    marginBottom: 30,
+    marginBottom: 10,
   },
   thirdContent: {
     rowGap: 100,
@@ -54,19 +57,19 @@ const styles = StyleSheet.create({
     backgroundColor: '#f6f6f6',
     borderRadius: 12,
     paddingLeft: 15,
+    marginBottom: 25,
   },
   step1btns: {
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
     columnGap: 15,
-    marginTop: '80%',
   },
   nextBtn: {
     borderRadius: 30,
     borderWidth: 1,
     paddingVertical: 15,
-    width: 250,
+    width: '100%',
     backgroundColor: '#815CFF',
     borderColor: '#815CFF',
     alignItems: 'center',
@@ -81,5 +84,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     textAlign: 'center',
+  },
+  textSecondary: {
+    textAlign: 'center',
+    marginBottom: 35,
+    color: '#979797',
+    fontSize: 15,
   },
 });
