@@ -35,6 +35,8 @@ export const fetchCategories = createAsyncThunk('api/categories', async () => {
     const response = await axios.get(
       'http://192.168.0.104:8080/api/categories',
     );
+ 
+    
     return response.data;
   } catch (error) {
     console.error('Error fetching categories:', error);

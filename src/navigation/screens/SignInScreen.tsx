@@ -15,11 +15,17 @@ import {loginUser} from '../../redux/slices/AuthSlice';
 import {AppDispatch} from '../../redux';
 import {Formik} from 'formik';
 import {signInSchema, signInInitialValues} from '../../schema/authSchema';
+import SvgViewEye from '../../assets/ViewEyeIcon';
+import SvgHideEye from '../../assets/HideEyeIcon';
 
 const SignInScreen = ({navigation}: any) => {
+  const [showPassword, setShowPassword] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
   const [error, setError] = useState('');
 
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
   //const token = useSelector((state: RootState) => state.authSlice.token);
 
   const handleSignIn = (values: any) => {
@@ -41,7 +47,11 @@ const SignInScreen = ({navigation}: any) => {
       });
   };
 
-  //   By using the .unwrap() method after dispatching the loginUser action, you can access the fulfilled value of the action, or catch any rejected value (in this case, the error from the server). Inside the catch block, you can handle the rejected login request appropriately, such as displaying an error message to the user or performing any other necessary actions.
+  //   By using the .unwrap() method after dispatching the loginUser action,
+  // you can access the fulfilled value of the action, or
+  // catch any rejected value (in this case, the error from the server).
+  // Inside the catch block, you can handle the rejected login request appropriately,
+  // such as displaying an error message to the user or performing any other necessary actions.
 
   return (
     <LinearGradient
@@ -76,7 +86,7 @@ const SignInScreen = ({navigation}: any) => {
               <TextInput
                 style={styles.input}
                 placeholder="Password"
-                secureTextEntry={true}
+                secureTextEntry={!showPassword}
                 value={formik.values.password}
                 onChangeText={formik.handleChange('password')}
                 onBlur={formik.handleBlur('password')}
@@ -85,6 +95,11 @@ const SignInScreen = ({navigation}: any) => {
                 <Text style={styles.errorText}>{formik.errors.password}</Text>
               )}
               {error ? <Text style={styles.errorText}>{error}</Text> : null}
+              <TouchableOpacity
+                onPress={togglePasswordVisibility}
+                style={styles.togglePwdStyles}>
+                {showPassword ? <SvgViewEye /> : <SvgHideEye />}
+              </TouchableOpacity>
             </View>
             <TouchableOpacity onPress={() => navigation.navigate('ForgotPwd')}>
               <Text style={styles.forgotPasswordBtn}>Forgot Password?</Text>
@@ -101,7 +116,7 @@ const SignInScreen = ({navigation}: any) => {
             </View>
             <TouchableOpacity
               style={[styles.signInBtn, {backgroundColor: '#1977f2'}]}
-              onPress={() => navigation.navigate('Register')}>
+              onPress={() => navigation.navigate('Onboarding')}>
               <SvgFacebook style={{marginRight: 50}} />
               <Text style={styles.labelTextSocial}>Login With Facebook</Text>
             </TouchableOpacity>
@@ -214,6 +229,11 @@ const styles = StyleSheet.create({
     fontSize: 14,
     marginTop: 5,
     marginLeft: 15,
+  },
+  togglePwdStyles: {
+    position: 'absolute',
+    top: 95,
+    right: 20,
   },
 });
 
