@@ -1,4 +1,5 @@
 PODS:
+  - BEMCheckBox (1.4.1)
   - boost (1.76.0)
   - BVLinearGradient (2.6.2):
     - React-Core
@@ -430,6 +431,9 @@ PODS:
     - React-perflogger (= 0.71.8)
   - RNCAsyncStorage (1.18.2):
     - React-Core
+  - RNCCheckbox (0.5.16):
+    - BEMCheckBox (~> 1.4)
+    - React-Core
   - RNDateTimePicker (7.1.0):
     - React-Core
   - RNScreens (3.20.0):
@@ -510,6 +514,7 @@ DEPENDENCIES:
   - React-runtimeexecutor (from `../node_modules/react-native/ReactCommon/runtimeexecutor`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
   - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
+  - "RNCCheckbox (from `../node_modules/@react-native-community/checkbox`)"
   - "RNDateTimePicker (from `../node_modules/@react-native-community/datetimepicker`)"
   - RNScreens (from `../node_modules/react-native-screens`)
   - RNSVG (from `../node_modules/react-native-svg`)
@@ -518,6 +523,7 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
+    - BEMCheckBox
     - CocoaAsyncSocket
     - Flipper
     - Flipper-Boost-iOSX
@@ -614,6 +620,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon"
   RNCAsyncStorage:
     :path: "../node_modules/@react-native-async-storage/async-storage"
+  RNCCheckbox:
+    :path: "../node_modules/@react-native-community/checkbox"
   RNDateTimePicker:
     :path: "../node_modules/@react-native-community/datetimepicker"
   RNScreens:
@@ -626,6 +634,7 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
+  BEMCheckBox: 5ba6e37ade3d3657b36caecc35c8b75c6c2b1a4e
   boost: 57d2868c099736d80fcd648bf211b4431e51a558
   BVLinearGradient: 34a999fda29036898a09c6a6b728b0b4189e1a44
   CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
@@ -678,6 +687,7 @@ SPEC CHECKSUMS:
   React-runtimeexecutor: 7c51ae9d4b3e9608a2366e39ccaa606aa551b9ed
   ReactCommon: 85c98ab0a509e70bf5ee5d9715cf68dbf495b84c
   RNCAsyncStorage: ddc4ee162bfd41b0d2c68bf2d95acd81dd7f1f93
+  RNCCheckbox: 75255b03e604bbcc26411eb31c4cbe3e3865f538
   RNDateTimePicker: 7ecd54a97fc3749f38c3c89a171f6cbd52f3c142
   RNScreens: 218801c16a2782546d30bd2026bb625c0302d70f
   RNSVG: 53c661b76829783cdaf9b7a57258f3d3b4c28315

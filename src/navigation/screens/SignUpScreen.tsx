@@ -1,4 +1,5 @@
 import {
+  ScrollView,
   StyleSheet,
   Text,
   TextInput,
@@ -17,10 +18,13 @@ import {signUpInitialValues, signUpSchema} from '../../schema/authSchema';
 import {useState} from 'react';
 import SvgViewEye from '../../assets/ViewEyeIcon';
 import SvgHideEye from '../../assets/HideEyeIcon';
+import CheckBox from '@react-native-community/checkbox';
 
 const SignUpScreen = ({navigation}: any) => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [isChecked, setIsChecked] = useState(false);
+
   //for password secure entry
 
   const dispatch = useDispatch<AppDispatch>();
@@ -33,6 +37,11 @@ const SignUpScreen = ({navigation}: any) => {
 
   const toggleConfirmPasswordVisibility = () => {
     setShowConfirmPassword(!showConfirmPassword);
+  };
+
+  // terms & conditions
+  const handleCheckboxChange = () => {
+    setIsChecked(!isChecked);
   };
 
   const handleSignUp = (values: any) => {
@@ -59,98 +68,117 @@ const SignUpScreen = ({navigation}: any) => {
       start={{x: 0, y: 0}}
       end={{x: 1, y: 0}}
       style={styles.linearGradient}>
-      <Formik
-        initialValues={signUpInitialValues}
-        validationSchema={signUpSchema}
-        onSubmit={handleSignUp}>
-        {formik => (
-          <View style={styles.primaryContent}>
-            <Text style={styles.primaryText}>Welcome!</Text>
-            <Text style={styles.secondaryText}>Already have an account?</Text>
-            <TouchableOpacity onPress={() => navigation.navigate('Login')}>
-              <Text style={styles.signUpBtn}>Sign in</Text>
-            </TouchableOpacity>
-            <View style={styles.inputs}>
-              <TextInput
-                style={styles.input}
-                placeholder="Email"
-                value={formik.values.email}
-                onChangeText={formik.handleChange('email')}
-                onBlur={formik.handleBlur('email')}
-              />
-              {formik.touched.email && formik.errors.email && (
-                <Text style={styles.errorText}>{formik.errors.email}</Text>
-              )}
-              {error && <Text style={styles.errorText}>{error.error}</Text>}
-              <View>
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <Formik
+          initialValues={signUpInitialValues}
+          validationSchema={signUpSchema}
+          onSubmit={handleSignUp}>
+          {formik => (
+            <View style={styles.primaryContent}>
+              <Text style={styles.primaryText}>Welcome!</Text>
+              <Text style={styles.secondaryText}>Already have an account?</Text>
+              <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+                <Text style={styles.signUpBtn}>Sign in</Text>
+              </TouchableOpacity>
+              <View style={styles.inputs}>
                 <TextInput
                   style={styles.input}
-                  placeholder="Password"
-                  secureTextEntry={!showPassword}
-                  value={formik.values.password}
-                  onChangeText={formik.handleChange('password')}
-                  onBlur={formik.handleBlur('password')}
+                  placeholder="Email"
+                  value={formik.values.email}
+                  onChangeText={formik.handleChange('email')}
+                  onBlur={formik.handleBlur('email')}
                 />
-                {formik.touched.password && formik.errors.password && (
-                  <Text style={styles.errorText}>{formik.errors.password}</Text>
+                {formik.touched.email && formik.errors.email && (
+                  <Text style={styles.errorText}>{formik.errors.email}</Text>
                 )}
-                <TouchableOpacity
-                  onPress={togglePasswordVisibility}
-                  style={styles.togglePwdStyles}>
-                  {showPassword ? <SvgViewEye /> : <SvgHideEye />}
-                </TouchableOpacity>
-              </View>
-              <View>
-                <TextInput
-                  style={styles.input}
-                  placeholder="Confirm Password"
-                  secureTextEntry={!showConfirmPassword}
-                  value={formik.values.confirmPassword}
-                  onChangeText={formik.handleChange('confirmPassword')}
-                  onBlur={formik.handleBlur('confirmPassword')}
-                />
-                {formik.touched.confirmPassword &&
-                  formik.errors.confirmPassword && (
+                {error && <Text style={styles.errorText}>{error.error}</Text>}
+                <View>
+                  <TextInput
+                    style={styles.input}
+                    placeholder="Password"
+                    secureTextEntry={!showPassword}
+                    value={formik.values.password}
+                    onChangeText={formik.handleChange('password')}
+                    onBlur={formik.handleBlur('password')}
+                  />
+                  {formik.touched.password && formik.errors.password && (
                     <Text style={styles.errorText}>
-                      {formik.errors.confirmPassword}
+                      {formik.errors.password}
                     </Text>
                   )}
-                <TouchableOpacity
-                  onPress={toggleConfirmPasswordVisibility}
-                  style={styles.togglePwdStyles}>
-                  {showConfirmPassword ? <SvgViewEye /> : <SvgHideEye />}
-                </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={togglePasswordVisibility}
+                    style={styles.togglePwdStyles}>
+                    {showPassword ? <SvgViewEye /> : <SvgHideEye />}
+                  </TouchableOpacity>
+                </View>
+                <View>
+                  <TextInput
+                    style={styles.input}
+                    placeholder="Confirm Password"
+                    secureTextEntry={!showConfirmPassword}
+                    value={formik.values.confirmPassword}
+                    onChangeText={formik.handleChange('confirmPassword')}
+                    onBlur={formik.handleBlur('confirmPassword')}
+                  />
+                  {formik.touched.confirmPassword &&
+                    formik.errors.confirmPassword && (
+                      <Text style={styles.errorText}>
+                        {formik.errors.confirmPassword}
+                      </Text>
+                    )}
+                  <TouchableOpacity
+                    onPress={toggleConfirmPasswordVisibility}
+                    style={styles.togglePwdStyles}>
+                    {showConfirmPassword ? <SvgViewEye /> : <SvgHideEye />}
+                  </TouchableOpacity>
+                </View>
+                <View style={styles.checkboxContainer}>
+                  <CheckBox
+                    disabled={false}
+                    value={isChecked}
+                    style={styles.checkbox}
+                    hideBox
+                    boxType="square"
+                    onValueChange={handleCheckboxChange}
+                    onCheckColor="#8866ff"
+                  />
+                  <View style={styles.privacyTextCont}>
+                    <Text style={styles.checkboxLabel}>I agree with</Text>
+                    <Text>Privacy&Policy</Text>
+                  </View>
+                </View>
               </View>
+              <TouchableOpacity
+                onPress={formik.handleSubmit}
+                style={[styles.signInBtn, {backgroundColor: '#8866ff'}]}>
+                <Text style={styles.labelText}>Sign Up</Text>
+              </TouchableOpacity>
+              <View style={styles.borderContainer}>
+                <View style={styles.border} />
+                <Text style={styles.borderText}>Or With</Text>
+                <View style={styles.border} />
+              </View>
+              <TouchableOpacity
+                style={[styles.signInBtn, {backgroundColor: '#1977f2'}]}>
+                <SvgFacebook style={{marginRight: 50}} />
+                <Text style={styles.labelTextSocial}>Login With Facebook</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[
+                  styles.signInBtn,
+                  {backgroundColor: '#fff', borderWidth: 0.5},
+                ]}
+                onPress={() => navigation.navigate('Register')}>
+                <SvgGoogle style={{marginRight: 60}} />
+                <Text style={styles.labelTextSocialSecond}>
+                  Login With Google
+                </Text>
+              </TouchableOpacity>
             </View>
-            <TouchableOpacity
-              onPress={formik.handleSubmit}
-              style={[styles.signInBtn, {backgroundColor: '#8866ff'}]}>
-              <Text style={styles.labelText}>Sign Up</Text>
-            </TouchableOpacity>
-            <View style={styles.borderContainer}>
-              <View style={styles.border} />
-              <Text style={styles.borderText}>Or With</Text>
-              <View style={styles.border} />
-            </View>
-            <TouchableOpacity
-              style={[styles.signInBtn, {backgroundColor: '#1977f2'}]}>
-              <SvgFacebook style={{marginRight: 50}} />
-              <Text style={styles.labelTextSocial}>Login With Facebook</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[
-                styles.signInBtn,
-                {backgroundColor: '#fff', borderWidth: 0.5},
-              ]}
-              onPress={() => navigation.navigate('Register')}>
-              <SvgGoogle style={{marginRight: 60}} />
-              <Text style={styles.labelTextSocialSecond}>
-                Login With Google
-              </Text>
-            </TouchableOpacity>
-          </View>
-        )}
-      </Formik>
+          )}
+        </Formik>
+      </ScrollView>
     </LinearGradient>
   );
 };
@@ -257,4 +285,21 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  checkboxContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    columnGap: 10,
+    marginTop: 12,
+  },
+  checkboxLabel: {
+    color: '#585858',
+  },
+  checkbox: {
+    width: 23,
+    height: 23,
+    borderRadius: 5,
+    borderWidth: 2,
+    borderColor: '#DADADA',
+  },
+  privacyTextCont: {flexDirection: 'row', columnGap: 4},
 });
