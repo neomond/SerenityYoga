@@ -14,10 +14,26 @@ import {Formik} from 'formik';
 import {Auth} from '../../models/Auth';
 import {signupUser} from '../../redux/slices/AuthSlice';
 import {signUpInitialValues, signUpSchema} from '../../schema/authSchema';
+import {useState} from 'react';
+import SvgViewEye from '../../assets/ViewEyeIcon';
+import SvgHideEye from '../../assets/HideEyeIcon';
 
 const SignUpScreen = ({navigation}: any) => {
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  //for password secure entry
+
   const dispatch = useDispatch<AppDispatch>();
   const error = useSelector((state: RootState) => state.authSlice.error);
+
+  //for password secure entry
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
+  const toggleConfirmPasswordVisibility = () => {
+    setShowConfirmPassword(!showConfirmPassword);
+  };
 
   const handleSignUp = (values: any) => {
     const {email, password, confirmPassword} = values;
@@ -66,31 +82,45 @@ const SignUpScreen = ({navigation}: any) => {
                 <Text style={styles.errorText}>{formik.errors.email}</Text>
               )}
               {error && <Text style={styles.errorText}>{error.error}</Text>}
-              <TextInput
-                style={styles.input}
-                placeholder="Password"
-                secureTextEntry={true}
-                value={formik.values.password}
-                onChangeText={formik.handleChange('password')}
-                onBlur={formik.handleBlur('password')}
-              />
-              {formik.touched.password && formik.errors.password && (
-                <Text style={styles.errorText}>{formik.errors.password}</Text>
-              )}
-              <TextInput
-                style={styles.input}
-                placeholder="Confirm Password"
-                secureTextEntry={true}
-                value={formik.values.confirmPassword}
-                onChangeText={formik.handleChange('confirmPassword')}
-                onBlur={formik.handleBlur('confirmPassword')}
-              />
-              {formik.touched.confirmPassword &&
-                formik.errors.confirmPassword && (
-                  <Text style={styles.errorText}>
-                    {formik.errors.confirmPassword}
-                  </Text>
+              <View>
+                <TextInput
+                  style={styles.input}
+                  placeholder="Password"
+                  secureTextEntry={!showPassword}
+                  value={formik.values.password}
+                  onChangeText={formik.handleChange('password')}
+                  onBlur={formik.handleBlur('password')}
+                />
+                {formik.touched.password && formik.errors.password && (
+                  <Text style={styles.errorText}>{formik.errors.password}</Text>
                 )}
+                <TouchableOpacity
+                  onPress={togglePasswordVisibility}
+                  style={styles.togglePwdStyles}>
+                  {showPassword ? <SvgViewEye /> : <SvgHideEye />}
+                </TouchableOpacity>
+              </View>
+              <View>
+                <TextInput
+                  style={styles.input}
+                  placeholder="Confirm Password"
+                  secureTextEntry={!showConfirmPassword}
+                  value={formik.values.confirmPassword}
+                  onChangeText={formik.handleChange('confirmPassword')}
+                  onBlur={formik.handleBlur('confirmPassword')}
+                />
+                {formik.touched.confirmPassword &&
+                  formik.errors.confirmPassword && (
+                    <Text style={styles.errorText}>
+                      {formik.errors.confirmPassword}
+                    </Text>
+                  )}
+                <TouchableOpacity
+                  onPress={toggleConfirmPasswordVisibility}
+                  style={styles.togglePwdStyles}>
+                  {showConfirmPassword ? <SvgViewEye /> : <SvgHideEye />}
+                </TouchableOpacity>
+              </View>
             </View>
             <TouchableOpacity
               onPress={formik.handleSubmit}
@@ -219,5 +249,12 @@ const styles = StyleSheet.create({
     fontSize: 14,
     marginTop: 5,
     marginLeft: 15,
+  },
+  togglePwdStyles: {
+    position: 'absolute',
+    top: 28,
+    right: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
