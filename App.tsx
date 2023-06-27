@@ -7,9 +7,12 @@ import {HomeStackNavigator} from './src/navigation/stack/HomeStack';
 import {SaveStackNavigator} from './src/navigation/stack/SaveStack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import SvgHomeIcon from './src/assets/HomeIcon';
-import SvgSaveIcon from './src/assets/SaveIcon';
 import SplashScreen from 'react-native-splash-screen';
 import {useEffect} from 'react';
+import MeditationsScreen from './src/navigation/screens/MeditationsScreen';
+import SvgMeditations from './src/assets/MeditationsIcon';
+import SvgPractices from './src/assets/VideosIcon';
+import SvgLiked from './src/assets/LikedIcon';
 
 type RootStackParamList = {
   AuthMain: undefined;
@@ -22,6 +25,8 @@ type BottomTabParamList = {
   Home: undefined;
   Profile: undefined;
   Liked: undefined;
+  Meditations: undefined;
+  Practices: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -50,18 +55,36 @@ const HomeTabNavigator: React.FC = () => {
         }}
         component={HomeStackNavigator}
       />
+      <Tab.Screen
+        name="Practices"
+        options={{
+          tabBarIcon: ({focused}: any) => (
+            <SvgPractices stroke={focused ? '#815CFF' : '#444444'} />
+          ),
+        }}
+        component={MeditationsScreen}
+      />
 
       <Tab.Screen
         name="Liked"
         options={{
           tabBarIcon: ({focused}: any) => (
-            <SvgSaveIcon
+            <SvgLiked
               stroke={focused ? '#815CFF' : '#444444'}
               fill={focused ? '#E5DEFF' : '#fff'}
             />
           ),
         }}
         component={SaveStackNavigator}
+      />
+      <Tab.Screen
+        name="Meditations"
+        options={{
+          tabBarIcon: ({focused}: any) => (
+            <SvgMeditations stroke={focused ? '#815CFF' : '#444444'} />
+          ),
+        }}
+        component={MeditationsScreen}
       />
     </Tab.Navigator>
   );
