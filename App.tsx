@@ -13,6 +13,8 @@ import MeditationsScreen from './src/navigation/screens/MeditationsScreen';
 import SvgMeditations from './src/assets/MeditationsIcon';
 import SvgPractices from './src/assets/VideosIcon';
 import SvgLiked from './src/assets/LikedIcon';
+import {PracticesStackNavigator} from './src/navigation/stack/PracticesStack';
+import {MeditationsStackNavigator} from './src/navigation/stack/MeditationsStack';
 
 type RootStackParamList = {
   AuthMain: undefined;
@@ -62,7 +64,7 @@ const HomeTabNavigator: React.FC = () => {
             <SvgPractices stroke={focused ? '#815CFF' : '#444444'} />
           ),
         }}
-        component={MeditationsScreen}
+        component={PracticesStackNavigator}
       />
 
       <Tab.Screen
@@ -84,7 +86,7 @@ const HomeTabNavigator: React.FC = () => {
             <SvgMeditations stroke={focused ? '#815CFF' : '#444444'} />
           ),
         }}
-        component={MeditationsScreen}
+        component={MeditationsStackNavigator}
       />
     </Tab.Navigator>
   );
