@@ -1,8 +1,9 @@
 import React from 'react';
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import SvgCloseIcon from '../../assets/CloseIcon';
 import SvgSettings from '../../assets/SettingsIcon';
+import SvgLikeIcon from '../../assets/LikeIcon';
 
 const PracticesScreen = ({navigation}: any) => {
   return (
@@ -22,7 +23,24 @@ const PracticesScreen = ({navigation}: any) => {
           <SvgCloseIcon />
         </TouchableOpacity>
       </View>
-      <View style={styles.primaryContent}></View>
+      <View style={styles.primaryContent}>
+        {/* render item will start here  */}
+        <TouchableOpacity style={styles.mainCollectionWrapper}>
+          <Image
+            style={styles.image}
+            source={require('../../assets/test.png')}
+          />
+
+          <View style={styles.secondaryCollectionWrapper}>
+            <Text style={styles.textCollFirst}>10 meditations</Text>
+            <Text style={styles.textCollSecond}>Remember to breathe</Text>
+            <Text style={styles.textCollThird}>
+              Bring awareness Back onto the menu. Reconnect with yourself
+            </Text>
+          </View>
+        </TouchableOpacity>
+        {/* render item will end here  */}
+      </View>
     </LinearGradient>
   );
 };
@@ -78,6 +96,37 @@ const styles = StyleSheet.create({
     fontSize: 22,
     fontWeight: '600',
     color: '#fff',
+  },
+  mainCollectionWrapper: {
+    borderWidth: 1,
+    marginHorizontal: 25,
+    borderRadius: 20,
+    borderColor: '#f5f5f5',
+    backgroundColor: '#f5f5f5',
+  },
+  image: {
+    width: '100%',
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    borderBottomLeftRadius: 0,
+    borderBottomRightRadius: 0,
+  },
+  secondaryCollectionWrapper: {
+    paddingHorizontal: 20,
+    paddingVertical: 15,
+    rowGap: 5,
+  },
+  textCollFirst: {
+    color: '#8F6FFE',
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  textCollSecond: {
+    fontSize: 18,
+    fontWeight: '500',
+  },
+  textCollThird: {
+    fontSize: 16,
   },
 });
 
