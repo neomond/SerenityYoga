@@ -8,7 +8,7 @@ const SvgBack = props => (
     fill="none"
     {...props}>
     <Path
-      stroke="#000"
+      // stroke="#000"
       strokeLinecap="round"
       strokeWidth={2}
       d="m9 8-4 4m0 0 4 4m-4-4h14"

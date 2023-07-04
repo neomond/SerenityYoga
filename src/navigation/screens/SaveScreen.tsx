@@ -171,7 +171,7 @@ const SaveScreen = ({navigation}: any) => {
     <SafeAreaView style={styles.wrapper}>
       <View style={styles.favoritesMainContent}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
-          <SvgBack />
+          <SvgBack stroke="#000" />
         </TouchableOpacity>
         <Text style={styles.textMain}>Favorites</Text>
         <Text>✨</Text>

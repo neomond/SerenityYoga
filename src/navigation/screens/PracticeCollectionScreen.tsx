@@ -9,12 +9,18 @@ import {
 import React from 'react';
 import SvgLikeIcon from '../../assets/LikeIcon';
 import SvgDuration from '../../assets/DurationIcon';
+import SvgBack from '../../assets/BackIcon';
 
-const PracticesCollectionScreen = () => {
+const PracticesCollectionScreen = ({navigation}: any) => {
   return (
     <View style={styles.mainWrapper}>
       <ScrollView>
         <Image style={styles.image} source={require('../../assets/test.png')} />
+        <View style={styles.favoritesMainContent}>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <SvgBack stroke="#fff" />
+          </TouchableOpacity>
+        </View>
         <View style={styles.secondaryCollectionWrapper}>
           <Text style={styles.textCollFirst}>10 meditations</Text>
           <Text style={styles.textCollSecond}>Remember to breathe</Text>
@@ -25,6 +31,7 @@ const PracticesCollectionScreen = () => {
             <Text style={styles.secondaryText}>
               Meditations in this collection
             </Text>
+            {/* rendered item starts */}
             <View style={styles.favoritesItem}>
               <View style={styles.imageContentSubtop}>
                 <SvgDuration />
@@ -34,6 +41,7 @@ const PracticesCollectionScreen = () => {
                 style={styles.imageFav}
                 source={require('../../assets/test.png')}
               />
+
               <View style={styles.favoritesItemSecondary}>
                 <Text style={styles.textFav}>Meow</Text>
                 <View style={styles.favoritesItemSecondaryBottom}>
@@ -53,6 +61,7 @@ const PracticesCollectionScreen = () => {
                 </View>
               </View>
             </View>
+            {/* rendered item ends */}
           </View>
         </View>
       </ScrollView>
@@ -138,5 +147,18 @@ const styles = StyleSheet.create({
     backgroundColor: '#f0f0f0',
     width: 110,
     marginRight: 10,
+  },
+  favoritesMainContent: {
+    position: 'absolute',
+    marginTop: 70,
+    marginHorizontal: 20,
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    borderWidth: 1,
+    borderRadius: 50,
+    borderColor: 'rgba(229,222,255, 0.2)',
+    backgroundColor: 'rgba(229,222,255, 0.2)',
+    padding: 5,
   },
 });
