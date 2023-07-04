@@ -25,7 +25,9 @@ const PracticesScreen = ({navigation}: any) => {
       </View>
       <View style={styles.primaryContent}>
         {/* render item will start here  */}
-        <TouchableOpacity style={styles.mainCollectionWrapper}>
+        <TouchableOpacity
+          style={styles.mainCollectionWrapper}
+          onPress={() => navigation.navigate('PracticeCollection')}>
           <Image
             style={styles.image}
             source={require('../../assets/test.png')}
