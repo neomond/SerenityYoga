@@ -23,6 +23,7 @@ import {
   setLikedItems,
 } from '../../redux/slices/LikedItemsSlice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import SvgFlower from '../../assets/Flower';
 
 const HomeScreen = ({navigation}: any) => {
   const dispatch = useDispatch<AppDispatch>();
@@ -105,19 +106,19 @@ const HomeScreen = ({navigation}: any) => {
     );
   };
 
-  if (isLoading) {
-    return (
-      <View
-        style={{
-          flex: 1,
-          alignItems: 'center',
-          justifyContent: 'center',
-          backgroundColor: '#fff',
-        }}>
-        <ActivityIndicator />
-      </View>
-    );
-  }
+  // if (isLoading) {
+  //   return (
+  //     <View
+  //       style={{
+  //         flex: 1,
+  //         alignItems: 'center',
+  //         justifyContent: 'center',
+  //         backgroundColor: '#fff',
+  //       }}>
+  //       <ActivityIndicator />
+  //     </View>
+  //   );
+  // }
 
   return (
     <LinearGradient
@@ -160,10 +161,12 @@ const HomeScreen = ({navigation}: any) => {
             keyExtractor={item => item._id}
           />
         ) : (
-          <Text
-            style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-            No categories found.
-          </Text>
+          <View style={styles.noItemsContainer}>
+            <View style={styles.flowerIcon}>
+              <SvgFlower />
+            </View>
+            <Text style={styles.noItemsText}>No Categories.</Text>
+          </View>
         )}
       </View>
     </LinearGradient>
@@ -223,6 +226,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     paddingVertical: 40,
     paddingBottom: 200,
+    height: '100%',
   },
   headerText: {
     marginHorizontal: 20,
@@ -299,6 +303,7 @@ const styles = StyleSheet.create({
   renderItemCont: {
     paddingLeft: 20,
     paddingBottom: 20,
+    // height: '200%',
   },
   renderItemContSecond: {
     flexDirection: 'row',
@@ -314,5 +319,23 @@ const styles = StyleSheet.create({
     color: '#929292',
     fontWeight: '400',
     paddingRight: 20,
+  },
+  noItemsContainer: {
+    flex: 0.6,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  noItemsText: {
+    fontSize: 16,
+    color: '#815CFF',
+    fontWeight: '600',
+  },
+  flowerIcon: {
+    width: 50,
+    height: 50,
+    position: 'absolute',
+    top: -30,
+    left: 0,
+    zIndex: -1,
   },
 });

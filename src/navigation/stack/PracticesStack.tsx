@@ -28,11 +28,11 @@ export const PracticesStackNavigator: React.FC = () => {
         component={PracticesCollectionScreen}
         options={{headerShown: false}}
       />
-      <PracticesStack.Screen
+      {/* <PracticesStack.Screen
         name="Settings"
         component={SettingsScreen}
         options={{headerShown: false}}
-      />
+      /> */}
       <PracticesStack.Screen
         name="PracticePreview"
         component={PracticePreviewScreen}

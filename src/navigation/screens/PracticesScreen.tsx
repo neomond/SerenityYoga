@@ -14,7 +14,7 @@ const PracticesScreen = ({navigation}: any) => {
       style={styles.linearGradient}>
       <View style={styles.iconsHeader}>
         <TouchableOpacity
-          onPress={() => navigation.navigate('ProfileScreen')}
+          // onPress={() => navigation.navigate('ProfileScreen')}
           style={styles.profileStyle}>
           <SvgSettings stroke="#E5DEFF" fill="transparent" />
         </TouchableOpacity>
