@@ -59,7 +59,6 @@ const PracticesScreen = ({navigation}: any) => {
               style={styles.image}
               source={require('../../assets/test.png')}
             />
-
             <View style={styles.secondaryCollectionWrapper}>
               <Text style={styles.textCollFirst}>10 meditations</Text>
               <Text style={styles.textCollSecond}>Remember to breathe</Text>
@@ -192,10 +191,10 @@ const styles = StyleSheet.create({
   },
   bottomSheetContent: {
     flexDirection: 'column',
-    marginTop: 35,
+    marginTop: 20,
   },
   closeButton: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: '500',
     color: '#fff',
     textAlign: 'center',
@@ -210,7 +209,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#f6f6f6',
     borderRadius: 10,
-    marginBottom: 15,
+    marginBottom: 12,
   },
   selectedItem: {
     position: 'absolute',
@@ -222,7 +221,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#8F6FFE',
     marginHorizontal: 25,
     borderRadius: 30,
-    marginTop: 15,
+
+    marginTop: 20,
   },
 });
 

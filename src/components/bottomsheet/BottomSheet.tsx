@@ -1,14 +1,14 @@
 import React, {useRef, useEffect} from 'react';
-import {TouchableOpacity, StyleSheet, Modal} from 'react-native';
+import {TouchableOpacity, StyleSheet, Modal, View} from 'react-native';
 import BottomSheet from '@gorhom/bottom-sheet';
 
 interface BottomSheetProps {
   isVisible: boolean;
   toggleBottomSheet: () => void;
   children: React.ReactNode;
-  items: string[]; // Pass the array of items
-  selectedItems: string[]; // Pass the array of selected items
-  onItemSelect: (item: string) => void; // Handle item selection
+  items: string[];
+  selectedItems: string[];
+  onItemSelect: (item: string) => void;
 }
 
 const BottomSheetComponent: React.FC<BottomSheetProps> = ({
@@ -43,7 +43,8 @@ const BottomSheetComponent: React.FC<BottomSheetProps> = ({
         ref={bottomSheetRef}
         index={isVisible ? 1 : 0}
         snapPoints={snapPoints}
-        onChange={handleSheetChange}>
+        onChange={handleSheetChange}
+        handleIndicatorStyle={styles.handleIndicator}>
         {children}
       </BottomSheet>
     </Modal>
@@ -54,6 +55,12 @@ const styles = StyleSheet.create({
   backdrop: {
     flex: 1,
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  handleIndicator: {
+    height: 4,
+    width: 50,
+    borderRadius: 2,
+    marginTop: 15,
   },
 });
 
