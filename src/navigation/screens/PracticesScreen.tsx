@@ -1,5 +1,12 @@
 import React, {useState} from 'react';
-import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {
+  Image,
+  Pressable,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import SvgSettings from '../../assets/SettingsIcon';
 import BottomSheetComponent from '../../components/bottomsheet/BottomSheet';
@@ -12,7 +19,7 @@ const PracticesScreen = ({navigation}: any) => {
   const toggleBottomSheet = () => {
     setBottomSheetVisible(!isBottomSheetVisible);
   };
-  const items = ['Item 1', 'Item 2', 'Item 3', 'Item 4'];
+  const items = ['Basic', 'Morning', 'Evening', 'General'];
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
 
   const handleItemSelect = (item: string) => {
@@ -70,16 +77,12 @@ const PracticesScreen = ({navigation}: any) => {
           selectedItems={selectedItems}
           onItemSelect={handleItemSelect}>
           <View style={styles.bottomSheetContent}>
-            {/* <Text>This is the Bottom Sheet content.</Text>
-            <TouchableOpacity onPress={toggleBottomSheet}>
-              <Text style={styles.closeButton}>Continue</Text>
-            </TouchableOpacity> */}
             {items.map(item => (
-              <TouchableOpacity
+              <Pressable
                 key={item}
                 style={styles.checkboxItem}
                 onPress={() => handleItemSelect(item)}>
-                <Text>{item}</Text>
+                <Text style={{fontSize: 16}}>{item}</Text>
                 {selectedItems.includes(item) ? (
                   <SvgCheckBox />
                 ) : (
@@ -88,8 +91,13 @@ const PracticesScreen = ({navigation}: any) => {
                     <SvgCheckBoxFill />
                   </>
                 )}
-              </TouchableOpacity>
+              </Pressable>
             ))}
+            <TouchableOpacity
+              onPress={toggleBottomSheet}
+              style={styles.continueBtn}>
+              <Text style={styles.closeButton}>Continue</Text>
+            </TouchableOpacity>
           </View>
         </BottomSheetComponent>
       </LinearGradient>
@@ -184,24 +192,37 @@ const styles = StyleSheet.create({
   },
   bottomSheetContent: {
     flexDirection: 'column',
+    marginTop: 35,
   },
   closeButton: {
     fontSize: 18,
-    color: 'red',
+    fontWeight: '500',
+    color: '#fff',
     textAlign: 'center',
-    padding: 10,
+    padding: 15,
   },
   checkboxItem: {
-    padding: 25,
+    paddingHorizontal: 15,
+    paddingVertical: 20,
+    marginHorizontal: 25,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    backgroundColor: '#f6f6f6',
+    borderRadius: 10,
+    marginBottom: 15,
   },
   selectedItem: {
     position: 'absolute',
-    right: '9%',
+    right: '7%',
     zIndex: 999,
     color: '#fff',
+  },
+  continueBtn: {
+    backgroundColor: '#8F6FFE',
+    marginHorizontal: 25,
+    borderRadius: 30,
+    marginTop: 15,
   },
 });
 
