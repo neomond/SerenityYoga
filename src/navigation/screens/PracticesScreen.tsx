@@ -41,7 +41,6 @@ const PracticesScreen = ({navigation}: any) => {
         style={styles.linearGradient}>
         <View style={styles.iconsHeader}>
           <TouchableOpacity
-            // onPress={() => navigation.navigate('ProfileScreen')}
             style={styles.profileStyle}
             onPress={toggleBottomSheet}>
             <SvgSettings stroke="#E5DEFF" fill="transparent" />
@@ -83,12 +82,12 @@ const PracticesScreen = ({navigation}: any) => {
                 onPress={() => handleItemSelect(item)}>
                 <Text style={{fontSize: 16}}>{item}</Text>
                 {selectedItems.includes(item) ? (
-                  <SvgCheckBox />
-                ) : (
                   <>
                     <Text style={styles.selectedItem}>✓</Text>
                     <SvgCheckBoxFill />
                   </>
+                ) : (
+                  <SvgCheckBox />
                 )}
               </Pressable>
             ))}
@@ -106,10 +105,10 @@ const PracticesScreen = ({navigation}: any) => {
 
 const styles = StyleSheet.create({
   linearGradient: {
-    paddingTop: 80,
+    paddingTop: 60,
   },
   profileStyle: {
-    marginBottom: 10,
+    marginBottom: 20,
     borderRadius: 80,
     borderWidth: 1,
     padding: 4,

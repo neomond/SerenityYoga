@@ -1,6 +1,5 @@
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import PracticesScreen from '../screens/PracticesScreen';
-import SettingsScreen from '../screens/SettingsScreen';
 import PracticePreviewScreen from '../screens/PracticePreviewScreen';
 import PracticeVideoScreen from '../screens/PracticeVideoScreen';
 import PracticesCollectionScreen from '../screens/PracticeCollectionScreen';
@@ -28,11 +27,6 @@ export const PracticesStackNavigator: React.FC = () => {
         component={PracticesCollectionScreen}
         options={{headerShown: false}}
       />
-      {/* <PracticesStack.Screen
-        name="Settings"
-        component={SettingsScreen}
-        options={{headerShown: false}}
-      /> */}
       <PracticesStack.Screen
         name="PracticePreview"
         component={PracticePreviewScreen}

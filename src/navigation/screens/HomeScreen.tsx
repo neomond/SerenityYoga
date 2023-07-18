@@ -16,7 +16,6 @@ import {ActivityIndicator} from 'react-native-paper';
 import SvgProfile from '../../assets/Profile';
 import SvgDuration from '../../assets/DurationIcon';
 import SvgLikeIcon from '../../assets/LikeIcon';
-import SvgNotifications from '../../assets/Notification';
 import {
   addItem,
   removeItem,
@@ -177,7 +176,7 @@ export default HomeScreen;
 
 const styles = StyleSheet.create({
   linearGradient: {
-    paddingTop: 90,
+    paddingTop: 60,
   },
   profileStyle: {
     marginBottom: 25,
