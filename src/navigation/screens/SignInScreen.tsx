@@ -166,7 +166,7 @@ const styles = StyleSheet.create({
     borderColor: '#fff',
     backgroundColor: '#fff',
     paddingVertical: 35,
-    paddingBottom: 70,
+    paddingBottom: 110,
   },
   tinyLogo: {
     paddingBottom: 20,
