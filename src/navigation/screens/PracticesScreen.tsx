@@ -51,8 +51,15 @@ const PracticesScreen = ({navigation}: any) => {
         </View>
         <BottomSheetComponent
           isVisible={isBottomSheetVisible}
-          toggleBottomSheet={toggleBottomSheet}
-        />
+          toggleBottomSheet={toggleBottomSheet}>
+          {/* Content for the bottom sheet */}
+          <View style={styles.bottomSheetContent}>
+            <Text>This is the Bottom Sheet content.</Text>
+            <TouchableOpacity onPress={toggleBottomSheet}>
+              <Text style={styles.closeButton}>Continue</Text>
+            </TouchableOpacity>
+          </View>
+        </BottomSheetComponent>
       </LinearGradient>
     </GestureHandlerRootView>
   );
@@ -142,6 +149,15 @@ const styles = StyleSheet.create({
   centerContainer: {
     flex: 1,
     alignItems: 'center',
+  },
+  bottomSheetContent: {
+    padding: 25,
+  },
+  closeButton: {
+    fontSize: 18,
+    color: 'red',
+    textAlign: 'center',
+    padding: 10,
   },
 });
 
