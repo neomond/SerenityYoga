@@ -5,13 +5,19 @@ import BottomSheet from '@gorhom/bottom-sheet';
 interface BottomSheetProps {
   isVisible: boolean;
   toggleBottomSheet: () => void;
-  children: React.ReactNode; // Allow children to be passed
+  children: React.ReactNode;
+  items: string[]; // Pass the array of items
+  selectedItems: string[]; // Pass the array of selected items
+  onItemSelect: (item: string) => void; // Handle item selection
 }
 
 const BottomSheetComponent: React.FC<BottomSheetProps> = ({
   isVisible,
   toggleBottomSheet,
   children,
+  items,
+  selectedItems,
+  onItemSelect,
 }) => {
   const bottomSheetRef = useRef<BottomSheet>(null);
   const snapPoints = ['25%', '60%'];

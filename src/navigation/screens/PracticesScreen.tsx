@@ -4,11 +4,25 @@ import LinearGradient from 'react-native-linear-gradient';
 import SvgSettings from '../../assets/SettingsIcon';
 import BottomSheetComponent from '../../components/bottomsheet/BottomSheet';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
+import SvgCheckBox from '../../assets/CheckBoxicon';
+import SvgCheckBoxFill from '../../assets/CheckBoxiconFilled';
 
 const PracticesScreen = ({navigation}: any) => {
   const [isBottomSheetVisible, setBottomSheetVisible] = useState(false);
   const toggleBottomSheet = () => {
     setBottomSheetVisible(!isBottomSheetVisible);
+  };
+  const items = ['Item 1', 'Item 2', 'Item 3', 'Item 4'];
+  const [selectedItems, setSelectedItems] = useState<string[]>([]);
+
+  const handleItemSelect = (item: string) => {
+    if (selectedItems.includes(item)) {
+      setSelectedItems(
+        selectedItems.filter(selectedItem => selectedItem !== item),
+      );
+    } else {
+      setSelectedItems([...selectedItems, item]);
+    }
   };
 
   return (
@@ -51,13 +65,31 @@ const PracticesScreen = ({navigation}: any) => {
         </View>
         <BottomSheetComponent
           isVisible={isBottomSheetVisible}
-          toggleBottomSheet={toggleBottomSheet}>
-          {/* Content for the bottom sheet */}
+          toggleBottomSheet={toggleBottomSheet}
+          items={items}
+          selectedItems={selectedItems}
+          onItemSelect={handleItemSelect}>
           <View style={styles.bottomSheetContent}>
-            <Text>This is the Bottom Sheet content.</Text>
+            {/* <Text>This is the Bottom Sheet content.</Text>
             <TouchableOpacity onPress={toggleBottomSheet}>
               <Text style={styles.closeButton}>Continue</Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
+            {items.map(item => (
+              <TouchableOpacity
+                key={item}
+                style={styles.checkboxItem}
+                onPress={() => handleItemSelect(item)}>
+                <Text>{item}</Text>
+                {selectedItems.includes(item) ? (
+                  <SvgCheckBox />
+                ) : (
+                  <>
+                    <Text style={styles.selectedItem}>✓</Text>
+                    <SvgCheckBoxFill />
+                  </>
+                )}
+              </TouchableOpacity>
+            ))}
           </View>
         </BottomSheetComponent>
       </LinearGradient>
@@ -151,13 +183,25 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   bottomSheetContent: {
-    padding: 25,
+    flexDirection: 'column',
   },
   closeButton: {
     fontSize: 18,
     color: 'red',
     textAlign: 'center',
     padding: 10,
+  },
+  checkboxItem: {
+    padding: 25,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  selectedItem: {
+    position: 'absolute',
+    right: '9%',
+    zIndex: 999,
+    color: '#fff',
   },
 });
 
