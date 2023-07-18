@@ -8,7 +8,6 @@ import {
   FlatList,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
-import SvgBack from '../../assets/BackIcon';
 import SvgLikeIcon from '../../assets/LikeIcon';
 import SvgDownload from '../../assets/DownloadIcon';
 import {useDispatch, useSelector} from 'react-redux';
@@ -170,10 +169,9 @@ const SaveScreen = ({navigation}: any) => {
   return (
     <SafeAreaView style={styles.wrapper}>
       <View style={styles.favoritesMainContent}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <SvgBack stroke="#000" />
-        </TouchableOpacity>
-        <Text style={styles.textMain}>Favorites</Text>
+        <View style={styles.centerContainer}>
+          <Text style={styles.textMain}>Liked Practices</Text>
+        </View>
         <Text>✨</Text>
       </View>
       {likedItems.length > 0 ? (
@@ -211,6 +209,7 @@ const styles = StyleSheet.create({
   },
   textMain: {
     fontSize: 18,
+    textAlign: 'center',
   },
   categoryHeader: {
     fontSize: 20,
@@ -316,6 +315,10 @@ const styles = StyleSheet.create({
     position: 'absolute',
     flexDirection: 'row',
     top: -20,
+  },
+  centerContainer: {
+    flex: 1,
+    alignItems: 'center',
   },
   playerCondStyles: {flexDirection: 'row', alignItems: 'center', columnGap: 10},
   playerLeftStyles: {flexDirection: 'row', alignItems: 'center', columnGap: 2},

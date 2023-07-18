@@ -1,49 +1,60 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import SvgCloseIcon from '../../assets/CloseIcon';
 import SvgSettings from '../../assets/SettingsIcon';
-import SvgLikeIcon from '../../assets/LikeIcon';
+import BottomSheetComponent from '../../components/bottomsheet/BottomSheet';
+import {GestureHandlerRootView} from 'react-native-gesture-handler';
 
 const PracticesScreen = ({navigation}: any) => {
-  return (
-    <LinearGradient
-      colors={['#c47afb', '#A07AFA', '#8380fb', '#8866ff']}
-      start={{x: 0, y: 0.2}}
-      end={{x: 1, y: 0}}
-      style={styles.linearGradient}>
-      <View style={styles.iconsHeader}>
-        <TouchableOpacity
-          // onPress={() => navigation.navigate('ProfileScreen')}
-          style={styles.profileStyle}>
-          <SvgSettings stroke="#E5DEFF" fill="transparent" />
-        </TouchableOpacity>
-        <Text style={styles.textCategory}>Yoga 🧘‍♀️</Text>
-        <TouchableOpacity style={styles.bellStyle}>
-          <SvgCloseIcon />
-        </TouchableOpacity>
-      </View>
-      <View style={styles.primaryContent}>
-        {/* render item will start here  */}
-        <TouchableOpacity
-          style={styles.mainCollectionWrapper}
-          onPress={() => navigation.navigate('PracticeCollection')}>
-          <Image
-            style={styles.image}
-            source={require('../../assets/test.png')}
-          />
+  const [isBottomSheetVisible, setBottomSheetVisible] = useState(false);
+  const toggleBottomSheet = () => {
+    setBottomSheetVisible(!isBottomSheetVisible);
+  };
 
-          <View style={styles.secondaryCollectionWrapper}>
-            <Text style={styles.textCollFirst}>10 meditations</Text>
-            <Text style={styles.textCollSecond}>Remember to breathe</Text>
-            <Text style={styles.textCollThird}>
-              Bring awareness Back onto the menu. Reconnect with yourself
-            </Text>
+  return (
+    <GestureHandlerRootView>
+      <LinearGradient
+        colors={['#c47afb', '#A07AFA', '#8380fb', '#8866ff']}
+        start={{x: 0, y: 0.2}}
+        end={{x: 1, y: 0}}
+        style={styles.linearGradient}>
+        <View style={styles.iconsHeader}>
+          <TouchableOpacity
+            // onPress={() => navigation.navigate('ProfileScreen')}
+            style={styles.profileStyle}
+            onPress={toggleBottomSheet}>
+            <SvgSettings stroke="#E5DEFF" fill="transparent" />
+          </TouchableOpacity>
+          <View style={styles.centerContainer}>
+            <Text style={styles.textCategory}>Yoga 🧘‍♀️</Text>
           </View>
-        </TouchableOpacity>
-        {/* render item will end here  */}
-      </View>
-    </LinearGradient>
+        </View>
+        <View style={styles.primaryContent}>
+          {/* render item will start here  */}
+          <TouchableOpacity
+            style={styles.mainCollectionWrapper}
+            onPress={() => navigation.navigate('PracticeCollection')}>
+            <Image
+              style={styles.image}
+              source={require('../../assets/test.png')}
+            />
+
+            <View style={styles.secondaryCollectionWrapper}>
+              <Text style={styles.textCollFirst}>10 meditations</Text>
+              <Text style={styles.textCollSecond}>Remember to breathe</Text>
+              <Text style={styles.textCollThird}>
+                Bring awareness Back onto the menu. Reconnect with yourself
+              </Text>
+            </View>
+          </TouchableOpacity>
+          {/* render item will end here  */}
+        </View>
+        <BottomSheetComponent
+          isVisible={isBottomSheetVisible}
+          toggleBottomSheet={toggleBottomSheet}
+        />
+      </LinearGradient>
+    </GestureHandlerRootView>
   );
 };
 
@@ -52,14 +63,12 @@ const styles = StyleSheet.create({
     paddingTop: 80,
   },
   profileStyle: {
-    marginBottom: 25,
+    marginBottom: 10,
     borderRadius: 80,
     borderWidth: 1,
-    paddingHorizontal: 2,
-    paddingVertical: 6,
+    padding: 4,
     alignItems: 'center',
     justifyContent: 'center',
-    width: 38,
     backgroundColor: 'rgba(255,255,255, 0.2)',
     borderColor: 'rgba(255,255,255, 0.1)',
   },
@@ -78,7 +87,7 @@ const styles = StyleSheet.create({
   },
   iconsHeader: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
     alignItems: 'center',
     marginHorizontal: 25,
   },
@@ -129,6 +138,10 @@ const styles = StyleSheet.create({
   },
   textCollThird: {
     fontSize: 16,
+  },
+  centerContainer: {
+    flex: 1,
+    alignItems: 'center',
   },
 });
 

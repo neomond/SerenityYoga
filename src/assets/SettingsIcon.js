@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Svg, {Path} from 'react-native-svg';
-const SvgSettings = props => (
+const SvgSetting = props => (
   <Svg
     xmlns="http://www.w3.org/2000/svg"
     width={24}
@@ -8,13 +8,13 @@ const SvgSettings = props => (
     fill="none"
     {...props}>
     <Path
-      stroke="#E5DEFF"
+      stroke="#fff"
       strokeLinecap="round"
       strokeLinejoin="round"
       strokeMiterlimit={10}
       strokeWidth={1.5}
-      d="M22 6.5h-6M6 6.5H2M10 10a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7ZM22 17.5h-4M8 17.5H2M14 21a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z"
+      d="M19 22V11M19 7V2M12 22v-5M12 13V2M5 22V11M5 7V2M3 11h4M17 11h4M10 13h4"
     />
   </Svg>
 );
-export default SvgSettings;
+export default SvgSetting;

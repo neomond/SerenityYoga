@@ -106,19 +106,19 @@ const HomeScreen = ({navigation}: any) => {
     );
   };
 
-  // if (isLoading) {
-  //   return (
-  //     <View
-  //       style={{
-  //         flex: 1,
-  //         alignItems: 'center',
-  //         justifyContent: 'center',
-  //         backgroundColor: '#fff',
-  //       }}>
-  //       <ActivityIndicator />
-  //     </View>
-  //   );
-  // }
+  if (isLoading) {
+    return (
+      <View
+        style={{
+          flex: 1,
+          alignItems: 'center',
+          justifyContent: 'center',
+          backgroundColor: '#fff',
+        }}>
+        <ActivityIndicator />
+      </View>
+    );
+  }
 
   return (
     <LinearGradient
@@ -132,9 +132,9 @@ const HomeScreen = ({navigation}: any) => {
           style={styles.profileStyle}>
           <SvgProfile stroke="#E5DEFF" fill="transparent" />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.bellStyle}>
+        {/* <TouchableOpacity style={styles.bellStyle}>
           <SvgNotifications />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
       <Text style={styles.headerText}>Welcome, Nazrin!</Text>
       <Text style={styles.subheaderText}>How are you feeling today?</Text>
@@ -185,10 +185,10 @@ const styles = StyleSheet.create({
     borderRadius: 80,
     borderWidth: 1,
     paddingHorizontal: 8,
-    paddingVertical: 7,
+    paddingVertical: 8,
     alignItems: 'center',
     justifyContent: 'center',
-    width: 45,
+    // width: 45,
     backgroundColor: 'rgba(255,255,255, 0.2)',
     borderColor: 'rgba(255,255,255, 0.1)',
   },
@@ -201,7 +201,7 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     alignItems: 'center',
     justifyContent: 'center',
-    width: 45,
+    // width: 45,
     fontWeight: '700',
     backgroundColor: 'rgba(255,255,255, 0.2)',
     borderColor: 'rgba(255,255,255, 0.1)',

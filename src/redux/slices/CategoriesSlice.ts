@@ -32,7 +32,9 @@ const initialState: CategoriesState = {
 
 export const fetchCategories = createAsyncThunk('api/categories', async () => {
   try {
-    const response = await axios.get('http://172.16.0.36:8080/api/categories');
+    const response = await axios.get(
+      'http://192.168.10.48:8080/api/categories',
+    );
 
     return response.data;
   } catch (error) {
@@ -46,7 +48,7 @@ export const fetchCategoryById = createAsyncThunk(
   async categoryId => {
     try {
       const response = await axios.get(
-        `http://172.16.0.36:8080/api/categories/${categoryId}`,
+        `http://192.168.10.48:8080/api/categories/${categoryId}`,
       );
       return response.data;
     } catch (error) {
