@@ -104,11 +104,11 @@ const App: React.FC = () => {
     <Provider store={store}>
       <NavigationContainer>
         <Stack.Navigator initialRouteName="AuthMain">
-          {/* <Stack.Screen
+          <Stack.Screen
             name="AuthMain"
             component={AuthStack}
             options={{headerShown: false}}
-          /> */}
+          />
           <Stack.Screen
             name="HomeMain"
             component={HomeTabNavigator}

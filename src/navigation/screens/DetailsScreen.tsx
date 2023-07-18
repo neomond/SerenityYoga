@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {
   View,
   Text,
@@ -15,8 +15,16 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useDispatch, useSelector} from 'react-redux';
 import {AppDispatch, RootState} from '../../redux';
 import SvgCloseIcon from '../../assets/CloseIcon';
+import {useIsFocused} from '@react-navigation/native';
 
 const DetailsScreen = ({route, navigation}: any) => {
+  const isFocused = useIsFocused();
+
+  useEffect(() => {
+    // Hide the bottom tab bar when the screen is focused
+    navigation.setOptions({tabBarVisible: !isFocused});
+  }, [isFocused, navigation]);
+
   const dispatch = useDispatch<AppDispatch>();
   const likedItems = useSelector(
     (state: RootState) => state.likedItemsSlice.likedItems,

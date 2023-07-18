@@ -19,6 +19,7 @@ import {useState} from 'react';
 import SvgViewEye from '../../assets/ViewEyeIcon';
 import SvgHideEye from '../../assets/HideEyeIcon';
 import CheckBox from '@react-native-community/checkbox';
+import SvgLogo from '../../assets/Logo';
 
 const SignUpScreen = ({navigation}: any) => {
   const [showPassword, setShowPassword] = useState(false);
@@ -63,18 +64,21 @@ const SignUpScreen = ({navigation}: any) => {
   };
 
   return (
-    <LinearGradient
-      colors={['#8866ff', '#a177f8', '#c47afb', '#d287fe']}
-      start={{x: 0, y: 0}}
-      end={{x: 1, y: 0}}
-      style={styles.linearGradient}>
-      <ScrollView showsVerticalScrollIndicator={false}>
+    <ScrollView showsVerticalScrollIndicator={false}>
+      <LinearGradient
+        colors={['#8866ff', '#a177f8', '#c47afb', '#d287fe']}
+        start={{x: 0, y: 0}}
+        end={{x: 1, y: 0}}
+        style={styles.linearGradient}>
         <Formik
           initialValues={signUpInitialValues}
           validationSchema={signUpSchema}
           onSubmit={handleSignUp}>
           {formik => (
             <View style={styles.primaryContent}>
+              <View style={styles.tinyLogo}>
+                <SvgLogo fontSize={24} />
+              </View>
               <Text style={styles.primaryText}>Welcome!</Text>
               <Text style={styles.secondaryText}>Already have an account?</Text>
               <TouchableOpacity onPress={() => navigation.navigate('Login')}>
@@ -178,8 +182,8 @@ const SignUpScreen = ({navigation}: any) => {
             </View>
           )}
         </Formik>
-      </ScrollView>
-    </LinearGradient>
+      </LinearGradient>
+    </ScrollView>
   );
 };
 
@@ -187,7 +191,13 @@ export default SignUpScreen;
 
 const styles = StyleSheet.create({
   linearGradient: {
-    paddingTop: 100,
+    paddingTop: 80,
+  },
+  tinyLogo: {
+    paddingBottom: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+    textAlign: 'center',
   },
   primaryContent: {
     alignItems: 'center',
@@ -197,8 +207,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#fff',
     backgroundColor: '#fff',
-    paddingVertical: 60,
-    paddingBottom: 200,
+    paddingVertical: 35,
+    paddingBottom: 70,
   },
   primaryText: {
     fontSize: 28,
@@ -212,7 +222,7 @@ const styles = StyleSheet.create({
     color: '#8866ff',
     fontWeight: '600',
     fontSize: 16,
-    paddingBottom: 20,
+    paddingBottom: 10,
   },
   input: {
     width: 355,

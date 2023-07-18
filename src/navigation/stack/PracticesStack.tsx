@@ -16,7 +16,7 @@ const PracticesStack = createNativeStackNavigator<PracticesStackParamList>();
 
 export const PracticesStackNavigator: React.FC = () => {
   return (
-    <PracticesStack.Navigator>
+    <PracticesStack.Navigator screenOptions={{headerShown: false}}>
       <PracticesStack.Screen
         name="PracticesMain"
         component={PracticesScreen}

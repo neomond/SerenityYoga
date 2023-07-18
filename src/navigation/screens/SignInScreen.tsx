@@ -18,6 +18,7 @@ import {Formik} from 'formik';
 import {signInSchema, signInInitialValues} from '../../schema/authSchema';
 import SvgViewEye from '../../assets/ViewEyeIcon';
 import SvgHideEye from '../../assets/HideEyeIcon';
+import SvgLogo from '../../assets/Logo';
 
 const SignInScreen = ({navigation}: any) => {
   const [showPassword, setShowPassword] = useState(false);
@@ -48,25 +49,28 @@ const SignInScreen = ({navigation}: any) => {
       });
   };
 
-  //   By using the .unwrap() method after dispatching the loginUser action,
+  // By using the .unwrap() method after dispatching the loginUser action,
   // you can access the fulfilled value of the action, or
   // catch any rejected value (in this case, the error from the server).
   // Inside the catch block, you can handle the rejected login request appropriately,
   // such as displaying an error message to the user or performing any other necessary actions.
 
   return (
-    <LinearGradient
-      colors={['#8866ff', '#a177f8', '#c47afb', '#d287fe']}
-      start={{x: 0, y: 0}}
-      end={{x: 1, y: 0}}
-      style={styles.linearGradient}>
-      <ScrollView showsVerticalScrollIndicator={false}>
+    <ScrollView showsVerticalScrollIndicator={false}>
+      <LinearGradient
+        colors={['#8866ff', '#a177f8', '#c47afb', '#d287fe']}
+        start={{x: 0, y: 0}}
+        end={{x: 1, y: 0}}
+        style={styles.linearGradient}>
         <Formik
           initialValues={signInInitialValues}
           validationSchema={signInSchema}
           onSubmit={handleSignIn}>
           {formik => (
             <View style={styles.primaryContent}>
+              <View style={styles.tinyLogo}>
+                <SvgLogo fontSize={24} />
+              </View>
               <Text style={styles.primaryText}>Welcome!</Text>
               <Text style={styles.secondaryText}>
                 Do not have an account yet?
@@ -85,23 +89,27 @@ const SignInScreen = ({navigation}: any) => {
                 {formik.touched.email && formik.errors.email && (
                   <Text style={styles.errorText}>{formik.errors.email}</Text>
                 )}
-                <TextInput
-                  style={styles.input}
-                  placeholder="Password"
-                  secureTextEntry={!showPassword}
-                  value={formik.values.password}
-                  onChangeText={formik.handleChange('password')}
-                  onBlur={formik.handleBlur('password')}
-                />
-                {formik.touched.password && formik.errors.password && (
-                  <Text style={styles.errorText}>{formik.errors.password}</Text>
-                )}
-                {error ? <Text style={styles.errorText}>{error}</Text> : null}
-                <TouchableOpacity
-                  onPress={togglePasswordVisibility}
-                  style={styles.togglePwdStyles}>
-                  {showPassword ? <SvgViewEye /> : <SvgHideEye />}
-                </TouchableOpacity>
+                <View>
+                  <TextInput
+                    style={styles.input}
+                    placeholder="Password"
+                    secureTextEntry={!showPassword}
+                    value={formik.values.password}
+                    onChangeText={formik.handleChange('password')}
+                    onBlur={formik.handleBlur('password')}
+                  />
+                  {formik.touched.password && formik.errors.password && (
+                    <Text style={styles.errorText}>
+                      {formik.errors.password}
+                    </Text>
+                  )}
+                  {error ? <Text style={styles.errorText}>{error}</Text> : null}
+                  <TouchableOpacity
+                    onPress={togglePasswordVisibility}
+                    style={styles.togglePwdStyles}>
+                    {showPassword ? <SvgViewEye /> : <SvgHideEye />}
+                  </TouchableOpacity>
+                </View>
               </View>
               <TouchableOpacity
                 onPress={() => navigation.navigate('ForgotPwd')}>
@@ -137,8 +145,8 @@ const SignInScreen = ({navigation}: any) => {
             </View>
           )}
         </Formik>
-      </ScrollView>
-    </LinearGradient>
+      </LinearGradient>
+    </ScrollView>
   );
 };
 
@@ -146,9 +154,10 @@ export default SignInScreen;
 
 const styles = StyleSheet.create({
   linearGradient: {
-    paddingTop: 100,
+    paddingTop: 80,
   },
   primaryContent: {
+    flex: 1,
     alignItems: 'center',
     rowGap: 8,
     borderTopLeftRadius: 30,
@@ -156,8 +165,14 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#fff',
     backgroundColor: '#fff',
-    paddingVertical: 60,
-    paddingBottom: 200,
+    paddingVertical: 35,
+    paddingBottom: 70,
+  },
+  tinyLogo: {
+    paddingBottom: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+    textAlign: 'center',
   },
   primaryText: {
     fontSize: 28,
@@ -236,8 +251,10 @@ const styles = StyleSheet.create({
   },
   togglePwdStyles: {
     position: 'absolute',
-    top: 95,
+    top: 28,
     right: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
 
