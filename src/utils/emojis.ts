@@ -1,4 +1,4 @@
-export const emojis = ['🤯', '🥵', '😌', '😡', '😖'];
+export const emojis = ['🤯', '🥵', '😌', '😪', '😡'];
 
 export const getEmojiForCategory = (categoryName: string) => {
   switch (categoryName) {
@@ -7,7 +7,7 @@ export const getEmojiForCategory = (categoryName: string) => {
     case 'Anxiety':
       return '🥵';
     case 'Depression':
-      return '😖';
+      return '😪';
     case 'Anger':
       return '😡';
     case 'Calmness':

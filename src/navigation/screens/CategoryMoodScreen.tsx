@@ -6,18 +6,24 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React from 'react';
+import React, {useEffect} from 'react';
 import LinearGradient from 'react-native-linear-gradient';
 import SvgCloseIcon from '../../assets/CloseIcon';
 import SvgLikeIcon from '../../assets/LikeIcon';
 import SvgDuration from '../../assets/DurationIcon';
-import {emojis, getEmojiForCategory} from '../../utils/emojis';
+import {getEmojiForCategory} from '../../utils/emojis';
+import {useDispatch, useSelector} from 'react-redux';
+import {AppDispatch, RootState} from '../../redux';
+import {fetchSessions} from '../../redux/slices/SessionSlice';
 
 const CategoryMoodScreen = ({navigation, route}: any) => {
   const {categoryName, categoryDescription} = route.params;
+  const dispatch = useDispatch<AppDispatch>();
+  const categories = useSelector((state: RootState) => state.sessions.sessions);
 
-  const categoryIndex = emojis.findIndex(emoji => emoji.includes(categoryName));
-  const emoji = categoryIndex !== -1 ? emojis[categoryIndex] : emojis[0];
+  useEffect(() => {
+    dispatch(fetchSessions());
+  }, [dispatch]);
 
   return (
     <ScrollView>
@@ -38,36 +44,26 @@ const CategoryMoodScreen = ({navigation, route}: any) => {
         </Text>
         <Text style={styles.subheaderText}>{categoryDescription}</Text>
         <View style={styles.primaryContent}>
-          {/* Rendered item */}
-          <View style={styles.favoritesItem}>
-            <View style={styles.imageContentSubtop}>
-              <SvgDuration />
-              <Text style={styles.titleColor}>10:00</Text>
-            </View>
-
-            <Image
-              style={styles.imageFav}
-              source={require('../../assets/test.png')}
-            />
-            <View style={styles.favoritesItemSecondary}>
-              <Text style={styles.textFav}>Title</Text>
-              <View style={styles.favoritesItemSecondaryBottom}>
-                <TouchableOpacity
-                  style={styles.btnFav}
-                  //   onPress={() => handlePlay(item)}
-                >
-                  {/* <Text>{pause === 'paused' ? 'Play' : 'Pause'}</Text> */}
-                  <Text>Listen</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                // onPress={() => handleRemove(item)}
-                >
-                  <SvgLikeIcon fill="#815cff" />
-                </TouchableOpacity>
+          {categories.map(c => (
+            <View style={styles.favoritesItem} key={c._id}>
+              <View style={styles.imageContentSubtop}>
+                <SvgDuration />
+                <Text style={styles.titleColor}>{c.duration}</Text>
+              </View>
+              <Image style={styles.imageFav} source={{uri: c.imageUrl}} />
+              <View style={styles.favoritesItemSecondary}>
+                <Text style={styles.textFav}>{c.title}</Text>
+                <View style={styles.favoritesItemSecondaryBottom}>
+                  <TouchableOpacity style={styles.btnFav}>
+                    <Text>Listen</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity>
+                    <SvgLikeIcon fill="#815cff" />
+                  </TouchableOpacity>
+                </View>
               </View>
             </View>
-          </View>
+          ))}
         </View>
       </LinearGradient>
     </ScrollView>
