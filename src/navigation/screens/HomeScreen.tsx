@@ -23,9 +23,22 @@ import {
 } from '../../redux/slices/LikedItemsSlice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import SvgFlower from '../../assets/Flower';
+import {fetchSessions} from '../../redux/slices/SessionSlice';
 
 const HomeScreen = ({navigation}: any) => {
-  // const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useDispatch<AppDispatch>();
+  const categories = useSelector(
+    (state: RootState) => state.sessions.categories,
+  );
+
+  const uniqueCategoryNames = [
+    ...new Set(categories.map(category => category.name)),
+  ];
+  const emojis = ['🤯', '🥵', '😖', '😡', '😌'];
+
+  useEffect(() => {
+    dispatch(fetchSessions());
+  }, [dispatch]);
   // const {categories} = useSelector((state: RootState) => state.categoriesSlice);
   // const likedItems = useSelector(
   //   (state: RootState) => state.likedItemsSlice.likedItems,
@@ -135,9 +148,6 @@ const HomeScreen = ({navigation}: any) => {
           style={styles.profileStyle}>
           <SvgProfile stroke="#E5DEFF" fill="transparent" />
         </TouchableOpacity>
-        {/* <TouchableOpacity style={styles.bellStyle}>
-          <SvgNotifications />
-        </TouchableOpacity> */}
       </View>
       <Text style={styles.headerText}>Welcome, Nazrin!</Text>
       <Text style={styles.subheaderText}>How are you feeling today?</Text>
@@ -146,14 +156,15 @@ const HomeScreen = ({navigation}: any) => {
           style={styles.scrollCategories}
           showsHorizontalScrollIndicator={false}
           horizontal={true}>
-          <TouchableOpacity
-            onPress={() => navigation.navigate('CategoryMoodScreen')}>
-            <Text style={styles.categoryText}>🤯 Stress</Text>
-          </TouchableOpacity>
-          <Text style={styles.categoryText}>🥵 Anxiety</Text>
-          <Text style={styles.categoryText}>😖 Depression</Text>
-          <Text style={styles.categoryText}>😡 Anger</Text>
-          <Text style={styles.categoryText}>😌 Calmness</Text>
+          {uniqueCategoryNames.map((categoryName, index) => (
+            <TouchableOpacity
+              key={categoryName}
+              onPress={() => navigation.navigate('CategoryMoodScreen')}>
+              <Text style={styles.categoryText}>
+                {emojis[index % emojis.length]} {categoryName}
+              </Text>
+            </TouchableOpacity>
+          ))}
         </ScrollView>
       </View>
       <View style={styles.primaryContent}>
