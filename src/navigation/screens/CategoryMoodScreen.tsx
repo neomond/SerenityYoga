@@ -11,8 +11,14 @@ import LinearGradient from 'react-native-linear-gradient';
 import SvgCloseIcon from '../../assets/CloseIcon';
 import SvgLikeIcon from '../../assets/LikeIcon';
 import SvgDuration from '../../assets/DurationIcon';
+import {emojis, getEmojiForCategory} from '../../utils/emojis';
 
-const CategoryMoodScreen = ({navigation}: any) => {
+const CategoryMoodScreen = ({navigation, route}: any) => {
+  const {categoryName, categoryDescription} = route.params;
+
+  const categoryIndex = emojis.findIndex(emoji => emoji.includes(categoryName));
+  const emoji = categoryIndex !== -1 ? emojis[categoryIndex] : emojis[0];
+
   return (
     <ScrollView>
       <LinearGradient
@@ -27,10 +33,10 @@ const CategoryMoodScreen = ({navigation}: any) => {
             <SvgCloseIcon stroke="#E5DEFF" fill="transparent" />
           </TouchableOpacity>
         </View>
-        <Text style={styles.headerText}>Stress 🤯</Text>
-        <Text style={styles.subheaderText}>
-          Lorem ipsum dolor, sit amet consectetur adipisicing elit.
+        <Text style={styles.headerText}>
+          {categoryName} {getEmojiForCategory(categoryName)}
         </Text>
+        <Text style={styles.subheaderText}>{categoryDescription}</Text>
         <View style={styles.primaryContent}>
           {/* Rendered item */}
           <View style={styles.favoritesItem}>

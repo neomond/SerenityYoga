@@ -24,21 +24,19 @@ import {
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import SvgFlower from '../../assets/Flower';
 import {fetchSessions} from '../../redux/slices/SessionSlice';
+import {emojis} from '../../utils/emojis';
 
 const HomeScreen = ({navigation}: any) => {
   const dispatch = useDispatch<AppDispatch>();
   const categories = useSelector(
     (state: RootState) => state.sessions.categories,
   );
-
-  const uniqueCategoryNames = [
-    ...new Set(categories.map(category => category.name)),
-  ];
-  const emojis = ['🤯', '🥵', '😖', '😡', '😌'];
+  const uniqueCategoryNames = [...new Set(categories.map(c => c.name))];
 
   useEffect(() => {
     dispatch(fetchSessions());
   }, [dispatch]);
+
   // const {categories} = useSelector((state: RootState) => state.categoriesSlice);
   // const likedItems = useSelector(
   //   (state: RootState) => state.likedItemsSlice.likedItems,
@@ -159,7 +157,14 @@ const HomeScreen = ({navigation}: any) => {
           {uniqueCategoryNames.map((categoryName, index) => (
             <TouchableOpacity
               key={categoryName}
-              onPress={() => navigation.navigate('CategoryMoodScreen')}>
+              onPress={() =>
+                navigation.navigate('CategoryMoodScreen', {
+                  categoryName,
+                  categoryDescription: categories.find(
+                    c => c.name === categoryName,
+                  )?.description,
+                })
+              }>
               <Text style={styles.categoryText}>
                 {emojis[index % emojis.length]} {categoryName}
               </Text>
