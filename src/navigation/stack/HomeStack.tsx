@@ -2,11 +2,13 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import HomeScreen from '../screens/HomeScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import DetailsScreen from '../screens/DetailsScreen';
+import CategoryMoodScreen from '../screens/CategoryMoodScreen';
 
 type HomeStackParamList = {
   HomeScreen: undefined;
   ProfileScreen: undefined;
   DetailsScreen: undefined;
+  CategoryMoodScreen: undefined;
 };
 
 const HomeStack = createNativeStackNavigator<HomeStackParamList>();
@@ -27,6 +29,11 @@ export const HomeStackNavigator: React.FC = () => {
       <HomeStack.Screen
         name="DetailsScreen"
         component={DetailsScreen}
+        options={{headerShown: false}}
+      />
+      <HomeStack.Screen
+        name="CategoryMoodScreen"
+        component={CategoryMoodScreen}
         options={{headerShown: false}}
       />
     </HomeStack.Navigator>
