@@ -2,6 +2,8 @@ import {configureStore, getDefaultMiddleware} from '@reduxjs/toolkit';
 import AuthSlice from './slices/AuthSlice';
 import CategoriesSlice from './slices/CategoriesSlice';
 import LikedItemsSlice from './slices/LikedItemsSlice';
+import sessionReducer from './slices/SessionSlice';
+
 const middleware = getDefaultMiddleware({
   serializableCheck: false, // Disable serializable state check
 });
@@ -11,6 +13,7 @@ const store = configureStore({
     authSlice: AuthSlice,
     categoriesSlice: CategoriesSlice,
     likedItemsSlice: LikedItemsSlice,
+    sessions: sessionReducer,
   },
   middleware,
 });
