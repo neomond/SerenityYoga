@@ -68,6 +68,15 @@ const HomeTabNavigator: React.FC = () => {
       />
 
       <Tab.Screen
+        name="Meditations"
+        options={{
+          tabBarIcon: ({focused}: any) => (
+            <SvgMeditations stroke={focused ? '#815CFF' : '#444444'} />
+          ),
+        }}
+        component={MeditationsStackNavigator}
+      />
+      <Tab.Screen
         name="Liked"
         options={{
           tabBarIcon: ({focused}: any) => (
@@ -78,15 +87,6 @@ const HomeTabNavigator: React.FC = () => {
           ),
         }}
         component={SaveStackNavigator}
-      />
-      <Tab.Screen
-        name="Meditations"
-        options={{
-          tabBarIcon: ({focused}: any) => (
-            <SvgMeditations stroke={focused ? '#815CFF' : '#444444'} />
-          ),
-        }}
-        component={MeditationsStackNavigator}
       />
     </Tab.Navigator>
   );
