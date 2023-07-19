@@ -118,7 +118,8 @@ const styles = StyleSheet.create({
     fontWeight: '300',
     marginHorizontal: 20,
     fontSize: 16,
-    marginBottom: 20,
+    marginBottom: 25,
+    width: '85%',
   },
   favoritesItem: {
     marginHorizontal: 20,
