@@ -1,119 +1,51 @@
+// ipconfig getifaddr en0
 import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
 import axios from 'axios';
 import {RootState} from '..';
-
-export interface Category {
-  _id: string;
-  category: string;
-  data: DataItem[];
-  likedItems: DataItem[];
-}
-
-export interface DataItem {
-  key: string;
-  title: string;
-  duration: string;
-  image: string;
-}
+import {Category} from '../../models/Category';
 
 interface CategoriesState {
-  categories: Category[];
   loading: boolean;
-  error: string | any;
+  error: string | null;
+  categories: Category[];
 }
 
 const initialState: CategoriesState = {
-  categories: [],
   loading: false,
   error: null,
+  categories: [],
 };
 
-// ipconfig getifaddr en0
-
-export const fetchCategories = createAsyncThunk('api/categories', async () => {
-  try {
+export const fetchCategories = createAsyncThunk(
+  'api/categories/fetchCategories',
+  async () => {
     const response = await axios.get(
       'http://192.168.0.102:8080/api/categories',
     );
-
     return response.data;
-  } catch (error) {
-    console.error('Error fetching categories:', error);
-    throw error;
-  }
-});
-
-export const fetchCategoryById = createAsyncThunk(
-  'api/categories/fetchById',
-  async categoryId => {
-    try {
-      const response = await axios.get(
-        `http://192.168.0.102:8080/api/categories/${categoryId}`,
-      );
-      return response.data;
-    } catch (error) {
-      console.error(`Error fetching category with ID ${categoryId}:`, error);
-      throw error;
-    }
   },
 );
 
-const categoriesSlice = createSlice({
+export const categoriesSlice = createSlice({
   name: 'categories',
   initialState,
-  reducers: {
-    addItemToLikedItems: (state, action) => {
-      const {categoryId, item} = action.payload;
-      const category = state.categories.find(c => c._id === categoryId);
-      if (category) {
-        category.likedItems.push(item);
-      }
-    },
-    removeItemFromLikedItems: (state, action) => {
-      const {categoryId, itemId} = action.payload;
-      const category = state.categories.find(c => c._id === categoryId);
-      if (category) {
-        category.likedItems = category.likedItems.filter(
-          item => item.key !== itemId,
-        );
-      }
-    },
-  },
+  reducers: {},
   extraReducers: builder => {
-    builder
-      .addCase(fetchCategories.pending, state => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(fetchCategories.fulfilled, (state, action) => {
-        state.categories = action.payload;
-        state.loading = false;
-        state.error = null;
-      })
-      .addCase(fetchCategories.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload;
-      });
-    builder
-      .addCase(fetchCategoryById.pending, state => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(fetchCategoryById.fulfilled, (state, action) => {
-        state.loading = false;
-        state.categories = action.payload;
-      })
-      .addCase(fetchCategoryById.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.error.message;
-      });
+    builder.addCase(fetchCategories.pending, state => {
+      state.loading = true;
+      state.error = null;
+    });
+    builder.addCase(fetchCategories.fulfilled, (state, action) => {
+      state.loading = false;
+      state.error = null;
+      state.categories = action.payload;
+    });
+    builder.addCase(fetchCategories.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message ?? 'Error fetching sessions';
+    });
   },
 });
 
-export const {addItemToLikedItems, removeItemFromLikedItems} =
-  categoriesSlice.actions;
-
-export const getCategories = (state: RootState) =>
-  state.categoriesSlice.categories;
-
 export default categoriesSlice.reducer;
+export const getCategories = (state: RootState) => state.categories;

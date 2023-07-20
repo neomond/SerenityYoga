@@ -10,7 +10,7 @@ import {
 import React, {useEffect} from 'react';
 import LinearGradient from 'react-native-linear-gradient';
 import {useDispatch, useSelector} from 'react-redux';
-import {fetchCategories} from '../../redux/slices/CategoriesSlice';
+// import {fetchCategories} from '../../redux/slices/CategoriesSlice';
 import {AppDispatch, RootState} from '../../redux';
 import {ActivityIndicator} from 'react-native-paper';
 import SvgProfile from '../../assets/Profile';

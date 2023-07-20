@@ -1,6 +1,6 @@
 import {configureStore} from '@reduxjs/toolkit';
 import AuthSlice from './slices/AuthSlice';
-import CategoriesSlice from './slices/CategoriesSlice';
+import categoriesReducer from './slices/CategoriesSlice';
 import LikedItemsSlice from './slices/LikedItemsSlice';
 import sessionReducer from './slices/SessionSlice';
 
@@ -11,7 +11,7 @@ import sessionReducer from './slices/SessionSlice';
 const store = configureStore({
   reducer: {
     authSlice: AuthSlice,
-    categoriesSlice: CategoriesSlice,
+    categories: categoriesReducer,
     likedItemsSlice: LikedItemsSlice,
     sessions: sessionReducer,
   },
