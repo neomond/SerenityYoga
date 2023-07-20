@@ -25,6 +25,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import SvgFlower from '../../assets/Flower';
 import {emojis, getEmojiForCategory} from '../../utils/emojis';
 import {fetchCategories} from '../../redux/slices/CategoriesSlice';
+import ScreenOpeningAnimation from '../../utils/ScreenOpeningAnimation';
+import HeaderAnimation from '../../utils/HeaderAnimation';
 
 const HomeScreen = ({navigation}: any) => {
   const dispatch = useDispatch<AppDispatch>();
@@ -135,40 +137,41 @@ const HomeScreen = ({navigation}: any) => {
   // }
 
   return (
-    <LinearGradient
-      colors={['#c47afb', '#A07AFA', '#8380fb', '#8866ff']}
-      start={{x: 0, y: 0.2}}
-      end={{x: 1, y: 0}}
-      style={styles.linearGradient}>
-      <View style={styles.iconsHeader}>
-        <TouchableOpacity
-          onPress={() => navigation.navigate('ProfileScreen')}
-          style={styles.profileStyle}>
-          <SvgProfile stroke="#E5DEFF" fill="transparent" />
-        </TouchableOpacity>
-      </View>
-      <Text style={styles.headerText}>Welcome, Nazrin!</Text>
-      <Text style={styles.subheaderText}>How are you feeling today?</Text>
-      <View>
-        <ScrollView
-          style={styles.scrollCategories}
-          showsHorizontalScrollIndicator={false}
-          horizontal={true}>
-          {categories.map(category => (
-            <TouchableOpacity
-              key={category._id}
-              onPress={() =>
-                navigation.navigate('CategoryMoodScreen', {category})
-              }>
-              <Text style={styles.categoryText}>
-                {getEmojiForCategory(category.name)} {category.name}
-              </Text>
-            </TouchableOpacity>
-          ))}
-        </ScrollView>
-      </View>
-      <View style={styles.primaryContent}>
-        {/* {categories.length > 0 ? (
+    <HeaderAnimation duration={1300}>
+      <LinearGradient
+        colors={['#c47afb', '#A07AFA', '#8380fb', '#8866ff']}
+        start={{x: 0, y: 0.2}}
+        end={{x: 1, y: 0}}
+        style={styles.linearGradient}>
+        <View style={styles.iconsHeader}>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('ProfileScreen')}
+            style={styles.profileStyle}>
+            <SvgProfile stroke="#E5DEFF" fill="transparent" />
+          </TouchableOpacity>
+        </View>
+        <Text style={styles.headerText}>Welcome, Nazrin!</Text>
+        <Text style={styles.subheaderText}>How are you feeling today?</Text>
+        <View>
+          <ScrollView
+            style={styles.scrollCategories}
+            showsHorizontalScrollIndicator={false}
+            horizontal={true}>
+            {categories.map(category => (
+              <TouchableOpacity
+                key={category._id}
+                onPress={() =>
+                  navigation.navigate('CategoryMoodScreen', {category})
+                }>
+                <Text style={styles.categoryText}>
+                  {getEmojiForCategory(category.name)} {category.name}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </ScrollView>
+        </View>
+        <View style={styles.primaryContent}>
+          {/* {categories.length > 0 ? (
           <FlatList
             data={categories}
             renderItem={renderItem}
@@ -182,8 +185,9 @@ const HomeScreen = ({navigation}: any) => {
             <Text style={styles.noItemsText}>No Categories.</Text>
           </View>
         )} */}
-      </View>
-    </LinearGradient>
+        </View>
+      </LinearGradient>
+    </HeaderAnimation>
   );
 };
 

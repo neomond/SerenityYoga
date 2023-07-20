@@ -13,13 +13,17 @@ import SvgLikeIcon from '../../assets/LikeIcon';
 import SvgDuration from '../../assets/DurationIcon';
 import {getEmojiForCategory} from '../../utils/emojis';
 import {useDispatch, useSelector} from 'react-redux';
-import {AppDispatch} from '../../redux';
+import {AppDispatch, RootState} from '../../redux';
 import {fetchSessions, getSessions} from '../../redux/slices/SessionSlice';
+import {ActivityIndicator} from 'react-native-paper';
+
+import HeaderAnimation from '../../utils/HeaderAnimation';
 
 const CategoryMoodScreen = ({navigation, route}: any) => {
   const {category} = route.params;
   const dispatch = useDispatch<AppDispatch>();
   const sessions = useSelector(getSessions);
+  const isLoading = useSelector((state: RootState) => state.sessions.loading);
 
   useEffect(() => {
     dispatch(fetchSessions(category._id));
@@ -29,48 +33,68 @@ const CategoryMoodScreen = ({navigation, route}: any) => {
   //   const categorySessions = sessions.filter(session => {
   //     return session.categories.some(cat => cat._id === category._id);
   //   });
+
   //   console.log('Category Sessions:', categorySessions);
 
+  if (isLoading) {
+    return (
+      <View
+        style={{
+          flex: 1,
+          alignItems: 'center',
+          justifyContent: 'center',
+          backgroundColor: '#fff',
+        }}>
+        <ActivityIndicator />
+      </View>
+    );
+  }
+
   return (
-    <ScrollView>
+    <ScrollView showsVerticalScrollIndicator={false}>
       <LinearGradient
         colors={['#c47afb', '#A07AFA', '#8380fb', '#8866ff']}
         start={{x: 0, y: 0.2}}
         end={{x: 1, y: 0}}
         style={styles.linearGradient}>
-        <View style={styles.iconsHeader}>
-          <TouchableOpacity
-            onPress={() => navigation.goBack()}
-            style={styles.profileStyle}>
-            <SvgCloseIcon stroke="#E5DEFF" fill="transparent" />
-          </TouchableOpacity>
-        </View>
-        <Text style={styles.headerText}>
-          {category.name} {''}
-          {getEmojiForCategory(category.name)}
-        </Text>
-        <Text style={styles.subheaderText}>{category.description}</Text>
-        <View style={styles.primaryContent}>
-          {sessions.map(c => (
-            <View style={styles.favoritesItem} key={c._id}>
-              <View style={styles.imageContentSubtop}>
-                <SvgDuration />
-                <Text style={styles.titleColor}>{c.duration}</Text>
-              </View>
-              <Image style={styles.imageFav} source={{uri: c.imageUrl}} />
-              <View style={styles.favoritesItemSecondary}>
-                <Text style={styles.textFav}>{c.title}</Text>
-                <View style={styles.favoritesItemSecondaryBottom}>
-                  <TouchableOpacity style={styles.btnFav}>
-                    <Text>Listen</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity>
-                    <SvgLikeIcon fill="#815cff" />
-                  </TouchableOpacity>
+        <HeaderAnimation duration={1300}>
+          <View style={styles.iconsHeader}>
+            <TouchableOpacity
+              onPress={() => navigation.goBack()}
+              style={styles.profileStyle}>
+              <SvgCloseIcon stroke="#E5DEFF" fill="transparent" />
+            </TouchableOpacity>
+          </View>
+
+          <Text style={styles.headerText}>
+            {category.name} {''}
+            {getEmojiForCategory(category.name)}
+          </Text>
+          <Text style={styles.subheaderText}>{category.description}</Text>
+        </HeaderAnimation>
+        <View style={[styles.primaryContent]}>
+          <HeaderAnimation duration={2000}>
+            {sessions.map(c => (
+              <View style={styles.favoritesItem} key={c._id}>
+                <View style={styles.imageContentSubtop}>
+                  <SvgDuration />
+                  <Text style={styles.titleColor}>{c.duration}</Text>
+                </View>
+                <Image style={styles.imageFav} source={{uri: c.imageUrl}} />
+                <View style={styles.favoritesItemSecondary}>
+                  <Text style={styles.textFav}>{c.title}</Text>
+                  <View style={styles.favoritesItemSecondaryBottom}>
+                    <TouchableOpacity style={styles.btnFav}>
+                      <Text>Listen</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity>
+                      <SvgLikeIcon fill="#815cff" />
+                    </TouchableOpacity>
+                  </View>
                 </View>
               </View>
-            </View>
-          ))}
+            ))}
+          </HeaderAnimation>
         </View>
       </LinearGradient>
     </ScrollView>
@@ -90,7 +114,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#fff',
     backgroundColor: '#fff',
-    paddingBottom: 200,
     height: '100%',
   },
   iconsHeader: {
