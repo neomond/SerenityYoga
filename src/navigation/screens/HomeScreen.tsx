@@ -154,10 +154,14 @@ const HomeScreen = ({navigation}: any) => {
           style={styles.scrollCategories}
           showsHorizontalScrollIndicator={false}
           horizontal={true}>
-          {categories.map(c => (
-            <TouchableOpacity key={c._id}>
+          {categories.map(category => (
+            <TouchableOpacity
+              key={category._id}
+              onPress={() =>
+                navigation.navigate('CategoryMoodScreen', {category})
+              }>
               <Text style={styles.categoryText}>
-                {getEmojiForCategory(c.name)} {c.name}
+                {getEmojiForCategory(category.name)} {category.name}
               </Text>
             </TouchableOpacity>
           ))}

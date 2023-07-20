@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import LinearGradient from 'react-native-linear-gradient';
 import SvgCloseIcon from '../../assets/CloseIcon';
 import SvgLikeIcon from '../../assets/LikeIcon';
@@ -14,16 +14,23 @@ import SvgDuration from '../../assets/DurationIcon';
 import {getEmojiForCategory} from '../../utils/emojis';
 import {useDispatch, useSelector} from 'react-redux';
 import {AppDispatch, RootState} from '../../redux';
-import {fetchSessions} from '../../redux/slices/SessionSlice';
+import {fetchSessions, getSessions} from '../../redux/slices/SessionSlice';
 
 const CategoryMoodScreen = ({navigation, route}: any) => {
-  const {categoryName, categoryDescription} = route.params;
+  const {category} = route.params;
   const dispatch = useDispatch<AppDispatch>();
-  const categories = useSelector((state: RootState) => state.sessions.sessions);
+  const sessions = useSelector(getSessions);
 
   useEffect(() => {
     dispatch(fetchSessions());
   }, [dispatch]);
+  console.log('Sessions:', sessions);
+
+  const categorySessions = sessions.filter(session => {
+    return session.categories.some(cat => cat._id === category._id);
+  });
+
+  console.log('Category Sessions:', categorySessions);
 
   return (
     <ScrollView>
@@ -40,11 +47,12 @@ const CategoryMoodScreen = ({navigation, route}: any) => {
           </TouchableOpacity>
         </View>
         <Text style={styles.headerText}>
-          {categoryName} {getEmojiForCategory(categoryName)}
+          {category.name} {''}
+          {getEmojiForCategory(category.name)}
         </Text>
-        <Text style={styles.subheaderText}>{categoryDescription}</Text>
+        <Text style={styles.subheaderText}>{category.description}</Text>
         <View style={styles.primaryContent}>
-          {categories.map(c => (
+          {categorySessions.map(c => (
             <View style={styles.favoritesItem} key={c._id}>
               <View style={styles.imageContentSubtop}>
                 <SvgDuration />
@@ -133,6 +141,7 @@ const styles = StyleSheet.create({
   },
   textFav: {
     fontSize: 16,
+    maxWidth: 170,
   },
   favoritesItemSecondary: {
     justifyContent: 'space-between',

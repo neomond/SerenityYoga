@@ -6,4 +6,5 @@ export interface Session {
   categories: Category[];
   duration: string;
   imageUrl: string;
+  category: string;
 }
