@@ -23,7 +23,7 @@ import {
 } from '../../redux/slices/LikedItemsSlice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import SvgFlower from '../../assets/Flower';
-import {emojis} from '../../utils/emojis';
+import {emojis, getEmojiForCategory} from '../../utils/emojis';
 import {fetchCategories} from '../../redux/slices/CategoriesSlice';
 
 const HomeScreen = ({navigation}: any) => {
@@ -154,9 +154,11 @@ const HomeScreen = ({navigation}: any) => {
           style={styles.scrollCategories}
           showsHorizontalScrollIndicator={false}
           horizontal={true}>
-          {categories.map(category => (
-            <TouchableOpacity key={category._id}>
-              <Text style={styles.categoryText}>{category.name}</Text>
+          {categories.map(c => (
+            <TouchableOpacity key={c._id}>
+              <Text style={styles.categoryText}>
+                {getEmojiForCategory(c.name)} {c.name}
+              </Text>
             </TouchableOpacity>
           ))}
         </ScrollView>
