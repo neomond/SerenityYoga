@@ -29,6 +29,12 @@ import ScreenOpeningAnimation from '../../utils/ScreenOpeningAnimation';
 import HeaderAnimation from '../../utils/HeaderAnimation';
 
 const HomeScreen = ({navigation}: any) => {
+  // const hideTabBar = () => {
+  //   navigation.setOptions({
+  //     tabBarStyle: {display: 'none'},
+  //   });
+  // };
+
   const dispatch = useDispatch<AppDispatch>();
   const {categories, loading, error} = useSelector(
     (state: RootState) => state.categories,
@@ -170,22 +176,7 @@ const HomeScreen = ({navigation}: any) => {
             ))}
           </ScrollView>
         </View>
-        <View style={styles.primaryContent}>
-          {/* {categories.length > 0 ? (
-          <FlatList
-            data={categories}
-            renderItem={renderItem}
-            keyExtractor={item => item._id}
-          />
-        ) : (
-          <View style={styles.noItemsContainer}>
-            <View style={styles.flowerIcon}>
-              <SvgFlower />
-            </View>
-            <Text style={styles.noItemsText}>No Categories.</Text>
-          </View>
-        )} */}
-        </View>
+        <View style={styles.primaryContent}></View>
       </LinearGradient>
     </HeaderAnimation>
   );

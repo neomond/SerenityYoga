@@ -3,6 +3,7 @@ import HomeScreen from '../screens/HomeScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import DetailsScreen from '../screens/DetailsScreen';
 import CategoryMoodScreen from '../screens/CategoryMoodScreen';
+import {getFocusedRouteNameFromRoute} from '@react-navigation/native';
 
 type HomeStackParamList = {
   HomeScreen: undefined;

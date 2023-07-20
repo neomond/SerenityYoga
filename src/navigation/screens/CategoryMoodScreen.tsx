@@ -114,7 +114,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#fff',
     backgroundColor: '#fff',
-    height: '100%',
   },
   iconsHeader: {
     flexDirection: 'row',

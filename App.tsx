@@ -1,4 +1,7 @@
-import {NavigationContainer} from '@react-navigation/native';
+import {
+  NavigationContainer,
+  getFocusedRouteNameFromRoute,
+} from '@react-navigation/native';
 import AuthStack from './src/navigation/stack/AuthStack';
 import {Provider, useSelector} from 'react-redux';
 import store, {RootState} from './src/redux';
@@ -47,14 +50,25 @@ const HomeTabNavigator: React.FC = () => {
       })}>
       <Tab.Screen
         name="Home"
-        options={{
+        options={({route}: any) => ({
+          tabBarStyle: (route => {
+            const routeName = getFocusedRouteNameFromRoute(route) ?? '';
+            console.log(routeName);
+            if (
+              routeName === 'CategoryMoodScreen' ||
+              routeName === 'DetailsScreen'
+            ) {
+              return {display: 'none'};
+            }
+            return;
+          })(route),
           tabBarIcon: ({focused}: any) => (
             <SvgHomeIcon
               stroke={focused ? '#815CFF' : '#444444'}
               fill={focused ? '#E5DEFF' : '#fff'}
             />
           ),
-        }}
+        })}
         component={HomeStackNavigator}
       />
       <Tab.Screen
