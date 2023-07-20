@@ -13,7 +13,7 @@ import SvgLikeIcon from '../../assets/LikeIcon';
 import SvgDuration from '../../assets/DurationIcon';
 import {getEmojiForCategory} from '../../utils/emojis';
 import {useDispatch, useSelector} from 'react-redux';
-import {AppDispatch, RootState} from '../../redux';
+import {AppDispatch} from '../../redux';
 import {fetchSessions, getSessions} from '../../redux/slices/SessionSlice';
 
 const CategoryMoodScreen = ({navigation, route}: any) => {
@@ -22,15 +22,14 @@ const CategoryMoodScreen = ({navigation, route}: any) => {
   const sessions = useSelector(getSessions);
 
   useEffect(() => {
-    dispatch(fetchSessions());
+    dispatch(fetchSessions(category._id));
   }, [dispatch]);
   console.log('Sessions:', sessions);
 
-  const categorySessions = sessions.filter(session => {
-    return session.categories.some(cat => cat._id === category._id);
-  });
-
-  console.log('Category Sessions:', categorySessions);
+  //   const categorySessions = sessions.filter(session => {
+  //     return session.categories.some(cat => cat._id === category._id);
+  //   });
+  //   console.log('Category Sessions:', categorySessions);
 
   return (
     <ScrollView>
@@ -52,7 +51,7 @@ const CategoryMoodScreen = ({navigation, route}: any) => {
         </Text>
         <Text style={styles.subheaderText}>{category.description}</Text>
         <View style={styles.primaryContent}>
-          {categorySessions.map(c => (
+          {sessions.map(c => (
             <View style={styles.favoritesItem} key={c._id}>
               <View style={styles.imageContentSubtop}>
                 <SvgDuration />

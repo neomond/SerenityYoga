@@ -18,9 +18,9 @@ const initialState: SessionState = {
 
 export const fetchSessions = createAsyncThunk(
   'api/sessions/fetchSessions',
-  async () => {
+  async (id: number) => {
     try {
-      const response = await axios.get(`${API_URL}/sessions`);
+      const response = await axios.get(`${API_URL}/sessions/${id}`);
       return response.data;
     } catch (error) {
       console.error('Error fetching sessions:', error);
