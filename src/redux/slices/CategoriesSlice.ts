@@ -3,6 +3,7 @@ import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
 import axios from 'axios';
 import {RootState} from '..';
 import {Category} from '../../models/Category';
+import API_URL from '../../utils/apiConfig';
 
 interface CategoriesState {
   loading: boolean;
@@ -19,9 +20,7 @@ const initialState: CategoriesState = {
 export const fetchCategories = createAsyncThunk(
   'api/categories/fetchCategories',
   async () => {
-    const response = await axios.get(
-      'http://192.168.0.102:8080/api/categories',
-    );
+    const response = await axios.get(`${API_URL}/categories`);
     return response.data;
   },
 );
@@ -39,6 +38,7 @@ export const categoriesSlice = createSlice({
       state.loading = false;
       state.error = null;
       state.categories = action.payload;
+      console.log('mmememe');
     });
     builder.addCase(fetchCategories.rejected, (state, action) => {
       state.loading = false;

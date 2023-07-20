@@ -23,18 +23,18 @@ import {
 } from '../../redux/slices/LikedItemsSlice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import SvgFlower from '../../assets/Flower';
-import {fetchSessions} from '../../redux/slices/SessionSlice';
 import {emojis} from '../../utils/emojis';
+import {fetchCategories} from '../../redux/slices/CategoriesSlice';
 
 const HomeScreen = ({navigation}: any) => {
   const dispatch = useDispatch<AppDispatch>();
-  const categories = useSelector(
-    (state: RootState) => state.sessions.categories,
+  const {categories, loading, error} = useSelector(
+    (state: RootState) => state.categories,
   );
-  const uniqueCategoryNames = [...new Set(categories.map(c => c.name))];
+  console.log(categories);
 
   useEffect(() => {
-    dispatch(fetchSessions());
+    dispatch(fetchCategories());
   }, [dispatch]);
 
   // const {categories} = useSelector((state: RootState) => state.categoriesSlice);
@@ -154,20 +154,9 @@ const HomeScreen = ({navigation}: any) => {
           style={styles.scrollCategories}
           showsHorizontalScrollIndicator={false}
           horizontal={true}>
-          {uniqueCategoryNames.map((categoryName, index) => (
-            <TouchableOpacity
-              key={categoryName}
-              onPress={() =>
-                navigation.navigate('CategoryMoodScreen', {
-                  categoryName,
-                  categoryDescription: categories.find(
-                    c => c.name === categoryName,
-                  )?.description,
-                })
-              }>
-              <Text style={styles.categoryText}>
-                {emojis[index % emojis.length]} {categoryName}
-              </Text>
+          {categories.map(category => (
+            <TouchableOpacity key={category._id}>
+              <Text style={styles.categoryText}>{category.name}</Text>
             </TouchableOpacity>
           ))}
         </ScrollView>
