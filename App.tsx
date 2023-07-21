@@ -18,6 +18,8 @@ import SvgPractices from './src/assets/VideosIcon';
 import SvgLiked from './src/assets/LikedIcon';
 import {PracticesStackNavigator} from './src/navigation/stack/PracticesStack';
 import {MeditationsStackNavigator} from './src/navigation/stack/MeditationsStack';
+import CustomTabBar from './src/utils/customTabBar';
+import {Text, View} from 'react-native';
 
 type RootStackParamList = {
   AuthMain: undefined;
@@ -44,10 +46,14 @@ const HomeTabNavigator: React.FC = () => {
         tabBarStyle: {
           borderTopWidth: 0,
         },
+
         tabBarActiveTintColor: '#815CFF',
         tabBarInactiveTintColor: '#444444',
         headerShown: false,
-      })}>
+        tabBarShowLabel: false,
+      })}
+      // tabBar={props => <CustomTabBar {...props} />}
+    >
       <Tab.Screen
         name="Home"
         options={({route}: any) => ({
@@ -62,11 +68,18 @@ const HomeTabNavigator: React.FC = () => {
             }
             return;
           })(route),
-          tabBarIcon: ({focused}: any) => (
-            <SvgHomeIcon
-              stroke={focused ? '#815CFF' : '#444444'}
-              fill={focused ? '#E5DEFF' : '#fff'}
-            />
+          tabBarIcon: ({focused}) => (
+            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+              <SvgHomeIcon
+                stroke={focused ? '#815CFF' : '#444444'}
+                fill={focused ? '#E5DEFF' : '#fff'}
+              />
+              {focused ? (
+                <Text style={{marginLeft: 5, fontSize: 12, color: '#815CFF'}}>
+                  Home
+                </Text>
+              ) : null}
+            </View>
           ),
         })}
         component={HomeStackNavigator}
@@ -74,18 +87,31 @@ const HomeTabNavigator: React.FC = () => {
       <Tab.Screen
         name="Practices"
         options={{
-          tabBarIcon: ({focused}: any) => (
-            <SvgPractices stroke={focused ? '#815CFF' : '#444444'} />
+          tabBarIcon: ({focused}) => (
+            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+              <SvgPractices stroke={focused ? '#815CFF' : '#444444'} />
+              {focused ? (
+                <Text style={{marginLeft: 5, fontSize: 12, color: '#815CFF'}}>
+                  Practices
+                </Text>
+              ) : null}
+            </View>
           ),
         }}
         component={PracticesStackNavigator}
       />
-
       <Tab.Screen
         name="Meditations"
         options={{
-          tabBarIcon: ({focused}: any) => (
-            <SvgMeditations stroke={focused ? '#815CFF' : '#444444'} />
+          tabBarIcon: ({focused}) => (
+            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+              <SvgMeditations stroke={focused ? '#815CFF' : '#444444'} />
+              {focused ? (
+                <Text style={{marginLeft: 5, fontSize: 12, color: '#815CFF'}}>
+                  Meditations
+                </Text>
+              ) : null}
+            </View>
           ),
         }}
         component={MeditationsStackNavigator}
@@ -93,11 +119,18 @@ const HomeTabNavigator: React.FC = () => {
       <Tab.Screen
         name="Liked"
         options={{
-          tabBarIcon: ({focused}: any) => (
-            <SvgLiked
-              stroke={focused ? '#815CFF' : '#444444'}
-              fill={focused ? '#E5DEFF' : '#fff'}
-            />
+          tabBarIcon: ({focused}) => (
+            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+              <SvgLiked
+                stroke={focused ? '#815CFF' : '#444444'}
+                fill={focused ? '#E5DEFF' : '#fff'}
+              />
+              {focused ? (
+                <Text style={{marginLeft: 5, fontSize: 12, color: '#815CFF'}}>
+                  Liked
+                </Text>
+              ) : null}
+            </View>
           ),
         }}
         component={SaveStackNavigator}
