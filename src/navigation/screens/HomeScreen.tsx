@@ -143,42 +143,42 @@ const HomeScreen = ({navigation}: any) => {
   // }
 
   return (
-    <HeaderAnimation duration={1300}>
-      <LinearGradient
-        colors={['#c47afb', '#A07AFA', '#8380fb', '#8866ff']}
-        start={{x: 0, y: 0.2}}
-        end={{x: 1, y: 0}}
-        style={styles.linearGradient}>
-        <View style={styles.iconsHeader}>
-          <TouchableOpacity
-            onPress={() => navigation.navigate('ProfileScreen')}
-            style={styles.profileStyle}>
-            <SvgProfile stroke="#E5DEFF" fill="transparent" />
-          </TouchableOpacity>
-        </View>
-        <Text style={styles.headerText}>Welcome, Nazrin!</Text>
-        <Text style={styles.subheaderText}>How are you feeling today?</Text>
-        <View>
-          <ScrollView
-            style={styles.scrollCategories}
-            showsHorizontalScrollIndicator={false}
-            horizontal={true}>
-            {categories.map(category => (
-              <TouchableOpacity
-                key={category._id}
-                onPress={() =>
-                  navigation.navigate('CategoryMoodScreen', {category})
-                }>
-                <Text style={styles.categoryText}>
-                  {getEmojiForCategory(category.name)} {category.name}
-                </Text>
-              </TouchableOpacity>
-            ))}
-          </ScrollView>
-        </View>
-        <View style={styles.primaryContent}></View>
-      </LinearGradient>
-    </HeaderAnimation>
+    // <HeaderAnimation duration={1300}>
+    <LinearGradient
+      colors={['#c47afb', '#A07AFA', '#8380fb', '#8866ff']}
+      start={{x: 0, y: 0.2}}
+      end={{x: 1, y: 0}}
+      style={styles.linearGradient}>
+      <View style={styles.iconsHeader}>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('ProfileScreen')}
+          style={styles.profileStyle}>
+          <SvgProfile stroke="#E5DEFF" fill="transparent" />
+        </TouchableOpacity>
+      </View>
+      <Text style={styles.headerText}>Welcome, Nazrin!</Text>
+      <Text style={styles.subheaderText}>How are you feeling today?</Text>
+      <View>
+        <ScrollView
+          style={styles.scrollCategories}
+          showsHorizontalScrollIndicator={false}
+          horizontal={true}>
+          {categories.map(category => (
+            <TouchableOpacity
+              key={category._id}
+              onPress={() =>
+                navigation.navigate('CategoryMoodScreen', {category})
+              }>
+              <Text style={styles.categoryText}>
+                {getEmojiForCategory(category.name)} {category.name}
+              </Text>
+            </TouchableOpacity>
+          ))}
+        </ScrollView>
+      </View>
+      <View style={styles.primaryContent}></View>
+    </LinearGradient>
+    // </HeaderAnimation>
   );
 };
 
