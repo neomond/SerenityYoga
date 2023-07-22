@@ -17,7 +17,7 @@ import {AppDispatch, RootState} from '../../redux';
 import SvgCloseIcon from '../../assets/CloseIcon';
 
 const DetailsScreen = ({route, navigation}: any) => {
-  // to not show bottom bar
+  // to not show bottom bar in this screen
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       navigation.getParent()?.setOptions({tabBarStyle: {display: 'none'}});

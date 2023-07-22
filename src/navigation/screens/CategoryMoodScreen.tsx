@@ -25,17 +25,17 @@ const CategoryMoodScreen = ({navigation, route}: any) => {
   const sessions = useSelector(getSessions);
   const isLoading = useSelector((state: RootState) => state.sessions.loading);
 
+  // to not show bottom bar in this screen
   useEffect(() => {
-    // Hide the bottom bar when this screen is focused
     const unsubscribe = navigation.addListener('focus', () => {
       navigation.getParent()?.setOptions({tabBarStyle: {display: 'none'}});
     });
-    // Show the bottom bar when leaving this screen
     return () => {
       navigation.getParent()?.setOptions({tabBarStyle: {display: 'flex'}});
       unsubscribe();
     };
   }, [navigation]);
+  /////////////////////////////
 
   useEffect(() => {
     dispatch(fetchSessions(category._id));
