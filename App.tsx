@@ -7,12 +7,7 @@ import {
 import {Provider} from 'react-redux';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import Animated, {
-  useAnimatedStyle,
-  useSharedValue,
-  withTiming,
-  Easing,
-} from 'react-native-reanimated';
+import Animated from 'react-native-reanimated';
 import store from './src/redux';
 
 import SplashScreen from 'react-native-splash-screen';
@@ -63,16 +58,7 @@ const HomeTabNavigator: React.FC = () => {
       })}>
       <Tab.Screen
         name="Home"
-        options={({route}: any) => ({
-          tabBarStyle: (() => {
-            const routeName = getFocusedRouteNameFromRoute(route) ?? '';
-            if (
-              routeName === 'CategoryMoodScreen' ||
-              routeName === 'DetailsScreen'
-            ) {
-              return {display: 'none'};
-            }
-          })(),
+        options={{
           tabBarIcon: ({focused}) => (
             <Animated.View
               style={[iconStyle, {flexDirection: 'row', alignItems: 'center'}]}>
@@ -91,7 +77,7 @@ const HomeTabNavigator: React.FC = () => {
               ) : null}
             </Animated.View>
           ),
-        })}
+        }}
         component={HomeStackNavigator}
       />
       <Tab.Screen

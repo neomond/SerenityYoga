@@ -15,15 +15,19 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useDispatch, useSelector} from 'react-redux';
 import {AppDispatch, RootState} from '../../redux';
 import SvgCloseIcon from '../../assets/CloseIcon';
-import {useIsFocused} from '@react-navigation/native';
 
 const DetailsScreen = ({route, navigation}: any) => {
-  const isFocused = useIsFocused();
-
+  // to not show bottom bar
   useEffect(() => {
-    // Hide the bottom tab bar when the screen is focused
-    navigation.setOptions({tabBarVisible: !isFocused});
-  }, [isFocused, navigation]);
+    const unsubscribe = navigation.addListener('focus', () => {
+      navigation.getParent()?.setOptions({tabBarStyle: {display: 'none'}});
+    });
+    return () => {
+      navigation.getParent()?.setOptions({tabBarStyle: {display: 'flex'}});
+      unsubscribe();
+    };
+  }, [navigation]);
+  /////////////////////////////
 
   const dispatch = useDispatch<AppDispatch>();
   const likedItems = useSelector(
@@ -49,6 +53,7 @@ const DetailsScreen = ({route, navigation}: any) => {
         ).catch(error => console.log('Error adding item:', error));
       }
     };
+
     return (
       <View style={styles.mainWrapper}>
         <Image source={{uri: item.image}} style={styles.categoryImages} />

@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useLayoutEffect, useState} from 'react';
 import LinearGradient from 'react-native-linear-gradient';
 import SvgCloseIcon from '../../assets/CloseIcon';
 import SvgLikeIcon from '../../assets/LikeIcon';
@@ -26,9 +26,22 @@ const CategoryMoodScreen = ({navigation, route}: any) => {
   const isLoading = useSelector((state: RootState) => state.sessions.loading);
 
   useEffect(() => {
+    // Hide the bottom bar when this screen is focused
+    const unsubscribe = navigation.addListener('focus', () => {
+      navigation.getParent()?.setOptions({tabBarStyle: {display: 'none'}});
+    });
+    // Show the bottom bar when leaving this screen
+    return () => {
+      navigation.getParent()?.setOptions({tabBarStyle: {display: 'flex'}});
+      unsubscribe();
+    };
+  }, [navigation]);
+
+  useEffect(() => {
     dispatch(fetchSessions(category._id));
   }, [dispatch]);
-  console.log('Sessions:', sessions);
+
+  //   console.log('Sessions:', sessions);
 
   //   const categorySessions = sessions.filter(session => {
   //     return session.categories.some(cat => cat._id === category._id);
