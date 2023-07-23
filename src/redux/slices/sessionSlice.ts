@@ -1,4 +1,4 @@
-import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
+import {createAsyncThunk, createSelector, createSlice} from '@reduxjs/toolkit';
 import axios from 'axios';
 import {RootState} from '..';
 import {Session} from '../../models/Session';
@@ -42,6 +42,7 @@ export const sessionSlice = createSlice({
       state.sessions = action.payload;
       state.loading = false;
       state.error = null;
+      console.log('fetchSessions fulfilled payload:', action.payload);
     });
     builder.addCase(fetchSessions.rejected, (state, action) => {
       state.loading = false;
@@ -52,3 +53,40 @@ export const sessionSlice = createSlice({
 
 export default sessionSlice.reducer;
 export const getSessions = (state: RootState) => state.sessions.sessions;
+
+// Selector to get all sessions from the state
+const selectAllSessions = (state: RootState) => state.sessions.sessions;
+
+// Fisher-Yates shuffle algorithm to shuffle an array randomly
+const shuffleArray = (array: any[]) => {
+  const shuffledArray = [...array];
+  let currentIndex = shuffledArray.length;
+
+  while (currentIndex !== 0) {
+    // Pick a remaining element randomly
+    const randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex--;
+
+    // Swap the current element with the randomly picked element
+    [shuffledArray[currentIndex], shuffledArray[randomIndex]] = [
+      shuffledArray[randomIndex],
+      shuffledArray[currentIndex],
+    ];
+  }
+  return shuffledArray;
+};
+
+// Function to get a certain number of random sessions from the shuffled array
+// const selectRandomSessions = (sessions: any[], count: number) => {
+//   const shuffledSessions = shuffleArray(sessions);
+//   return shuffledSessions.slice(0, count);
+// };
+
+// Compose the final selector
+export const getRandomSessions = createSelector(
+  [selectAllSessions],
+  sessions => {
+    const shuffledSessions = shuffleArray(sessions);
+    return shuffledSessions.slice(0, 5); // Change 5 to the number of random sessions you want to display horizontally
+  },
+);

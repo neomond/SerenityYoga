@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useEffect, useLayoutEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import LinearGradient from 'react-native-linear-gradient';
 import SvgCloseIcon from '../../assets/CloseIcon';
 import SvgLikeIcon from '../../assets/LikeIcon';
@@ -18,12 +18,17 @@ import {fetchSessions, getSessions} from '../../redux/slices/SessionSlice';
 import {ActivityIndicator} from 'react-native-paper';
 
 import HeaderAnimation from '../../utils/HeaderAnimation';
+import {fetchCategories} from '../../redux/slices/CategoriesSlice';
 
 const CategoryMoodScreen = ({navigation, route}: any) => {
   const {category} = route.params;
   const dispatch = useDispatch<AppDispatch>();
   const sessions = useSelector(getSessions);
   const isLoading = useSelector((state: RootState) => state.sessions.loading);
+
+  useEffect(() => {
+    dispatch(fetchSessions(category._id));
+  }, [dispatch]);
 
   // to not show bottom bar in this screen
   useEffect(() => {
@@ -36,10 +41,6 @@ const CategoryMoodScreen = ({navigation, route}: any) => {
     };
   }, [navigation]);
   /////////////////////////////
-
-  useEffect(() => {
-    dispatch(fetchSessions(category._id));
-  }, [dispatch]);
 
   //   console.log('Sessions:', sessions);
 

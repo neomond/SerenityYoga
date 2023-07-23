@@ -24,9 +24,18 @@ import {
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import SvgFlower from '../../assets/Flower';
 import {emojis, getEmojiForCategory} from '../../utils/emojis';
-import {fetchCategories} from '../../redux/slices/CategoriesSlice';
+import {
+  fetchCategories,
+  getCategories,
+} from '../../redux/slices/CategoriesSlice';
 import ScreenOpeningAnimation from '../../utils/ScreenOpeningAnimation';
 import HeaderAnimation from '../../utils/HeaderAnimation';
+import {
+  fetchSessions,
+  getRandomSessions,
+  getSessions,
+} from '../../redux/slices/SessionSlice';
+import {Session} from '../../models/Session';
 
 const HomeScreen = ({navigation}: any) => {
   // const hideTabBar = () => {
@@ -34,17 +43,25 @@ const HomeScreen = ({navigation}: any) => {
   //     tabBarStyle: {display: 'none'},
   //   });
   // };
-
   const dispatch = useDispatch<AppDispatch>();
-  const {categories, loading, error} = useSelector(
-    (state: RootState) => state.categories,
-  );
-  console.log(categories);
+  const {categories, loading, error} = useSelector(getCategories);
+  const sessions = useSelector(getSessions);
+  const randomSessions = useSelector(getRandomSessions);
+
+  const isLoading = useSelector((state: RootState) => state.sessions.loading);
+
+  console.log('isLoading:', isLoading);
+  console.log('randomSessions:', randomSessions);
+  console.log('sessions:', sessions);
+  // console.log(categories);
 
   useEffect(() => {
     dispatch(fetchCategories());
   }, [dispatch]);
 
+  // for random categories and sessions
+
+  //////////////////////////////
   // const {categories} = useSelector((state: RootState) => state.categoriesSlice);
   // const likedItems = useSelector(
   //   (state: RootState) => state.likedItemsSlice.likedItems,
@@ -85,62 +102,19 @@ const HomeScreen = ({navigation}: any) => {
   //   loadLikedItems();
   // }, [dispatch]);
 
-  const renderItem = ({item}: {item: any}) => {
+  if (isLoading) {
     return (
-      <View style={styles.renderItemCont}>
-        <View style={styles.renderItemContSecond}>
-          <Text style={styles.categoryHeader}>{item.category}</Text>
-          <TouchableOpacity
-            onPress={() =>
-              navigation.navigate('DetailsScreen', {category: item})
-            }>
-            <Text style={styles.categoryHeaderSecond}>View All</Text>
-          </TouchableOpacity>
-        </View>
-        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-          {/* {item.data.map((dataItem: any) => {
-            const isLiked = likedItems.some(item => item.key === dataItem.key);
-            return ( */}
-          <View style={styles.imageContainer}>
-            {/* <Image source={{uri: dataItem.image}} style={styles.image} /> */}
-            <Image
-              style={styles.image}
-              source={require('../../assets/test.png')}
-            />
-            <Text style={styles.imageTitle}>Title</Text>
-            <View style={styles.imageContentTop}>
-              <View style={styles.imageContentSubtop}>
-                <SvgDuration />
-                <Text style={styles.titleColor}>10:00</Text>
-              </View>
-              <TouchableOpacity>
-                <SvgLikeIcon
-                // fill={isLiked ? '#815cff' : 'transparent'}
-                // stroke={isLiked ? '#815cff' : '#fff'}
-                />
-              </TouchableOpacity>
-            </View>
-          </View>
-          {/* );
-          })} */}
-        </ScrollView>
+      <View
+        style={{
+          flex: 1,
+          alignItems: 'center',
+          justifyContent: 'center',
+          backgroundColor: '#fff',
+        }}>
+        <ActivityIndicator />
       </View>
     );
-  };
-
-  // if (isLoading) {
-  //   return (
-  //     <View
-  //       style={{
-  //         flex: 1,
-  //         alignItems: 'center',
-  //         justifyContent: 'center',
-  //         backgroundColor: '#fff',
-  //       }}>
-  //       <ActivityIndicator />
-  //     </View>
-  //   );
-  // }
+  }
 
   return (
     // <HeaderAnimation duration={1300}>
@@ -176,7 +150,34 @@ const HomeScreen = ({navigation}: any) => {
           ))}
         </ScrollView>
       </View>
-      <View style={styles.primaryContent}></View>
+      <View style={styles.primaryContent}>
+        <View style={styles.renderItemCont}>
+          <View style={styles.renderItemContSecond}>
+            <Text style={styles.categoryHeader}>Try this</Text>
+            <TouchableOpacity
+              onPress={() => navigation.navigate('DetailsScreen')}>
+              <Text style={styles.categoryHeaderSecond}>View All</Text>
+            </TouchableOpacity>
+          </View>
+          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+            {randomSessions.map((session: Session) => (
+              <View style={styles.imageContainer} key={session._id}>
+                <Image style={styles.image} source={{uri: session.imageUrl}} />
+                <Text style={styles.imageTitle}>{session.title}</Text>
+                <View style={styles.imageContentTop}>
+                  <View style={styles.imageContentSubtop}>
+                    <SvgDuration />
+                    <Text style={styles.titleColor}>{session.duration}</Text>
+                  </View>
+                  <TouchableOpacity>
+                    <SvgLikeIcon />
+                  </TouchableOpacity>
+                </View>
+              </View>
+            ))}
+          </ScrollView>
+        </View>
+      </View>
     </LinearGradient>
     // </HeaderAnimation>
   );
