@@ -46,7 +46,9 @@ const HomeScreen = ({navigation}: any) => {
   const dispatch = useDispatch<AppDispatch>();
   const {categories, loading, error} = useSelector(getCategories);
   const sessions = useSelector(getSessions);
-  const randomSessions = useSelector(getRandomSessions);
+  const randomSessions = useSelector((state: RootState) =>
+    getRandomSessions(state),
+  );
 
   const isLoading = useSelector((state: RootState) => state.sessions.loading);
 
@@ -56,6 +58,7 @@ const HomeScreen = ({navigation}: any) => {
   // console.log(categories);
 
   useEffect(() => {
+    // dispatch(fetchSessions())
     dispatch(fetchCategories());
   }, [dispatch]);
 
@@ -155,7 +158,37 @@ const HomeScreen = ({navigation}: any) => {
           <View style={styles.renderItemContSecond}>
             <Text style={styles.categoryHeader}>Try this</Text>
             <TouchableOpacity
-              onPress={() => navigation.navigate('DetailsScreen')}>
+              onPress={() =>
+                navigation.navigate('DetailsScreen', {randomSessions})
+              }>
+              <Text style={styles.categoryHeaderSecond}>View All</Text>
+            </TouchableOpacity>
+          </View>
+          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+            {randomSessions.map((session: Session) => (
+              <View style={styles.imageContainer} key={session._id}>
+                <Image style={styles.image} source={{uri: session.imageUrl}} />
+                <Text style={styles.imageTitle}>{session.title}</Text>
+                <View style={styles.imageContentTop}>
+                  <View style={styles.imageContentSubtop}>
+                    <SvgDuration />
+                    <Text style={styles.titleColor}>{session.duration}</Text>
+                  </View>
+                  <TouchableOpacity>
+                    <SvgLikeIcon />
+                  </TouchableOpacity>
+                </View>
+              </View>
+            ))}
+          </ScrollView>
+        </View>
+        <View style={styles.renderItemCont}>
+          <View style={styles.renderItemContSecond}>
+            <Text style={styles.categoryHeader}>Meditate</Text>
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate('DetailsScreen', {randomSessions})
+              }>
               <Text style={styles.categoryHeaderSecond}>View All</Text>
             </TouchableOpacity>
           </View>

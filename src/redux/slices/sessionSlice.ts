@@ -54,9 +54,6 @@ export const sessionSlice = createSlice({
 export default sessionSlice.reducer;
 export const getSessions = (state: RootState) => state.sessions.sessions;
 
-// Selector to get all sessions from the state
-const selectAllSessions = (state: RootState) => state.sessions.sessions;
-
 // Fisher-Yates shuffle algorithm to shuffle an array randomly
 const shuffleArray = (array: any[]) => {
   const shuffledArray = [...array];
@@ -76,17 +73,17 @@ const shuffleArray = (array: any[]) => {
   return shuffledArray;
 };
 
+// Compose the final selector
+export const getRandomSessions = createSelector(
+  (state: RootState) => state.sessions.sessions,
+  sessions => {
+    const shuffledSessions = shuffleArray(sessions);
+    return shuffledSessions.slice(0, 5);
+  },
+);
+
 // Function to get a certain number of random sessions from the shuffled array
 // const selectRandomSessions = (sessions: any[], count: number) => {
 //   const shuffledSessions = shuffleArray(sessions);
 //   return shuffledSessions.slice(0, count);
 // };
-
-// Compose the final selector
-export const getRandomSessions = createSelector(
-  [selectAllSessions],
-  sessions => {
-    const shuffledSessions = shuffleArray(sessions);
-    return shuffledSessions.slice(0, 5); // Change 5 to the number of random sessions you want to display horizontally
-  },
-);

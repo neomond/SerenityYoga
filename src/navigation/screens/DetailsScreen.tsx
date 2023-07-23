@@ -6,6 +6,7 @@ import {
   Image,
   StyleSheet,
   TouchableOpacity,
+  Platform,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import SvgDuration from '../../assets/DurationIcon';
@@ -15,6 +16,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useDispatch, useSelector} from 'react-redux';
 import {AppDispatch, RootState} from '../../redux';
 import SvgCloseIcon from '../../assets/CloseIcon';
+import {Session} from '../../models/Session';
 
 const DetailsScreen = ({route, navigation}: any) => {
   // to not show bottom bar in this screen
@@ -33,8 +35,8 @@ const DetailsScreen = ({route, navigation}: any) => {
   const likedItems = useSelector(
     (state: RootState) => state.likedItemsSlice.likedItems,
   );
-  const {category} = route.params;
-
+  const {randomSessions} = route.params;
+  console.log('mmmeeeow', randomSessions);
   const renderItem = ({item, index}: {item: any; index: number}) => {
     const isLiked = likedItems.some(likedItem => likedItem.key === item.key);
 
@@ -56,10 +58,12 @@ const DetailsScreen = ({route, navigation}: any) => {
 
     return (
       <View style={styles.mainWrapper}>
-        <Image source={{uri: item.image}} style={styles.categoryImages} />
+        <View style={styles.elevationLow}>
+          <Image source={{uri: item.imageUrl}} style={styles.categoryImages} />
+        </View>
         <Text style={styles.imageTitle}>{item.title}</Text>
         <TouchableOpacity style={styles.playBtn}>
-          <Text style={{fontSize: 14}}>More Info</Text>
+          <Text style={{fontSize: 14}}>Play</Text>
         </TouchableOpacity>
 
         <View style={styles.imageContentTop}>
@@ -86,7 +90,7 @@ const DetailsScreen = ({route, navigation}: any) => {
       end={{x: 1, y: 0}}
       style={styles.linearGradient}>
       <View style={styles.headerTop}>
-        <Text style={styles.textCategory}>{category.category} ✨</Text>
+        <Text style={styles.textCategory}>Try This ✨</Text>
         <TouchableOpacity
           onPress={() => navigation.goBack()}
           style={styles.closeIconStyle}>
@@ -96,9 +100,9 @@ const DetailsScreen = ({route, navigation}: any) => {
 
       <View style={styles.primaryContent}>
         <FlatList
-          data={category.data}
+          data={randomSessions}
           renderItem={renderItem}
-          keyExtractor={(item: any) => item.key}
+          keyExtractor={(item: Session) => item._id}
           showsVerticalScrollIndicator={false}
         />
       </View>
@@ -149,11 +153,12 @@ const styles = StyleSheet.create({
     bottom: 28,
     left: 15,
     color: '#fff',
-    fontSize: 14,
-    width: 95,
-    fontWeight: '700',
+    fontSize: 12,
+    width: 110,
+    fontWeight: '500',
+    letterSpacing: 1,
     alignItems: 'center',
-    backgroundColor: 'rgba(229,222,255, 0.2)',
+    backgroundColor: 'rgba(229,222,255, 0.3)',
     borderColor: 'rgba(229,222,255, 0)',
     borderRadius: 5,
     borderWidth: 1,
@@ -167,12 +172,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     top: 18,
     left: 15,
-    columnGap: 160,
+    columnGap: 140,
   },
   imageContentSubtop: {
     flexDirection: 'row',
     columnGap: 3,
     alignItems: 'center',
+    backgroundColor: 'rgba(229,222,255, 0.3)',
+    borderColor: 'rgba(229,222,255, 0)',
+    borderRadius: 5,
+    borderWidth: 1,
+    paddingVertical: 2,
+    paddingHorizontal: 8,
   },
   titleColor: {
     color: '#fff',
@@ -208,5 +219,19 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     columnGap: 30,
     paddingLeft: 110,
+  },
+  elevationLow: {
+    borderRadius: 20,
+    ...Platform.select({
+      ios: {
+        shadowColor: '#000',
+        shadowOffset: {width: 0, height: 2},
+        shadowOpacity: 0.8,
+        shadowRadius: 2,
+      },
+      android: {
+        elevation: 5,
+      },
+    }),
   },
 });
