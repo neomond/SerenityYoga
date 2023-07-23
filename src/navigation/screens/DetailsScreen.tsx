@@ -7,6 +7,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   Platform,
+  ScrollView,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import SvgDuration from '../../assets/DurationIcon';
@@ -37,8 +38,10 @@ const DetailsScreen = ({route, navigation}: any) => {
   );
   const {randomSessions} = route.params;
   console.log('mmmeeeow', randomSessions);
+
   const renderItem = ({item, index}: {item: any; index: number}) => {
     const isLiked = likedItems.some(likedItem => likedItem.key === item.key);
+    const isFirstItem = index === 0;
 
     const handlePress = (dataItem: any) => {
       if (isLiked) {
@@ -57,23 +60,54 @@ const DetailsScreen = ({route, navigation}: any) => {
     };
 
     return (
-      <View style={styles.mainWrapper}>
+      <View
+        style={[
+          styles.mainWrapper,
+          isFirstItem ? styles.mainWrapper : styles.otherItemsWrapper,
+        ]}>
         <View style={styles.elevationLow}>
-          <Image source={{uri: item.imageUrl}} style={styles.categoryImages} />
+          <Image
+            source={{uri: item.imageUrl}}
+            style={[
+              styles.categoryImages,
+              isFirstItem ? styles.categoryImages : styles.otherCategoryImages,
+            ]}
+          />
         </View>
-        <Text style={styles.imageTitle}>{item.title}</Text>
-        <TouchableOpacity style={styles.playBtn}>
+        <Text
+          style={[
+            styles.imageTitle,
+            isFirstItem ? styles.imageTitle : styles.otherImageTitle,
+          ]}>
+          {item.title}
+        </Text>
+        <TouchableOpacity
+          style={[
+            styles.playBtn,
+            isFirstItem ? styles.playBtn : styles.otherPlayBtn,
+          ]}>
           <Text style={{fontSize: 14}}>Play</Text>
         </TouchableOpacity>
 
-        <View style={styles.imageContentTop}>
+        <View
+          style={[
+            styles.imageContentTop,
+            isFirstItem
+              ? styles.imageContentSubtop
+              : styles.otherImageContentSubtop,
+          ]}>
           <View style={styles.imageContentSubtop}>
             <SvgDuration />
             <Text style={styles.titleColor}>{item.duration}</Text>
           </View>
           <TouchableOpacity onPress={() => handlePress(item)}>
             <SvgLikeIcon
-              style={{marginLeft: 45}}
+              style={[
+                styles.heartStyleMain,
+                isFirstItem
+                  ? styles.heartStyleMain
+                  : styles.otherHeartStyleMain,
+              ]}
               fill={isLiked ? '#815cff' : 'transparent'}
               stroke={isLiked ? '#815cff' : '#fff'}
             />
@@ -84,6 +118,7 @@ const DetailsScreen = ({route, navigation}: any) => {
   };
 
   return (
+    // <ScrollView showsVerticalScrollIndicator={false}>
     <LinearGradient
       colors={['#c47afb', '#A07AFA', '#8380fb', '#8866ff']}
       start={{x: 0, y: 0.2}}
@@ -104,9 +139,11 @@ const DetailsScreen = ({route, navigation}: any) => {
           renderItem={renderItem}
           keyExtractor={(item: Session) => item._id}
           showsVerticalScrollIndicator={false}
+          // contentContainerStyle={styles.primaryContent}
         />
       </View>
     </LinearGradient>
+    // </ScrollView>
   );
 };
 
@@ -114,13 +151,11 @@ export default DetailsScreen;
 
 const styles = StyleSheet.create({
   mainWrapper: {
-    marginBottom: 20,
-    borderBottomColor: '#f0f0f0',
-    borderBottomWidth: 1.2,
+    marginBottom: 25,
     paddingBottom: 15,
   },
   linearGradient: {
-    paddingTop: 90,
+    paddingTop: 60,
   },
   primaryContent: {
     rowGap: 8,
@@ -129,10 +164,10 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#fff',
     backgroundColor: '#fff',
-    paddingVertical: 40,
+    paddingTop: 40,
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 50,
+    height: '200%',
   },
   textCategory: {
     marginBottom: 20,
@@ -147,14 +182,19 @@ const styles = StyleSheet.create({
     height: 170,
     borderRadius: 10,
   },
+  otherCategoryImages: {
+    width: 150,
+    height: 100,
+    borderRadius: 15,
+  },
   imageTitle: {
     marginTop: 5,
     position: 'absolute',
     bottom: 28,
     left: 15,
     color: '#fff',
-    fontSize: 12,
-    width: 110,
+    fontSize: 13,
+    width: 145,
     fontWeight: '500',
     letterSpacing: 1,
     alignItems: 'center',
@@ -165,6 +205,14 @@ const styles = StyleSheet.create({
     paddingVertical: 2,
     paddingHorizontal: 8,
     overflow: 'hidden',
+  },
+  otherImageTitle: {
+    color: '#000',
+    backgroundColor: 'transparent',
+    left: 170,
+    top: -8,
+    fontSize: 14,
+    width: 160,
   },
   imageContentTop: {
     flexDirection: 'row',
@@ -178,17 +226,19 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     columnGap: 3,
     alignItems: 'center',
-    backgroundColor: 'rgba(229,222,255, 0.3)',
-    borderColor: 'rgba(229,222,255, 0)',
-    borderRadius: 5,
-    borderWidth: 1,
     paddingVertical: 2,
-    paddingHorizontal: 8,
+  },
+  otherImageContentSubtop: {
+    paddingVertical: 2,
+    top: 8,
+    left: 10,
   },
   titleColor: {
     color: '#fff',
-    fontSize: 14,
+    fontSize: 15,
+    marginRight: 12,
   },
+
   playBtn: {
     position: 'absolute',
     right: 10,
@@ -199,6 +249,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#E5DEFF',
     width: 105,
     marginRight: 10,
+  },
+  otherPlayBtn: {
+    right: 30,
+    bottom: 12,
+    backgroundColor: '#f0f0f0',
   },
   closeIconStyle: {
     marginBottom: 25,
@@ -221,12 +276,12 @@ const styles = StyleSheet.create({
     paddingLeft: 110,
   },
   elevationLow: {
-    borderRadius: 20,
+    borderRadius: 30,
     ...Platform.select({
       ios: {
         shadowColor: '#000',
         shadowOffset: {width: 0, height: 2},
-        shadowOpacity: 0.8,
+        shadowOpacity: 0.5,
         shadowRadius: 2,
       },
       android: {
@@ -234,4 +289,12 @@ const styles = StyleSheet.create({
       },
     }),
   },
+  otherItemsWrapper: {
+    marginBottom: 20,
+    borderBottomColor: '#f0f0f0',
+    borderBottomWidth: 1,
+    paddingBottom: 15,
+  },
+  heartStyleMain: {left: 185},
+  otherHeartStyleMain: {left: -110, top: 0},
 });

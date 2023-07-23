@@ -28,10 +28,9 @@ import {
   fetchCategories,
   getCategories,
 } from '../../redux/slices/CategoriesSlice';
-import ScreenOpeningAnimation from '../../utils/ScreenOpeningAnimation';
-import HeaderAnimation from '../../utils/HeaderAnimation';
+
 import {
-  fetchSessions,
+  getMeditationSessions,
   getRandomSessions,
   getSessions,
 } from '../../redux/slices/SessionSlice';
@@ -51,7 +50,7 @@ const HomeScreen = ({navigation}: any) => {
   );
 
   const isLoading = useSelector((state: RootState) => state.sessions.loading);
-
+  const meditationSessions = useSelector(getMeditationSessions);
   console.log('isLoading:', isLoading);
   console.log('randomSessions:', randomSessions);
   console.log('sessions:', sessions);
@@ -193,14 +192,14 @@ const HomeScreen = ({navigation}: any) => {
             </TouchableOpacity>
           </View>
           <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            {randomSessions.map((session: Session) => (
-              <View style={styles.imageContainer} key={session._id}>
-                <Image style={styles.image} source={{uri: session.imageUrl}} />
-                <Text style={styles.imageTitle}>{session.title}</Text>
+            {meditationSessions.map((meditate: Session) => (
+              <View style={styles.imageContainer} key={meditate._id}>
+                <Image style={styles.image} source={{uri: meditate.imageUrl}} />
+                <Text style={styles.imageTitle}>{meditate.title}</Text>
                 <View style={styles.imageContentTop}>
                   <View style={styles.imageContentSubtop}>
                     <SvgDuration />
-                    <Text style={styles.titleColor}>{session.duration}</Text>
+                    <Text style={styles.titleColor}>{meditate.duration}</Text>
                   </View>
                   <TouchableOpacity>
                     <SvgLikeIcon />
@@ -310,11 +309,14 @@ const styles = StyleSheet.create({
   },
   imageTitle: {
     marginTop: 5,
+    fontSize: 12,
+    letterSpacing: 1,
+    width: 155,
     position: 'absolute',
     bottom: 15,
     left: 15,
     color: '#fff',
-    fontWeight: '600',
+    fontWeight: '500',
     alignItems: 'center',
     backgroundColor: 'rgba(229,222,255, 0.2)',
     borderColor: 'rgba(229,222,255, 0)',

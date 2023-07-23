@@ -54,6 +54,11 @@ export const sessionSlice = createSlice({
 export default sessionSlice.reducer;
 export const getSessions = (state: RootState) => state.sessions.sessions;
 
+// Get Meditation sessions
+export const getMeditationSessions = createSelector(getSessions, sessions =>
+  sessions.filter(session => session.title.includes('Meditation')),
+);
+
 // Fisher-Yates shuffle algorithm to shuffle an array randomly
 const shuffleArray = (array: any[]) => {
   const shuffledArray = [...array];
