@@ -36,7 +36,7 @@ const DetailsScreen = ({route, navigation}: any) => {
   const likedItems = useSelector(
     (state: RootState) => state.likedItemsSlice.likedItems,
   );
-  const {randomSessions} = route.params;
+  const {randomSessions, meditationSessions} = route.params;
   console.log('mmmeeeow', randomSessions);
 
   const renderItem = ({item, index}: {item: any; index: number}) => {
@@ -125,7 +125,11 @@ const DetailsScreen = ({route, navigation}: any) => {
       end={{x: 1, y: 0}}
       style={styles.linearGradient}>
       <View style={styles.headerTop}>
-        <Text style={styles.textCategory}>Try This ✨</Text>
+        {randomSessions ? (
+          <Text style={styles.textCategory}>Try This ✨</Text>
+        ) : (
+          <Text style={styles.textCategory}>Meditate 🧘‍♀️</Text>
+        )}
         <TouchableOpacity
           onPress={() => navigation.goBack()}
           style={styles.closeIconStyle}>
@@ -135,11 +139,11 @@ const DetailsScreen = ({route, navigation}: any) => {
 
       <View style={styles.primaryContent}>
         <FlatList
-          data={randomSessions}
+          data={randomSessions || meditationSessions}
           renderItem={renderItem}
+          style={{marginBottom: 100}}
           keyExtractor={(item: Session) => item._id}
           showsVerticalScrollIndicator={false}
-          // contentContainerStyle={styles.primaryContent}
         />
       </View>
     </LinearGradient>

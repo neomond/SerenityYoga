@@ -30,6 +30,7 @@ import {
 } from '../../redux/slices/CategoriesSlice';
 
 import {
+  fetchSessionsAll,
   getMeditationSessions,
   getRandomSessions,
   getSessions,
@@ -57,7 +58,7 @@ const HomeScreen = ({navigation}: any) => {
   // console.log(categories);
 
   useEffect(() => {
-    // dispatch(fetchSessions())
+    // dispatch(fetchSessionsAll());
     dispatch(fetchCategories());
   }, [dispatch]);
 
@@ -186,7 +187,7 @@ const HomeScreen = ({navigation}: any) => {
             <Text style={styles.categoryHeader}>Meditate</Text>
             <TouchableOpacity
               onPress={() =>
-                navigation.navigate('DetailsScreen', {randomSessions})
+                navigation.navigate('DetailsScreen', {meditationSessions})
               }>
               <Text style={styles.categoryHeaderSecond}>View All</Text>
             </TouchableOpacity>
@@ -230,7 +231,6 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     alignItems: 'center',
     justifyContent: 'center',
-    // width: 45,
     backgroundColor: 'rgba(255,255,255, 0.2)',
     borderColor: 'rgba(255,255,255, 0.1)',
   },
@@ -243,7 +243,6 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     alignItems: 'center',
     justifyContent: 'center',
-    // width: 45,
     fontWeight: '700',
     backgroundColor: 'rgba(255,255,255, 0.2)',
     borderColor: 'rgba(255,255,255, 0.1)',

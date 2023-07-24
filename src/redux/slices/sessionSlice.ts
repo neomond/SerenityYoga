@@ -29,6 +29,19 @@ export const fetchSessions = createAsyncThunk(
   },
 );
 
+export const fetchSessionsAll = createAsyncThunk(
+  'api/sessions/fetchSessions',
+  async () => {
+    try {
+      const response = await axios.get(`${API_URL}/sessions`);
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching sessions:', error);
+      throw error;
+    }
+  },
+);
+
 export const sessionSlice = createSlice({
   name: 'sessions',
   initialState,
@@ -48,6 +61,7 @@ export const sessionSlice = createSlice({
       state.loading = false;
       state.error = action.error.message ?? 'Error fetching sessions';
     });
+    // for all sessions
   },
 });
 
@@ -82,7 +96,10 @@ const shuffleArray = (array: any[]) => {
 export const getRandomSessions = createSelector(
   (state: RootState) => state.sessions.sessions,
   sessions => {
-    const shuffledSessions = shuffleArray(sessions);
+    const filteredSessions = sessions.filter(
+      session => !session.title.includes('Meditation'),
+    );
+    const shuffledSessions = shuffleArray(filteredSessions);
     return shuffledSessions.slice(0, 5);
   },
 );
