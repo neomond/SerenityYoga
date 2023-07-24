@@ -44,22 +44,23 @@ const HomeScreen = ({navigation}: any) => {
   //   });
   // };
   const dispatch = useDispatch<AppDispatch>();
-  const {categories, loading, error} = useSelector(getCategories);
+  const {categories} = useSelector(getCategories);
   const sessions = useSelector(getSessions);
   const randomSessions = useSelector((state: RootState) =>
     getRandomSessions(state),
   );
+  console.log('random', randomSessions);
 
   const isLoading = useSelector((state: RootState) => state.sessions.loading);
   const meditationSessions = useSelector(getMeditationSessions);
   console.log('isLoading:', isLoading);
-  console.log('randomSessions:', randomSessions);
+  // console.log('randomSessions:', randomSessions);
   console.log('sessions:', sessions);
   // console.log(categories);
 
   useEffect(() => {
-    // dispatch(fetchSessionsAll());
     dispatch(fetchCategories());
+    dispatch(fetchSessionsAll());
   }, [dispatch]);
 
   // for random categories and sessions
