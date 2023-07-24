@@ -34,7 +34,7 @@ const DetailsScreen = ({route, navigation}: any) => {
 
   const dispatch = useDispatch<AppDispatch>();
   const likedItems = useSelector(
-    (state: RootState) => state.likedItemsSlice.likedItems,
+    (state: RootState) => state.likedItems.likedItems,
   );
   const {randomSessions, meditationSessions} = route.params;
   console.log('mmmeeeow', randomSessions);

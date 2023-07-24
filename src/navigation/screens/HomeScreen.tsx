@@ -58,6 +58,13 @@ const HomeScreen = ({navigation}: any) => {
   console.log('sessions:', sessions);
   // console.log(categories);
 
+  const likedItems = useSelector(
+    (state: RootState) => state.likedItems.likedItems,
+  );
+  const isSessionLiked = (session: Session) => {
+    return likedItems.includes(session._id);
+  };
+
   useEffect(() => {
     dispatch(fetchCategories());
     dispatch(fetchSessionsAll());
@@ -65,46 +72,23 @@ const HomeScreen = ({navigation}: any) => {
 
   // for random categories and sessions
 
-  //////////////////////////////
-  // const {categories} = useSelector((state: RootState) => state.categoriesSlice);
-  // const likedItems = useSelector(
-  //   (state: RootState) => state.likedItemsSlice.likedItems,
-  // );
-  // const isLoading = useSelector(
-  //   (state: RootState) => state.categoriesSlice.loading,
-  // );
-
-  // const handlePress = (dataItem: any) => {
-  //   const isLiked = likedItems.some(item => item.key === dataItem.key);
-  //   if (isLiked) {
-  //     dispatch(removeItem(dataItem.key));
-  //     AsyncStorage.setItem(
-  //       'likedItems',
-  //       JSON.stringify(likedItems.filter(item => item.key !== dataItem.key)),
-  //     ).catch(error => console.log('Error removing item:', error));
-  //   } else {
-  //     dispatch(addItem(dataItem));
-  //     AsyncStorage.setItem(
-  //       'likedItems',
-  //       JSON.stringify([...likedItems, dataItem]),
-  //     ).catch(error => console.log('Error adding item:', error));
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   dispatch(fetchCategories());
-  //   const loadLikedItems = async () => {
-  //     try {
-  //       const savedItems = await AsyncStorage.getItem('likedItems');
-  //       if (savedItems) {
-  //         dispatch(setLikedItems(JSON.parse(savedItems)));
-  //       }
-  //     } catch (error) {
-  //       console.log('Error loading liked items:', error);
-  //     }
-  //   };
-  //   loadLikedItems();
-  // }, [dispatch]);
+  // Handler for liking and unliking sessions
+  const handleLikeSession = (session: Session) => {
+    const isLiked = likedItems.includes(session._id);
+    if (isLiked) {
+      dispatch(removeItem(session._id));
+      AsyncStorage.setItem(
+        'likedItems',
+        JSON.stringify(likedItems.filter(item => item !== session._id)),
+      ).catch(error => console.log('Error removing item:', error));
+    } else {
+      dispatch(addItem(session._id));
+      AsyncStorage.setItem(
+        'likedItems',
+        JSON.stringify([...likedItems, session._id]),
+      ).catch(error => console.log('Error adding item:', error));
+    }
+  };
 
   if (isLoading) {
     return (
@@ -175,8 +159,11 @@ const HomeScreen = ({navigation}: any) => {
                     <SvgDuration />
                     <Text style={styles.titleColor}>{session.duration}</Text>
                   </View>
-                  <TouchableOpacity>
-                    <SvgLikeIcon />
+                  <TouchableOpacity onPress={() => handleLikeSession(session)}>
+                    <SvgLikeIcon
+                      fill={isSessionLiked(session) ? '#815cff' : 'transparent'}
+                      stroke={isSessionLiked(session) ? '#815cff' : '#fff'}
+                    />
                   </TouchableOpacity>
                 </View>
               </View>

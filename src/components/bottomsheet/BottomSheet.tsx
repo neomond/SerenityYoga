@@ -6,18 +6,18 @@ interface BottomSheetProps {
   isVisible: boolean;
   toggleBottomSheet: () => void;
   children: React.ReactNode;
-  items: string[];
-  selectedItems: string[];
-  onItemSelect: (item: string) => void;
+  items?: string[];
+  selectedItems?: string[];
+  onItemSelect?: (item: string) => void;
 }
 
 const BottomSheetComponent: React.FC<BottomSheetProps> = ({
   isVisible,
   toggleBottomSheet,
   children,
-  items,
-  selectedItems,
-  onItemSelect,
+  items = [],
+  selectedItems = [],
+  onItemSelect = () => {},
 }) => {
   const bottomSheetRef = useRef<BottomSheet>(null);
   const snapPoints = ['25%', '60%'];

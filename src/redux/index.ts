@@ -12,7 +12,7 @@ const store = configureStore({
   reducer: {
     authSlice: AuthSlice,
     categories: categoriesReducer,
-    likedItemsSlice: LikedItemsSlice,
+    likedItems: LikedItemsSlice,
     sessions: sessionReducer,
   },
   // middleware,
