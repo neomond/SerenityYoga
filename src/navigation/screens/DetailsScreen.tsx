@@ -201,7 +201,8 @@ const styles = StyleSheet.create({
     left: 15,
     color: '#fff',
     fontSize: 13,
-    width: 145,
+    width: 135,
+    textAlign: 'center',
     fontWeight: '500',
     letterSpacing: 1,
     alignItems: 'center',
@@ -220,6 +221,7 @@ const styles = StyleSheet.create({
     top: -8,
     fontSize: 14,
     width: 160,
+    textAlign: 'left',
   },
   imageContentTop: {
     flexDirection: 'row',

@@ -62,6 +62,7 @@ const HomeScreen = ({navigation}: any) => {
       dispatch(addItem(session));
     }
   };
+
   // for favorites endsss
   useEffect(() => {
     dispatch(fetchCategories());

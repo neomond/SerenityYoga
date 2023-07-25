@@ -106,6 +106,7 @@ const SaveScreen = ({navigation}: any) => {
           data={likedItems}
           renderItem={renderItem}
           keyExtractor={(item: Session) => item._id}
+          showsVerticalScrollIndicator={false}
         />
       ) : (
         <View style={styles.noItemsContainer}>
@@ -121,13 +122,6 @@ const SaveScreen = ({navigation}: any) => {
 };
 
 export default SaveScreen;
-
-// const likedItems = useSelector(
-//     (state: RootState) => state.likedItems.likedItems,
-//   );
-//   const handleRemove = (item: Session) => {
-//     dispatch(removeItem(item._id));
-//   };
 
 const styles = StyleSheet.create({
   wrapper: {
@@ -178,6 +172,7 @@ const styles = StyleSheet.create({
   },
   textFav: {
     fontSize: 16,
+    width: '90%',
   },
   titleColor: {
     color: '#fff',
