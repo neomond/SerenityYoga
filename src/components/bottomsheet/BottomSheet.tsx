@@ -9,6 +9,8 @@ interface BottomSheetProps {
   items?: string[];
   selectedItems?: string[];
   onItemSelect?: (item: string) => void;
+  showHandleIndicator?: boolean;
+  snapPoints?: string[];
 }
 
 const BottomSheetComponent: React.FC<BottomSheetProps> = ({
@@ -18,9 +20,10 @@ const BottomSheetComponent: React.FC<BottomSheetProps> = ({
   items = [],
   selectedItems = [],
   onItemSelect = () => {},
+  showHandleIndicator = true,
+  snapPoints = ['25%', '60%'],
 }) => {
   const bottomSheetRef = useRef<BottomSheet>(null);
-  const snapPoints = ['25%', '60%'];
 
   useEffect(() => {
     if (!isVisible) {
@@ -44,7 +47,11 @@ const BottomSheetComponent: React.FC<BottomSheetProps> = ({
         index={isVisible ? 1 : 0}
         snapPoints={snapPoints}
         onChange={handleSheetChange}
-        handleIndicatorStyle={styles.handleIndicator}>
+        handleIndicatorStyle={
+          showHandleIndicator
+            ? styles.handleIndicator
+            : styles.handleIndicatorNone
+        }>
         {children}
       </BottomSheet>
     </Modal>
@@ -61,6 +68,9 @@ const styles = StyleSheet.create({
     width: 50,
     borderRadius: 2,
     marginTop: 15,
+  },
+  handleIndicatorNone: {
+    backgroundColor: '#fff',
   },
 });
 

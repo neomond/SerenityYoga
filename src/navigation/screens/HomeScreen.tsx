@@ -102,7 +102,8 @@ const HomeScreen = ({navigation}: any) => {
       style={styles.linearGradient}>
       <View style={styles.iconsHeader}>
         <TouchableOpacity
-          onPress={handleClearLikedItems}
+          // onPress={handleClearLikedItems}
+          onPress={() => navigation.navigate('ProfileScreen')}
           style={styles.profileStyle}>
           <SvgProfile stroke="#E5DEFF" fill="transparent" />
         </TouchableOpacity>

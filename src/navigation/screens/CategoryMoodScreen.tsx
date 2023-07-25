@@ -118,12 +118,14 @@ const CategoryMoodScreen = ({navigation, route}: any) => {
                   <Text style={styles.textFav}>{c.title}</Text>
                   <View style={styles.favoritesItemSecondaryBottom}>
                     <TouchableOpacity style={styles.btnFav}>
-                      <Text>Listen</Text>
+                      <Text>
+                        {category.name === 'Meditation' ? 'Listen' : 'Play'}
+                      </Text>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={() => handleLikeItem(c)}>
                       <SvgLikeIcon
-                        fill={isItemLiked(c) ? '#815cff' : 'transparent'}
-                        stroke={isItemLiked(c) ? '#fff' : '#815cff'}
+                        fill={isItemLiked(c) ? '#E5DEFF' : 'transparent'}
+                        stroke={isItemLiked(c) ? '#815cff' : '#E5DEFF'}
                       />
                     </TouchableOpacity>
                   </View>
