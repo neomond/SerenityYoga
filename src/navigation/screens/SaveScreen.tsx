@@ -12,10 +12,16 @@ import SvgLikeIcon from '../../assets/LikeIcon';
 import SvgDownload from '../../assets/DownloadIcon';
 import {useDispatch, useSelector} from 'react-redux';
 import {AppDispatch, RootState} from '../../redux';
-import {removeItem} from '../../redux/slices/LikedItemsSlice';
+import {
+  addItem,
+  clearLikedItems,
+  getLikes,
+  loadLikedItems,
+  removeItem,
+} from '../../redux/slices/LikedItemsSlice';
 import SvgFlower from '../../assets/Flower';
 import SvgDuration from '../../assets/DurationIcon';
-import {DataItem} from '../../redux/slices/CategoriesSlice';
+// import {DataItem} from '../../redux/slices/CategoriesSlice';
 import SvgCloseIcon from '../../assets/CloseIcon';
 import LinearGradient from 'react-native-linear-gradient';
 import SvgPause from '../../assets/PauseIcon';
@@ -33,137 +39,58 @@ import TrackPlayer, {
 } from 'react-native-track-player';
 import tracks from '../../models/tracks';
 import SvgPlay from '../../assets/PlayIcon';
+import {Session} from '../../models/Session';
 
-// const setUpPlayer = async () => {
-//   await TrackPlayer.setupPlayer();
-//   await TrackPlayer.add(tracks);
-// };
-
-//?????? check if player has already been initialized before calling TrackPlayer.setupPlayer():
-let isPlayerInitialized = false;
 const SaveScreen = ({navigation}: any) => {
-  /////////////////PLAYER
-  const playbackState = usePlaybackState();
-  const progress = useProgress();
-  const [pause, setPause] = useState('paused');
-  const [sliderValue, setSliderValue] = useState(0);
-
-  const setUpPlayer = async () => {
-    if (!isPlayerInitialized) {
-      await TrackPlayer.setupPlayer();
-      isPlayerInitialized = true;
-    }
-    await TrackPlayer.add(tracks);
-  };
+  const dispatch = useDispatch<AppDispatch>();
+  const likedItems = useSelector((state: RootState) => getLikes(state));
 
   useEffect(() => {
-    setUpPlayer();
-  }, []);
+    dispatch(loadLikedItems());
+  }, [dispatch]);
 
-  const togglePause = () => {
-    if (pause == 'paused') {
-      TrackPlayer.play();
-      setPause('playing');
+  const isItemLiked = (item: Session) => {
+    return likedItems.some(likedItem => likedItem._id === item._id);
+  };
+
+  const handleLikeItem = (item: Session) => {
+    if (isItemLiked(item)) {
+      dispatch(removeItem(item._id));
     } else {
-      TrackPlayer.pause();
-      setPause('paused');
+      dispatch(addItem(item));
     }
   };
-  /////////////////PLAYER
-  const dispatch = useDispatch<AppDispatch>();
-  const [isLiked, setIsLiked] = useState(false);
-  const [selectedItem, setSelectedItem] = useState<DataItem | null>(null);
 
-  const likedItems = useSelector(
-    (state: RootState) => state.likedItemsSlice.likedItems,
-  );
-
-  const handleRemove = (item: any) => {
-    setIsLiked(!isLiked);
-    dispatch(removeItem(item.key));
-  };
-
-  const handlePlay = async (item: any) => {
-    setSelectedItem(item);
-    await TrackPlayer.reset();
-    await TrackPlayer.add(tracks);
-    await TrackPlayer.play();
-    setPause('playing');
-  };
-
-  const handleClosePlayer = () => {
-    setSelectedItem(null);
-    TrackPlayer.stop();
-  };
-
-  const renderItem = ({item}: {item: any}) => (
-    <View key={item.key} style={styles.favoritesItem}>
-      <View style={styles.imageContentSubtop}>
-        <SvgDuration />
-        <Text style={styles.titleColor}>{item.duration}</Text>
-      </View>
-      <Image style={styles.imageFav} source={{uri: item.image}} />
-      <View style={styles.favoritesItemSecondary}>
-        <Text style={styles.textFav}>{item.title}</Text>
-        <View style={styles.favoritesItemSecondaryBottom}>
-          <TouchableOpacity
-            style={styles.btnFav}
-            onPress={() => handlePlay(item)}>
-            <Text>{pause === 'paused' ? 'Play' : 'Pause'}</Text>
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <SvgDownload />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => handleRemove(item)}>
-            <SvgLikeIcon fill="#815cff" />
-          </TouchableOpacity>
+  const renderItem = ({item}: {item: any}) => {
+    return (
+      <View key={item._id} style={styles.favoritesItem}>
+        <View style={styles.imageContentSubtop}>
+          <SvgDuration />
+          <Text style={styles.titleColor}>{item.duration}</Text>
+        </View>
+        <Image style={styles.imageFav} source={{uri: item.imageUrl}} />
+        <View style={styles.favoritesItemSecondary}>
+          <Text style={styles.textFav}>{item.title}</Text>
+          <View style={styles.favoritesItemSecondaryBottom}>
+            <TouchableOpacity
+              style={styles.btnFav}
+              // onPress={() => handlePlay(item)}
+            >
+              <Text>Play</Text>
+            </TouchableOpacity>
+            <TouchableOpacity>
+              <SvgDownload />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => handleLikeItem(item)}>
+              <SvgLikeIcon
+                fill={isItemLiked(item) ? '#E5DEFF' : 'transparent'}
+                stroke={isItemLiked(item) ? '#815cff' : '#E5DEFF'}
+              />
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
-    </View>
-  );
-
-  //////////// FOR PLAYER
-  const renderPlayer = () => {
-    if (selectedItem) {
-      return (
-        <LinearGradient
-          colors={['#E5DEFF', '#E5DEFF', '#B39FF8', '#815cff']}
-          start={{x: 0, y: 0.2}}
-          end={{x: 1, y: 0}}
-          style={styles.playerContainer}>
-          <Slider
-            style={styles.progressBar}
-            value={progress.position}
-            minimumValue={0}
-            maximumValue={progress.duration}
-            minimumTrackTintColor="#B39FF8"
-            maximumTrackTintColor="#E5DEFF"
-            onSlidingComplete={async value => {
-              await TrackPlayer.seekTo(value);
-            }}
-          />
-
-          <View style={styles.playerLeftStyles}>
-            <Image
-              style={styles.playerImage}
-              source={{uri: selectedItem.image}}
-            />
-            <View>
-              <Text>{selectedItem.title}</Text>
-            </View>
-          </View>
-          <View style={styles.playerCondStyles}>
-            <TouchableOpacity onPress={togglePause}>
-              {pause == 'paused' ? <SvgPlay /> : <SvgPause />}
-            </TouchableOpacity>
-            <TouchableOpacity onPress={handleClosePlayer}>
-              <SvgCloseIcon stroke="#000" />
-            </TouchableOpacity>
-          </View>
-        </LinearGradient>
-      );
-    }
-    return null;
+    );
   };
 
   return (
@@ -178,7 +105,7 @@ const SaveScreen = ({navigation}: any) => {
         <FlatList
           data={likedItems}
           renderItem={renderItem}
-          keyExtractor={item => item.key}
+          keyExtractor={(item: Session) => item._id}
         />
       ) : (
         <View style={styles.noItemsContainer}>
@@ -188,12 +115,19 @@ const SaveScreen = ({navigation}: any) => {
           <Text style={styles.noItemsText}>No items in favorites.</Text>
         </View>
       )}
-      {renderPlayer()}
+      {/* {renderPlayer()} */}
     </SafeAreaView>
   );
 };
 
 export default SaveScreen;
+
+// const likedItems = useSelector(
+//     (state: RootState) => state.likedItems.likedItems,
+//   );
+//   const handleRemove = (item: Session) => {
+//     dispatch(removeItem(item._id));
+//   };
 
 const styles = StyleSheet.create({
   wrapper: {
@@ -323,3 +257,100 @@ const styles = StyleSheet.create({
   playerCondStyles: {flexDirection: 'row', alignItems: 'center', columnGap: 10},
   playerLeftStyles: {flexDirection: 'row', alignItems: 'center', columnGap: 2},
 });
+
+// const setUpPlayer = async () => {
+//   await TrackPlayer.setupPlayer();
+//   await TrackPlayer.add(tracks);
+// };
+
+//?????? check if player has already been initialized before calling TrackPlayer.setupPlayer():
+// let isPlayerInitialized = false;
+
+// console.log('Liked Items:', likedItems);
+// const handlePlay = async (item: any) => {
+//   setSelectedItem(item);
+//   await TrackPlayer.reset();
+//   await TrackPlayer.add(tracks);
+//   await TrackPlayer.play();
+//   setPause('playing');
+// };
+
+// const handleClosePlayer = () => {
+//   setSelectedItem(null);
+//   TrackPlayer.stop();
+// };
+// console.log('meeeeoooooowww', likedItems);
+
+//////////// FOR PLAYER
+// const renderPlayer = () => {
+//   if (selectedItem) {
+//     return (
+//       <LinearGradient
+//         colors={['#E5DEFF', '#E5DEFF', '#B39FF8', '#815cff']}
+//         start={{x: 0, y: 0.2}}
+//         end={{x: 1, y: 0}}
+//         style={styles.playerContainer}>
+//         <Slider
+//           style={styles.progressBar}
+//           value={progress.position}
+//           minimumValue={0}
+//           maximumValue={progress.duration}
+//           minimumTrackTintColor="#B39FF8"
+//           maximumTrackTintColor="#E5DEFF"
+//           onSlidingComplete={async value => {
+//             await TrackPlayer.seekTo(value);
+//           }}
+//         />
+
+//         <View style={styles.playerLeftStyles}>
+//           <Image
+//             style={styles.playerImage}
+//             source={{uri: selectedItem.image}}
+//           />
+//           <View>
+//             <Text>{selectedItem.title}</Text>
+//           </View>
+//         </View>
+//         <View style={styles.playerCondStyles}>
+//           <TouchableOpacity onPress={togglePause}>
+//             {pause == 'paused' ? <SvgPlay /> : <SvgPause />}
+//           </TouchableOpacity>
+//           <TouchableOpacity onPress={handleClosePlayer}>
+//             <SvgCloseIcon stroke="#000" />
+//           </TouchableOpacity>
+//         </View>
+//       </LinearGradient>
+//     );
+//   }
+//   return null;
+// };
+// console.log('wtttttffff', likedItems);
+/////////////////PLAYER
+// const playbackState = usePlaybackState();
+// const progress = useProgress();
+// const [pause, setPause] = useState('paused');
+// const [sliderValue, setSliderValue] = useState(0);
+
+// const setUpPlayer = async () => {
+//   if (!isPlayerInitialized) {
+//     await TrackPlayer.setupPlayer();
+//     isPlayerInitialized = true;
+//   }
+//   await TrackPlayer.add(tracks);
+// };
+
+// useEffect(() => {
+//   setUpPlayer();
+// }, []);
+
+// const togglePause = () => {
+//   if (pause == 'paused') {
+//     TrackPlayer.play();
+//     setPause('playing');
+//   } else {
+//     TrackPlayer.pause();
+//     setPause('paused');
+//   }
+// };
+/////////////////PLAYER
+// const [selectedItem, setSelectedItem] = useState<DataItem | null>(null);

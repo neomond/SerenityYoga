@@ -1,7 +1,7 @@
 import {configureStore} from '@reduxjs/toolkit';
 import AuthSlice from './slices/AuthSlice';
 import categoriesReducer from './slices/CategoriesSlice';
-import LikedItemsSlice from './slices/LikedItemsSlice';
+import likedItemsSliceReducer from './slices/LikedItemsSlice';
 import sessionReducer from './slices/SessionSlice';
 
 // const middleware = getDefaultMiddleware({
@@ -12,7 +12,7 @@ const store = configureStore({
   reducer: {
     authSlice: AuthSlice,
     categories: categoriesReducer,
-    likedItems: LikedItemsSlice,
+    likedItems: likedItemsSliceReducer,
     sessions: sessionReducer,
   },
   // middleware,

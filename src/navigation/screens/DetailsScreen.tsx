@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -12,14 +12,30 @@ import {
 import LinearGradient from 'react-native-linear-gradient';
 import SvgDuration from '../../assets/DurationIcon';
 import SvgLikeIcon from '../../assets/LikeIcon';
-import {addItem, removeItem} from '../../redux/slices/LikedItemsSlice';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import {
+  addItem,
+  getLikes,
+  removeItem,
+} from '../../redux/slices/LikedItemsSlice';
 import {useDispatch, useSelector} from 'react-redux';
 import {AppDispatch, RootState} from '../../redux';
 import SvgCloseIcon from '../../assets/CloseIcon';
 import {Session} from '../../models/Session';
 
 const DetailsScreen = ({route, navigation}: any) => {
+  const likedItems = useSelector((state: RootState) => getLikes(state));
+  const isItemLiked = (item: Session) => {
+    return likedItems.some(likedItem => likedItem._id === item._id);
+  };
+
+  const handleLikeItem = (item: Session) => {
+    if (isItemLiked(item)) {
+      dispatch(removeItem(item._id));
+    } else {
+      dispatch(addItem(item));
+    }
+  };
+
   // to not show bottom bar in this screen
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
@@ -33,32 +49,12 @@ const DetailsScreen = ({route, navigation}: any) => {
   /////////////////////////////
 
   const dispatch = useDispatch<AppDispatch>();
-  const likedItems = useSelector(
-    (state: RootState) => state.likedItems.likedItems,
-  );
+
   const {randomSessions, meditationSessions} = route.params;
   console.log('mmmeeeow', randomSessions);
 
   const renderItem = ({item, index}: {item: any; index: number}) => {
-    const isLiked = likedItems.some(likedItem => likedItem.key === item.key);
     const isFirstItem = index === 0;
-
-    const handlePress = (dataItem: any) => {
-      if (isLiked) {
-        dispatch(removeItem(dataItem.key));
-        AsyncStorage.setItem(
-          'likedItems',
-          JSON.stringify(likedItems.filter(item => item.key !== dataItem.key)),
-        ).catch(error => console.log('Error removing item:', error));
-      } else {
-        dispatch(addItem(dataItem));
-        AsyncStorage.setItem(
-          'likedItems',
-          JSON.stringify([...likedItems, dataItem]),
-        ).catch(error => console.log('Error adding item:', error));
-      }
-    };
-
     return (
       <View
         style={[
@@ -86,7 +82,11 @@ const DetailsScreen = ({route, navigation}: any) => {
             styles.playBtn,
             isFirstItem ? styles.playBtn : styles.otherPlayBtn,
           ]}>
-          <Text style={{fontSize: 14}}>Play</Text>
+          {randomSessions ? (
+            <Text style={{fontSize: 14}}>Play</Text>
+          ) : (
+            <Text style={{fontSize: 14}}>Listen</Text>
+          )}
         </TouchableOpacity>
 
         <View
@@ -100,7 +100,10 @@ const DetailsScreen = ({route, navigation}: any) => {
             <SvgDuration />
             <Text style={styles.titleColor}>{item.duration}</Text>
           </View>
-          <TouchableOpacity onPress={() => handlePress(item)}>
+          <TouchableOpacity
+            onPress={() => {
+              handleLikeItem(item);
+            }}>
             <SvgLikeIcon
               style={[
                 styles.heartStyleMain,
@@ -108,8 +111,8 @@ const DetailsScreen = ({route, navigation}: any) => {
                   ? styles.heartStyleMain
                   : styles.otherHeartStyleMain,
               ]}
-              fill={isLiked ? '#815cff' : 'transparent'}
-              stroke={isLiked ? '#815cff' : '#fff'}
+              fill={isItemLiked(item) ? '#815cff' : 'transparent'}
+              stroke={isItemLiked(item) ? '#E5DEFF' : '#E5DEFF'}
             />
           </TouchableOpacity>
         </View>
@@ -139,7 +142,7 @@ const DetailsScreen = ({route, navigation}: any) => {
 
       <View style={styles.primaryContent}>
         <FlatList
-          data={randomSessions || meditationSessions}
+          data={randomSessions ? randomSessions : meditationSessions}
           renderItem={renderItem}
           style={{marginBottom: 100}}
           keyExtractor={(item: Session) => item._id}
@@ -302,3 +305,42 @@ const styles = StyleSheet.create({
   heartStyleMain: {left: 185},
   otherHeartStyleMain: {left: -110, top: 0},
 });
+
+// const likedItems = useSelector(
+//   (state: RootState) => state.likedItems.likedItems,
+// );
+// const [likedItemsState, setLikedItemsState] = useState<string[]>(likedItems);
+// useEffect(() => {
+//   setLikedItemsState(likedItems);
+// }, [likedItems]);
+// const isLiked = likedItems.some(likedItem => likedItem === item._id);
+
+// const handlePress = (dataItem: any) => {
+//   if (isLiked) {
+//     dispatch(removeItem(dataItem._id));
+//     AsyncStorage.setItem(
+//       'likedItems',
+//       JSON.stringify(likedItems.filter(item => item !== dataItem._id)),
+//     ).catch(error => console.log('Error removing item:', error));
+//   } else {
+//     dispatch(addItem(dataItem));
+//     AsyncStorage.setItem(
+//       'likedItems',
+//       JSON.stringify([...likedItems, dataItem]),
+//     ).catch(error => console.log('Error adding item:', error));
+//   }
+// };
+
+// const isItemLiked = (item: Session) => {
+//   const likedItems = useSelector(
+//     (state: RootState) => state.likedItems.likedItems,
+//   );
+//   return likedItems.some(likedItem => likedItem._id === item._id);
+// };
+// const handleLikeItem = (item: Session) => {
+//   if (isItemLiked(item)) {
+//     dispatch(removeItem(item._id));
+//   } else {
+//     dispatch(addItem(item));
+//   }
+// };

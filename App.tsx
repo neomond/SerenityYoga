@@ -1,13 +1,9 @@
 import React, {useEffect} from 'react';
-import {
-  NavigationContainer,
-  getFocusedRouteNameFromRoute,
-  useIsFocused,
-} from '@react-navigation/native';
+import {NavigationContainer, useIsFocused} from '@react-navigation/native';
 import {Provider} from 'react-redux';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import Animated from 'react-native-reanimated';
+
 import store from './src/redux';
 
 import SplashScreen from 'react-native-splash-screen';
@@ -22,6 +18,7 @@ import {MeditationsStackNavigator} from './src/navigation/stack/MeditationsStack
 import {SaveStackNavigator} from './src/navigation/stack/SaveStack';
 import TabBarAnimations from './src/utils/TabBarAnimations';
 import AuthStack from './src/navigation/stack/AuthStack';
+import {Text, View} from 'react-native';
 
 type RootStackParamList = {
   AuthMain: undefined;
@@ -43,7 +40,6 @@ const Tab = createBottomTabNavigator<BottomTabParamList>();
 
 const HomeTabNavigator: React.FC = () => {
   const isFocused = useIsFocused();
-  const {iconStyle, labelStyle} = TabBarAnimations({isFocused});
 
   return (
     <Tab.Navigator
@@ -60,22 +56,17 @@ const HomeTabNavigator: React.FC = () => {
         name="Home"
         options={{
           tabBarIcon: ({focused}) => (
-            <Animated.View
-              style={[iconStyle, {flexDirection: 'row', alignItems: 'center'}]}>
+            <View style={{flexDirection: 'row', alignItems: 'center'}}>
               <SvgHomeIcon
                 stroke={focused ? '#815CFF' : '#444444'}
                 fill={focused ? '#E5DEFF' : '#fff'}
               />
               {focused ? (
-                <Animated.Text
-                  style={[
-                    labelStyle,
-                    {marginLeft: 5, fontSize: 12, color: '#815CFF'},
-                  ]}>
+                <Text style={{marginLeft: 5, fontSize: 12, color: '#815CFF'}}>
                   Home
-                </Animated.Text>
+                </Text>
               ) : null}
-            </Animated.View>
+            </View>
           ),
         }}
         component={HomeStackNavigator}
@@ -84,19 +75,14 @@ const HomeTabNavigator: React.FC = () => {
         name="Practices"
         options={{
           tabBarIcon: ({focused}) => (
-            <Animated.View
-              style={[iconStyle, {flexDirection: 'row', alignItems: 'center'}]}>
+            <View style={{flexDirection: 'row', alignItems: 'center'}}>
               <SvgPractices stroke={focused ? '#815CFF' : '#444444'} />
               {focused ? (
-                <Animated.Text
-                  style={[
-                    labelStyle,
-                    {marginLeft: 5, fontSize: 12, color: '#815CFF'},
-                  ]}>
+                <Text style={{marginLeft: 5, fontSize: 12, color: '#815CFF'}}>
                   Practices
-                </Animated.Text>
+                </Text>
               ) : null}
-            </Animated.View>
+            </View>
           ),
         }}
         component={PracticesStackNavigator}
@@ -105,19 +91,14 @@ const HomeTabNavigator: React.FC = () => {
         name="Meditations"
         options={{
           tabBarIcon: ({focused}) => (
-            <Animated.View
-              style={[iconStyle, {flexDirection: 'row', alignItems: 'center'}]}>
+            <View style={{flexDirection: 'row', alignItems: 'center'}}>
               <SvgMeditations stroke={focused ? '#815CFF' : '#444444'} />
               {focused ? (
-                <Animated.Text
-                  style={[
-                    labelStyle,
-                    {marginLeft: 5, fontSize: 12, color: '#815CFF'},
-                  ]}>
+                <Text style={{marginLeft: 5, fontSize: 12, color: '#815CFF'}}>
                   Meditations
-                </Animated.Text>
+                </Text>
               ) : null}
-            </Animated.View>
+            </View>
           ),
         }}
         component={MeditationsStackNavigator}
@@ -126,22 +107,17 @@ const HomeTabNavigator: React.FC = () => {
         name="Liked"
         options={{
           tabBarIcon: ({focused}) => (
-            <Animated.View
-              style={[iconStyle, {flexDirection: 'row', alignItems: 'center'}]}>
+            <View style={{flexDirection: 'row', alignItems: 'center'}}>
               <SvgLiked
                 stroke={focused ? '#815CFF' : '#444444'}
                 fill={focused ? '#E5DEFF' : '#fff'}
               />
               {focused ? (
-                <Animated.Text
-                  style={[
-                    labelStyle,
-                    {marginLeft: 5, fontSize: 12, color: '#815CFF'},
-                  ]}>
+                <Text style={{marginLeft: 5, fontSize: 12, color: '#815CFF'}}>
                   Liked
-                </Animated.Text>
+                </Text>
               ) : null}
-            </Animated.View>
+            </View>
           ),
         }}
         component={SaveStackNavigator}

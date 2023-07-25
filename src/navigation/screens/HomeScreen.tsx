@@ -18,12 +18,14 @@ import SvgDuration from '../../assets/DurationIcon';
 import SvgLikeIcon from '../../assets/LikeIcon';
 import {
   addItem,
+  clearLikedItems,
+  getLikes,
+  loadLikedItems,
   removeItem,
-  setLikedItems,
 } from '../../redux/slices/LikedItemsSlice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import SvgFlower from '../../assets/Flower';
-import {emojis, getEmojiForCategory} from '../../utils/emojis';
+import {getEmojiForCategory} from '../../utils/emojis';
 import {
   fetchCategories,
   getCategories,
@@ -38,11 +40,6 @@ import {
 import {Session} from '../../models/Session';
 
 const HomeScreen = ({navigation}: any) => {
-  // const hideTabBar = () => {
-  //   navigation.setOptions({
-  //     tabBarStyle: {display: 'none'},
-  //   });
-  // };
   const dispatch = useDispatch<AppDispatch>();
   const {categories} = useSelector(getCategories);
   const sessions = useSelector(getSessions);
@@ -53,43 +50,34 @@ const HomeScreen = ({navigation}: any) => {
 
   const isLoading = useSelector((state: RootState) => state.sessions.loading);
   const meditationSessions = useSelector(getMeditationSessions);
-  console.log('isLoading:', isLoading);
-  // console.log('randomSessions:', randomSessions);
-  console.log('sessions:', sessions);
-  // console.log(categories);
+  // for favorites startttsss
+  const likedItems = useSelector(getLikes);
+  const isSessionLiked = (session: Session) =>
+    likedItems.some(item => item._id === session._id);
 
-  const likedItems = useSelector(
-    (state: RootState) => state.likedItems.likedItems,
-  );
-  const isSessionLiked = (session: Session) => {
-    return likedItems.includes(session._id);
+  const handleLikeSession = (session: Session) => {
+    if (isSessionLiked(session)) {
+      dispatch(removeItem(session._id));
+    } else {
+      dispatch(addItem(session));
+    }
   };
-
+  // for favorites endsss
   useEffect(() => {
     dispatch(fetchCategories());
     dispatch(fetchSessionsAll());
+    dispatch(loadLikedItems());
   }, [dispatch]);
 
-  // for random categories and sessions
-
-  // Handler for liking and unliking sessions
-  const handleLikeSession = (session: Session) => {
-    const isLiked = likedItems.includes(session._id);
-    if (isLiked) {
-      dispatch(removeItem(session._id));
-      AsyncStorage.setItem(
-        'likedItems',
-        JSON.stringify(likedItems.filter(item => item !== session._id)),
-      ).catch(error => console.log('Error removing item:', error));
-    } else {
-      dispatch(addItem(session._id));
-      AsyncStorage.setItem(
-        'likedItems',
-        JSON.stringify([...likedItems, session._id]),
-      ).catch(error => console.log('Error adding item:', error));
+  // console.log('isLoading:', isLoading);
+  // console.log('sessions:', sessions);
+  const handleClearLikedItems = async () => {
+    try {
+      await dispatch(clearLikedItems());
+    } catch (error) {
+      console.error('Failed to clear liked items:', error);
     }
   };
-
   if (isLoading) {
     return (
       <View
@@ -113,7 +101,7 @@ const HomeScreen = ({navigation}: any) => {
       style={styles.linearGradient}>
       <View style={styles.iconsHeader}>
         <TouchableOpacity
-          onPress={() => navigation.navigate('ProfileScreen')}
+          onPress={handleClearLikedItems}
           style={styles.profileStyle}>
           <SvgProfile stroke="#E5DEFF" fill="transparent" />
         </TouchableOpacity>
@@ -162,7 +150,7 @@ const HomeScreen = ({navigation}: any) => {
                   <TouchableOpacity onPress={() => handleLikeSession(session)}>
                     <SvgLikeIcon
                       fill={isSessionLiked(session) ? '#815cff' : 'transparent'}
-                      stroke={isSessionLiked(session) ? '#815cff' : '#fff'}
+                      stroke={isSessionLiked(session) ? '#fff' : '#fff'}
                     />
                   </TouchableOpacity>
                 </View>
@@ -190,8 +178,13 @@ const HomeScreen = ({navigation}: any) => {
                     <SvgDuration />
                     <Text style={styles.titleColor}>{meditate.duration}</Text>
                   </View>
-                  <TouchableOpacity>
-                    <SvgLikeIcon />
+                  <TouchableOpacity onPress={() => handleLikeSession(meditate)}>
+                    <SvgLikeIcon
+                      fill={
+                        isSessionLiked(meditate) ? '#815cff' : 'transparent'
+                      }
+                      stroke={isSessionLiked(meditate) ? '#fff' : '#fff'}
+                    />
                   </TouchableOpacity>
                 </View>
               </View>

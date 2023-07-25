@@ -19,12 +19,31 @@ import {ActivityIndicator} from 'react-native-paper';
 
 import HeaderAnimation from '../../utils/HeaderAnimation';
 import {fetchCategories} from '../../redux/slices/CategoriesSlice';
+import {Session} from '../../models/Session';
+import {
+  addItem,
+  getLikes,
+  removeItem,
+} from '../../redux/slices/LikedItemsSlice';
 
 const CategoryMoodScreen = ({navigation, route}: any) => {
   const {category} = route.params;
   const dispatch = useDispatch<AppDispatch>();
   const sessions = useSelector(getSessions);
   const isLoading = useSelector((state: RootState) => state.sessions.loading);
+  const likedItems = useSelector((state: RootState) => getLikes(state));
+
+  const isItemLiked = (item: Session) => {
+    return likedItems.some(likedItem => likedItem._id === item._id);
+  };
+
+  const handleLikeItem = (item: Session) => {
+    if (isItemLiked(item)) {
+      dispatch(removeItem(item._id));
+    } else {
+      dispatch(addItem(item));
+    }
+  };
 
   useEffect(() => {
     dispatch(fetchSessions(category._id));
@@ -101,8 +120,11 @@ const CategoryMoodScreen = ({navigation, route}: any) => {
                     <TouchableOpacity style={styles.btnFav}>
                       <Text>Listen</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity>
-                      <SvgLikeIcon fill="#815cff" />
+                    <TouchableOpacity onPress={() => handleLikeItem(c)}>
+                      <SvgLikeIcon
+                        fill={isItemLiked(c) ? '#815cff' : 'transparent'}
+                        stroke={isItemLiked(c) ? '#fff' : '#815cff'}
+                      />
                     </TouchableOpacity>
                   </View>
                 </View>
@@ -209,3 +231,18 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
 });
+
+// const isItemLiked = (item: Session) => {
+//   const likedItems = useSelector(
+//     (state: RootState) => state.likedItemsSlice.likedItems,
+//   );
+//   return likedItems.some(likedItem => likedItem._id === item._id);
+// };
+
+// const handleLikeItem = (item: Session) => {
+//   if (isItemLiked(item)) {
+//     dispatch(removeItem(item._id));
+//   } else {
+//     dispatch(addItem(item));
+//   }
+// };
