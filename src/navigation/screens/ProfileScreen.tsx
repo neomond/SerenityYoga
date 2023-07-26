@@ -8,11 +8,17 @@ import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {AnimatedCircularProgress} from 'react-native-circular-progress';
 
 const ProfileScreen = ({navigation}: any) => {
-  const [selectedDays, setSelectedDays] = useState(4);
+  const [selectedDays, setSelectedDays] = useState<number[]>([]);
+  const [selectedFill, setSelectedFill] = useState(0);
+
   const [isBottomSheetVisible, setIsBottomSheetVisible] = useState(false);
   const [currentFill, setCurrentFill] = useState(0);
+
+  const [motivationalPhrase, setMotivationalPhrase] = useState('');
+
   const snapPoints = ['25%', '85%'];
   const animationDuration = 1000;
+
   useEffect(() => {
     const animateProgress = (targetFill: number) => {
       let startFill = currentFill;
@@ -36,9 +42,7 @@ const ProfileScreen = ({navigation}: any) => {
 
       requestAnimationFrame(animationFrame);
     };
-
-    animateProgress(selectedDays);
-
+    animateProgress(selectedDays.length);
     return () => {
       setCurrentFill(0);
     };
@@ -59,12 +63,35 @@ const ProfileScreen = ({navigation}: any) => {
   const toggleBottomSheet = () => {
     setIsBottomSheetVisible(prevState => !prevState);
   };
-  const handleSelectDays = (days: number) => {
-    setSelectedDays(days);
-    toggleBottomSheet();
+
+  const isDaySelected = (day: number) => {
+    return selectedDays.includes(day);
   };
-  const handleBackdropPress = () => {
-    setIsBottomSheetVisible(false);
+
+  // motivational words
+  const motivationalPhrases = [
+    "Keep going! You're doing great!",
+    "You're on your way to success!",
+    'Each day brings you closer to your goal!',
+    'Believe in yourself and stay committed!',
+    'Superb!',
+    'You rock!',
+  ];
+
+  const selectRandomMotivationalPhrase = () => {
+    const randomIndex = Math.floor(Math.random() * motivationalPhrases.length);
+    setMotivationalPhrase(motivationalPhrases[randomIndex]);
+  };
+
+  const handleSelectDays = (day: number) => {
+    setSelectedDays(prevSelectedDays => {
+      if (prevSelectedDays.includes(day)) {
+        return prevSelectedDays.filter(selectedDay => selectedDay !== day);
+      } else {
+        return [...prevSelectedDays, day];
+      }
+    });
+    selectRandomMotivationalPhrase();
   };
 
   return (
@@ -92,14 +119,14 @@ const ProfileScreen = ({navigation}: any) => {
           <View>
             <Text style={styles.firstSectionHeadtext}>Weekly Goal</Text>
             <Text style={styles.firstSectionSubHeadtext}>
-              Complete a session on {selectedDays} days each week to achieve
-              your goal
+              Complete a session on {selectedDays.length} days each week to
+              achieve your goal
             </Text>
             <View style={styles.stepperContainer}>
               <AnimatedCircularProgress
                 size={150}
                 width={18}
-                fill={(selectedDays / 7) * 100}
+                fill={(selectedDays.length / 7) * 100}
                 tintColor="#815cff"
                 lineCap="round"
                 backgroundColor="#f5f5f5"
@@ -108,12 +135,15 @@ const ProfileScreen = ({navigation}: any) => {
                 rotation={220}>
                 {fill => (
                   <View style={styles.circularProgressContent}>
-                    <Text style={styles.progressText}>{selectedDays}</Text>
-                    <Text style={styles.daysText}>Days</Text>
+                    <Text style={styles.progressText}>1</Text>
+                    <Text style={styles.daysText}>
+                      / {selectedDays.length} days
+                    </Text>
                   </View>
                 )}
               </AnimatedCircularProgress>
             </View>
+
             <TouchableOpacity onPress={toggleBottomSheet}>
               <Text style={styles.editWeeklyGoalBtn}>Edit</Text>
             </TouchableOpacity>
@@ -131,27 +161,164 @@ const ProfileScreen = ({navigation}: any) => {
           showHandleIndicator={false}
           snapPoints={snapPoints}>
           <View>
-            <TouchableOpacity onPress={() => handleSelectDays(1)}>
-              <Text>Monday</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => handleSelectDays(2)}>
-              <Text>Tuesday</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => handleSelectDays(3)}>
-              <Text>Wednesday</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => handleSelectDays(4)}>
-              <Text>Thursday</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => handleSelectDays(5)}>
-              <Text>Friday</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => handleSelectDays(6)}>
-              <Text>Saturday</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => handleSelectDays(7)}>
-              <Text>Sunday</Text>
-            </TouchableOpacity>
+            <View>
+              <Text style={[styles.firstSectionHeadtext, {paddingTop: 8}]}>
+                Set your weekly goal!
+              </Text>
+              <Text
+                style={[
+                  styles.firstSectionSubHeadtext,
+                  {paddingHorizontal: 10},
+                ]}>
+                To keep you motivated, now you can set your personal goal for
+                your week. Edit your goal anytime later.
+              </Text>
+            </View>
+            <View style={styles.stepperContainer}>
+              <AnimatedCircularProgress
+                size={200}
+                width={25}
+                fill={(selectedDays.length / 7) * 100}
+                tintColor="#815cff"
+                lineCap="round"
+                backgroundColor="#f5f5f5"
+                padding={10}
+                arcSweepAngle={280}
+                rotation={220}>
+                {fill => (
+                  <View style={styles.circularProgressContent}>
+                    <Text style={[styles.progressText, {fontSize: 28}]}>
+                      {selectedDays.length}
+                    </Text>
+                    <Text style={styles.daysText}>days / week</Text>
+                  </View>
+                )}
+              </AnimatedCircularProgress>
+              <View style={styles.motivationalPhraseContainer}>
+                {selectedDays.length > 0 && (
+                  <View style={styles.motivsubtext}>
+                    <Text style={{fontSize: 18}}>🚀</Text>
+                    <Text style={styles.motivationalPhraseText}>
+                      {motivationalPhrase}
+                    </Text>
+                  </View>
+                )}
+              </View>
+            </View>
+            <View style={styles.bottomsheetDaysWrapper}>
+              <TouchableOpacity
+                style={
+                  isDaySelected(1)
+                    ? styles.bottomsheetDayBtnAct
+                    : styles.bottomsheetDayBtn
+                }
+                onPress={() => handleSelectDays(1)}>
+                <Text
+                  style={
+                    isDaySelected(1)
+                      ? styles.bottomsheetDayTextAct
+                      : styles.bottomsheetDayText
+                  }>
+                  Mon
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={
+                  isDaySelected(2)
+                    ? styles.bottomsheetDayBtnAct
+                    : styles.bottomsheetDayBtn
+                }
+                onPress={() => handleSelectDays(2)}>
+                <Text
+                  style={
+                    isDaySelected(2)
+                      ? styles.bottomsheetDayTextAct
+                      : styles.bottomsheetDayText
+                  }>
+                  Tue
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={
+                  isDaySelected(3)
+                    ? styles.bottomsheetDayBtnAct
+                    : styles.bottomsheetDayBtn
+                }
+                onPress={() => handleSelectDays(3)}>
+                <Text
+                  style={
+                    isDaySelected(3)
+                      ? styles.bottomsheetDayTextAct
+                      : styles.bottomsheetDayText
+                  }>
+                  Wed
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={
+                  isDaySelected(4)
+                    ? styles.bottomsheetDayBtnAct
+                    : styles.bottomsheetDayBtn
+                }
+                onPress={() => handleSelectDays(4)}>
+                <Text
+                  style={
+                    isDaySelected(4)
+                      ? styles.bottomsheetDayTextAct
+                      : styles.bottomsheetDayText
+                  }>
+                  Thu
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={
+                  isDaySelected(5)
+                    ? styles.bottomsheetDayBtnAct
+                    : styles.bottomsheetDayBtn
+                }
+                onPress={() => handleSelectDays(5)}>
+                <Text
+                  style={
+                    isDaySelected(5)
+                      ? styles.bottomsheetDayTextAct
+                      : styles.bottomsheetDayText
+                  }>
+                  Fri
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={
+                  isDaySelected(6)
+                    ? styles.bottomsheetDayBtnAct
+                    : styles.bottomsheetDayBtn
+                }
+                onPress={() => handleSelectDays(6)}>
+                <Text
+                  style={
+                    isDaySelected(6)
+                      ? styles.bottomsheetDayTextAct
+                      : styles.bottomsheetDayText
+                  }>
+                  Sat
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={
+                  isDaySelected(7)
+                    ? styles.bottomsheetDayBtnAct
+                    : styles.bottomsheetDayBtn
+                }
+                onPress={() => handleSelectDays(7)}>
+                <Text
+                  style={
+                    isDaySelected(7)
+                      ? styles.bottomsheetDayTextAct
+                      : styles.bottomsheetDayText
+                  }>
+                  Sun
+                </Text>
+              </TouchableOpacity>
+            </View>
           </View>
           <TouchableOpacity
             onPress={toggleBottomSheet}
@@ -244,6 +411,7 @@ const styles = StyleSheet.create({
   firstSectionSubHeadtext: {
     textAlign: 'center',
     fontSize: 16,
+    marginHorizontal: 20,
   },
   editWeeklyGoalBtn: {
     color: '#815cff',
@@ -264,10 +432,10 @@ const styles = StyleSheet.create({
   },
   // styles for Circular Progress Bar
   stepperContainer: {
-    flexDirection: 'row',
+    flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 10,
+    marginTop: 25,
   },
   circularProgressContent: {
     justifyContent: 'center',
@@ -278,15 +446,74 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
   },
-
   progressText: {
-    fontSize: 21,
+    fontSize: 22,
     fontWeight: '600',
-    color: '#815cff',
+    color: '#000',
   },
   daysText: {
     fontSize: 12,
     fontWeight: '500',
     color: '#666',
+    marginTop: 5,
+  },
+
+  // bottomsheet items
+  bottomsheetDaysWrapper: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    marginHorizontal: 20,
+    alignItems: 'center',
+    columnGap: 10,
+    rowGap: 15,
+    justifyContent: 'center',
+    marginTop: 20,
+    marginBottom: 20,
+  },
+  bottomsheetDayBtn: {
+    borderWidth: 1,
+    padding: 10,
+    borderRadius: 5,
+    backgroundColor: '#f5f5f5',
+    borderColor: '#f5f5f5',
+    width: 60,
+  },
+  bottomsheetDayText: {
+    color: '#909090',
+    fontWeight: '600',
+    fontSize: 16,
+    textAlign: 'center',
+  },
+  bottomsheetDayBtnAct: {
+    borderWidth: 1,
+    padding: 10,
+    borderRadius: 5,
+    backgroundColor: '#815cff',
+    borderColor: '#815cff',
+    width: 60,
+  },
+  bottomsheetDayTextAct: {
+    color: '#f5f5f5',
+    fontWeight: '600',
+    fontSize: 16,
+    textAlign: 'center',
+  },
+  // motivational words
+  motivationalPhraseContainer: {
+    alignItems: 'center',
+    marginBottom: 30,
+  },
+  motivationalPhraseText: {
+    fontSize: 16,
+    fontStyle: 'italic',
+    textAlign: 'center',
+    color: '#000',
+    fontWeight: '600',
+  },
+  motivsubtext: {
+    alignItems: 'center',
+    rowGap: 8,
+    position: 'absolute',
+    top: -40,
   },
 });
