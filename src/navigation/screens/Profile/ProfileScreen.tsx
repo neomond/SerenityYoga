@@ -7,25 +7,34 @@ import {
 } from 'react-native';
 import React, {useEffect, useRef, useState} from 'react';
 import LinearGradient from 'react-native-linear-gradient';
-import BottomSheetComponent from '../../components/bottomsheet/BottomSheet';
+import BottomSheetComponent from '../../../components/bottomsheet/BottomSheet';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {AnimatedCircularProgress} from 'react-native-circular-progress';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {ProfileCalendar} from '../../components/calendar/ProfileCalendar';
-import {ProfileHeader} from './Profile/Header';
-import WeeklyGoal from './Profile/WeeklyGoal';
-import {ProgressBar} from './Profile/ProgressBar';
-import BottomSheetDays from './Profile/BottomSheetDays';
-import {LogoutConfirmationModal} from './Profile/LogoutConfirmationModal';
+import {ProfileCalendar} from '../../../components/calendar/ProfileCalendar';
+import {ProfileHeader} from './Header';
+import WeeklyGoal from './WeeklyGoal';
+import {ProgressBar} from './ProgressBar';
+import BottomSheetDays from './BottomSheetDays';
+import {LogoutConfirmationModal} from './LogoutConfirmationModal';
+
+import {debounce} from 'lodash';
+// motivational words
+const motivationalPhrases = [
+  "Keep going! You're doing great!",
+  "You're on your way to success!",
+  'Each day brings you closer to your goal!',
+  'Believe in yourself and stay committed!',
+  'Superb!',
+  'You rock!',
+];
 
 const ProfileScreen = ({navigation}: any) => {
   const [selectedDays, setSelectedDays] = useState<number[]>([]);
   const [activeDays, setActiveDays] = useState(0); // for active days out of selected from bottom sheeet's circular bar
   const [isLogoutModalVisible, setIsLogoutModalVisible] = useState(false);
-
   const [isBottomSheetVisible, setIsBottomSheetVisible] = useState(false);
   const [currentFill, setCurrentFill] = useState(0);
-
   const [motivationalPhrase, setMotivationalPhrase] = useState('');
 
   const snapPoints = ['25%', '85%'];
@@ -41,14 +50,10 @@ const ProfileScreen = ({navigation}: any) => {
       console.error('Error storing activeDays in local storage:', error);
     }
   };
-
   const loadActiveDaysFromLocalStorage = async () => {
     try {
       const storedActiveDays = await AsyncStorage.getItem('@activeDays');
-      if (storedActiveDays !== null) {
-        return JSON.parse(storedActiveDays);
-      }
-      return null;
+      return storedActiveDays !== null ? JSON.parse(storedActiveDays) : null;
     } catch (error) {
       console.error('Error loading activeDays from local storage:', error);
       return null;
@@ -102,39 +107,28 @@ const ProfileScreen = ({navigation}: any) => {
     animationRef.current = requestAnimationFrame(animationFrame);
   };
 
-  // to not show bottom bar in this screen
   useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', () => {
-      navigation.getParent()?.setOptions({tabBarStyle: {display: 'none'}});
-    });
-    return () => {
-      navigation.getParent()?.setOptions({tabBarStyle: {display: 'flex'}});
-      unsubscribe();
-    };
-  }, [navigation]);
-  /////////////////////////////
-
-  const toggleBottomSheet = () => {
-    setIsBottomSheetVisible(prevState => !prevState);
-  };
-
-  // const isDaySelected = (day: number) => {
-  //   return selectedDays.includes(day);
-  // };
-
-  // motivational words
-  const motivationalPhrases = [
-    "Keep going! You're doing great!",
-    "You're on your way to success!",
-    'Each day brings you closer to your goal!',
-    'Believe in yourself and stay committed!',
-    'Superb!',
-    'You rock!',
-  ];
+    animateProgress(selectedDays.length);
+    setActiveDays(selectedDays.length);
+    selectRandomMotivationalPhrase();
+    updateActiveDays();
+  }, [selectedDays]);
 
   const selectRandomMotivationalPhrase = () => {
     const randomIndex = Math.floor(Math.random() * motivationalPhrases.length);
     setMotivationalPhrase(motivationalPhrases[randomIndex]);
+  };
+
+  const handleSelectDays = debounce((day: number) => {
+    setSelectedDays(prevSelectedDays =>
+      prevSelectedDays.includes(day)
+        ? prevSelectedDays.filter(selectedDay => selectedDay !== day)
+        : [...prevSelectedDays, day],
+    );
+  }, 200);
+
+  const toggleBottomSheet = () => {
+    setIsBottomSheetVisible(prevState => !prevState);
   };
 
   const updateActiveDays = () => {
@@ -149,22 +143,17 @@ const ProfileScreen = ({navigation}: any) => {
     };
   }, []);
 
+  // to not show bottom bar in this screen
   useEffect(() => {
-    animateProgress(selectedDays.length);
-    setActiveDays(selectedDays.length);
-    selectRandomMotivationalPhrase();
-  }, [selectedDays]);
-
-  const handleSelectDays = (day: number) => {
-    setSelectedDays(prevSelectedDays => {
-      if (prevSelectedDays.includes(day)) {
-        return prevSelectedDays.filter(selectedDay => selectedDay !== day);
-      } else {
-        return [...prevSelectedDays, day];
-      }
+    const unsubscribe = navigation.addListener('focus', () => {
+      navigation.getParent()?.setOptions({tabBarStyle: {display: 'none'}});
     });
-    updateActiveDays();
-  };
+    return () => {
+      navigation.getParent()?.setOptions({tabBarStyle: {display: 'flex'}});
+      unsubscribe();
+    };
+  }, [navigation]);
+  /////////////////////////////
 
   return (
     <GestureHandlerRootView>
@@ -225,7 +214,7 @@ const ProfileScreen = ({navigation}: any) => {
               <View style={styles.motivationalPhraseContainer}>
                 {selectedDays.length > 0 && (
                   <View style={styles.motivsubtext}>
-                    <Text style={{fontSize: 18}}>🚀</Text>
+                    <Text>🚀</Text>
                     <Text style={styles.motivationalPhraseText}>
                       {motivationalPhrase}
                     </Text>

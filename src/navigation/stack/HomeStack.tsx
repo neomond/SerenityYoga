@@ -1,6 +1,6 @@
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import HomeScreen from '../screens/HomeScreen';
-import ProfileScreen from '../screens/ProfileScreen';
+import ProfileScreen from '../screens/Profile/ProfileScreen';
 import DetailsScreen from '../screens/DetailsScreen';
 import CategoryMoodScreen from '../screens/CategoryMoodScreen';
 import {getFocusedRouteNameFromRoute} from '@react-navigation/native';
