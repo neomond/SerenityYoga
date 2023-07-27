@@ -1,8 +1,8 @@
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import PracticesScreen from '../screens/PracticesScreen';
-import PracticePreviewScreen from '../screens/PracticePreviewScreen';
-import PracticeVideoScreen from '../screens/PracticeVideoScreen';
-import PracticesCollectionScreen from '../screens/PracticeCollectionScreen';
+import PracticesScreen from '../screens/Practices/PracticesScreen';
+import PracticePreviewScreen from '../screens/Practices/PracticePreviewScreen';
+import PracticeVideoScreen from '../screens/Practices/PracticeVideoScreen';
+import PracticesCollectionScreen from '../screens/Practices/PracticeCollectionScreen';
 
 type PracticesStackParamList = {
   PracticesMain: undefined;

@@ -6,16 +6,30 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React from 'react';
-import SvgLikeIcon from '../../assets/LikeIcon';
-import SvgDuration from '../../assets/DurationIcon';
-import SvgBack from '../../assets/BackIcon';
+import React, {useEffect} from 'react';
+import SvgLikeIcon from '../../../assets/LikeIcon';
+import SvgDuration from '../../../assets/DurationIcon';
+import SvgBack from '../../../assets/BackIcon';
 
 const PracticesCollectionScreen = ({navigation}: any) => {
+  // to not show bottom bar in this screen
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      navigation.getParent()?.setOptions({tabBarStyle: {display: 'none'}});
+    });
+    return () => {
+      navigation.getParent()?.setOptions({tabBarStyle: {display: 'flex'}});
+      unsubscribe();
+    };
+  }, [navigation]);
+  /////////////////////////////
   return (
     <View style={styles.mainWrapper}>
       <ScrollView>
-        <Image style={styles.image} source={require('../../assets/test.png')} />
+        <Image
+          style={styles.image}
+          source={require('../../../assets/test.png')}
+        />
         <View style={styles.favoritesMainContent}>
           <TouchableOpacity onPress={() => navigation.goBack()}>
             <SvgBack stroke="#fff" />
@@ -39,7 +53,7 @@ const PracticesCollectionScreen = ({navigation}: any) => {
               </View>
               <Image
                 style={styles.imageFav}
-                source={require('../../assets/test.png')}
+                source={require('../../../assets/test.png')}
               />
 
               <View style={styles.favoritesItemSecondary}>

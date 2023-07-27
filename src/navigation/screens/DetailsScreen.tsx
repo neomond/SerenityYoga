@@ -7,7 +7,6 @@ import {
   StyleSheet,
   TouchableOpacity,
   Platform,
-  ScrollView,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import SvgDuration from '../../assets/DurationIcon';
