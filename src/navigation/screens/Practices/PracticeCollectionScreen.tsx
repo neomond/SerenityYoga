@@ -29,7 +29,7 @@ const PracticesCollectionScreen = ({navigation}: any) => {
       description:
         'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus, doloribus',
       imgUrl:
-        'https://cdn.pixabay.com/photo/2015/06/19/21/24/avenue-815297_1280.jpg',
+        'https://img.freepik.com/premium-photo/abstract-creative-background-using-your-project-ui-ux-design_155807-1066.jpg',
     },
     {
       id: '2',
@@ -40,7 +40,7 @@ const PracticesCollectionScreen = ({navigation}: any) => {
       description:
         'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus, doloribus',
       imgUrl:
-        'https://cdn.pixabay.com/photo/2015/06/19/21/24/avenue-815297_1280.jpg',
+        'https://img.freepik.com/premium-photo/abstract-creative-background-using-your-project-ui-ux-design_155807-1066.jpg',
     },
     {
       id: '3',
@@ -51,7 +51,7 @@ const PracticesCollectionScreen = ({navigation}: any) => {
       description:
         'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus, doloribus',
       imgUrl:
-        'https://cdn.pixabay.com/photo/2015/06/19/21/24/avenue-815297_1280.jpg',
+        'https://img.freepik.com/premium-photo/abstract-creative-background-using-your-project-ui-ux-design_155807-1066.jpg',
     },
     {
       id: '4',
@@ -62,7 +62,7 @@ const PracticesCollectionScreen = ({navigation}: any) => {
       description:
         'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus, doloribus',
       imgUrl:
-        'https://cdn.pixabay.com/photo/2015/06/19/21/24/avenue-815297_1280.jpg',
+        'https://img.freepik.com/premium-photo/abstract-creative-background-using-your-project-ui-ux-design_155807-1066.jpg',
     },
   ];
 
