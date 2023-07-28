@@ -99,19 +99,17 @@ const PracticesScreen = ({navigation}: any) => {
     <GestureHandlerRootView>
       <ScrollView showsVerticalScrollIndicator={false}>
         <LinearGradient
-          colors={['#c47afb', '#A07AFA', '#8380fb', '#8866ff']}
-          start={{x: 0, y: 0.2}}
+          colors={['#C17BFA', '#7F7DFA', '#8283FC']}
+          start={{x: 0, y: 0}}
           end={{x: 1, y: 0}}
           style={styles.linearGradient}>
           <View style={styles.iconsHeader}>
-            <TouchableOpacity
+            {/* <TouchableOpacity
               style={styles.profileStyle}
               onPress={toggleBottomSheet}>
               <SvgSettings stroke="#E5DEFF" fill="transparent" />
-            </TouchableOpacity>
-            <View style={styles.centerContainer}>
-              <Text style={styles.textCategory}>Yoga 🧘‍♀️</Text>
-            </View>
+            </TouchableOpacity> */}
+            <Text style={styles.textCategory}>Yoga Sessions 🧘</Text>
           </View>
 
           <View style={styles.primaryContent}>
@@ -182,14 +180,15 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#fff',
     backgroundColor: '#fff',
-    paddingVertical: 40,
+    paddingVertical: 30,
     height: '100%',
   },
   textCategory: {
     marginBottom: 20,
     fontSize: 22,
-    fontWeight: '600',
+    fontWeight: '500',
     color: '#fff',
+    textAlign: 'center',
   },
   mainCollectionWrapper: {
     borderWidth: 1,
@@ -201,7 +200,7 @@ const styles = StyleSheet.create({
   },
   image: {
     width: '100%',
-    height: 160,
+    height: 150,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     borderBottomLeftRadius: 0,
@@ -223,10 +222,6 @@ const styles = StyleSheet.create({
   },
   textCollThird: {
     fontSize: 15,
-  },
-  centerContainer: {
-    flex: 1,
-    alignItems: 'center',
   },
   bottomSheetContent: {
     flexDirection: 'column',
@@ -268,7 +263,7 @@ const styles = StyleSheet.create({
     color: 'gray',
   },
   shadowForImage: {
-    height: 160,
+    height: 150,
     width: '100%',
     backgroundColor: 'rgba(255,255,255, 0.18)',
     position: 'absolute',
