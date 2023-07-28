@@ -83,6 +83,7 @@ const PracticesScreen = ({navigation}: any) => {
         key={item.id}
         style={styles.mainCollectionWrapper}
         onPress={() => navigation.navigate('PracticeCollection')}>
+        <View style={styles.shadowForImage}></View>
         <Image style={styles.image} source={{uri: item.imgUrl}} />
         <View style={styles.secondaryCollectionWrapper}>
           <Text style={styles.textCollFirst}>{item.title}</Text>
@@ -265,6 +266,14 @@ const styles = StyleSheet.create({
   textType: {
     alignItems: 'center',
     color: 'gray',
+  },
+  shadowForImage: {
+    height: 160,
+    width: '100%',
+    backgroundColor: 'rgba(255,255,255, 0.18)',
+    position: 'absolute',
+    zIndex: 99999,
+    top: 0,
   },
 });
 
