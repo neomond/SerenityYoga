@@ -1,6 +1,7 @@
 import {
   FlatList,
   Image,
+  Pressable,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -10,6 +11,12 @@ import {
 import SvgLikeIcon from '../../../assets/LikeIcon';
 import SvgDuration from '../../../assets/DurationIcon';
 import SvgBack from '../../../assets/BackIcon';
+import SvgSetting from '../../../assets/SettingsIcon';
+import BottomSheetComponent from '../../../components/bottomsheet/BottomSheet';
+import {useState} from 'react';
+import SvgCheckBox from '../../../assets/CheckBoxicon';
+import SvgCheckBoxFill from '../../../assets/CheckBoxiconFilled';
+import {GestureHandlerRootView} from 'react-native-gesture-handler';
 
 const PracticesCollectionScreen = ({navigation}: any) => {
   const dummydata = [
@@ -59,6 +66,23 @@ const PracticesCollectionScreen = ({navigation}: any) => {
     },
   ];
 
+  const [isBottomSheetVisible, setBottomSheetVisible] = useState(false);
+  const toggleBottomSheet = () => {
+    setBottomSheetVisible(!isBottomSheetVisible);
+  };
+  const items = ['Basic', 'Morning', 'Evening', 'General'];
+  const [selectedItems, setSelectedItems] = useState<string[]>([]);
+
+  const handleItemSelect = (item: string) => {
+    if (selectedItems.includes(item)) {
+      setSelectedItems(
+        selectedItems.filter(selectedItem => selectedItem !== item),
+      );
+    } else {
+      setSelectedItems([...selectedItems, item]);
+    }
+  };
+
   const renderMeditationItem = ({item}: any) => (
     <View key={item.id} style={styles.favoritesItem}>
       <View style={styles.imageContentSubtop}>
@@ -91,14 +115,29 @@ const PracticesCollectionScreen = ({navigation}: any) => {
       style={styles.mainWrapper}
       showsVerticalScrollIndicator={false}
       ListHeaderComponent={
-        <>
+        <GestureHandlerRootView>
           <Image
             style={styles.image}
             source={require('../../../assets/test.png')}
           />
-          <View style={styles.favoritesMainContent}>
-            <TouchableOpacity onPress={() => navigation.goBack()}>
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              top: 30,
+              position: 'absolute',
+              width: '100%',
+            }}>
+            <TouchableOpacity
+              style={styles.goBackBtnStyle}
+              onPress={() => navigation.goBack()}>
               <SvgBack stroke="#fff" />
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.settingsStyle}
+              onPress={toggleBottomSheet}>
+              <SvgSetting />
             </TouchableOpacity>
           </View>
           <View style={styles.secondaryCollectionWrapper}>
@@ -108,7 +147,37 @@ const PracticesCollectionScreen = ({navigation}: any) => {
               Bring awareness Back onto the menu. Reconnect with yourself
             </Text>
           </View>
-        </>
+          <BottomSheetComponent
+            isVisible={isBottomSheetVisible}
+            toggleBottomSheet={toggleBottomSheet}
+            items={items}
+            selectedItems={selectedItems}
+            onItemSelect={handleItemSelect}>
+            <View style={styles.bottomSheetContent}>
+              {items.map(item => (
+                <Pressable
+                  key={item}
+                  style={styles.checkboxItem}
+                  onPress={() => handleItemSelect(item)}>
+                  <Text style={{fontSize: 16}}>{item}</Text>
+                  {selectedItems.includes(item) ? (
+                    <>
+                      <Text style={styles.selectedItem}>✓</Text>
+                      <SvgCheckBoxFill />
+                    </>
+                  ) : (
+                    <SvgCheckBox />
+                  )}
+                </Pressable>
+              ))}
+              <TouchableOpacity
+                onPress={toggleBottomSheet}
+                style={styles.continueBtn}>
+                <Text style={styles.closeButton}>Continue</Text>
+              </TouchableOpacity>
+            </View>
+          </BottomSheetComponent>
+        </GestureHandlerRootView>
       }
     />
   );
@@ -201,17 +270,58 @@ const styles = StyleSheet.create({
     width: 110,
     marginRight: 10,
   },
-  favoritesMainContent: {
-    position: 'absolute',
-    marginTop: 40,
-    marginHorizontal: 20,
-    alignItems: 'center',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+  goBackBtnStyle: {
     borderWidth: 1,
     borderRadius: 50,
     borderColor: 'rgba(229,222,255, 0.2)',
     backgroundColor: 'rgba(229,222,255, 0.2)',
     padding: 5,
+    marginLeft: 20,
+  },
+  settingsStyle: {
+    borderRadius: 80,
+    borderWidth: 1,
+    padding: 4,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'rgba(255,255,255, 0.2)',
+    borderColor: 'rgba(255,255,255, 0.1)',
+    marginRight: 20,
+  },
+
+  // bottom sheet
+  bottomSheetContent: {
+    flexDirection: 'column',
+    marginTop: 20,
+  },
+  checkboxItem: {
+    paddingHorizontal: 15,
+    paddingVertical: 20,
+    marginHorizontal: 25,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    backgroundColor: '#f6f6f6',
+    borderRadius: 10,
+    marginBottom: 12,
+  },
+  selectedItem: {
+    position: 'absolute',
+    right: '7%',
+    zIndex: 999,
+    color: '#fff',
+  },
+  continueBtn: {
+    backgroundColor: '#8F6FFE',
+    marginHorizontal: 25,
+    borderRadius: 30,
+    marginTop: 20,
+  },
+  closeButton: {
+    fontSize: 16,
+    fontWeight: '500',
+    color: '#fff',
+    textAlign: 'center',
+    padding: 15,
   },
 });
