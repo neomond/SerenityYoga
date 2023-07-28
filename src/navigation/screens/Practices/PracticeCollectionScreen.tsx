@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useEffect} from 'react';
+
 import SvgLikeIcon from '../../../assets/LikeIcon';
 import SvgDuration from '../../../assets/DurationIcon';
 import SvgBack from '../../../assets/BackIcon';

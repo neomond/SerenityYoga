@@ -1,6 +1,5 @@
 import React, {useState} from 'react';
 import {
-  FlatList,
   Image,
   Pressable,
   ScrollView,
@@ -265,7 +264,7 @@ const styles = StyleSheet.create({
   shadowForImage: {
     height: 150,
     width: '100%',
-    backgroundColor: 'rgba(255,255,255, 0.18)',
+    backgroundColor: 'rgba(255,255,255, 0.09)',
     position: 'absolute',
     zIndex: 99999,
     top: 0,
