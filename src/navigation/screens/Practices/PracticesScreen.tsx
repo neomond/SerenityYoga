@@ -1,8 +1,8 @@
 import React, {useState} from 'react';
 import {
+  FlatList,
   Image,
   Pressable,
-  SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
@@ -26,7 +26,7 @@ const PracticesScreen = ({navigation}: any) => {
       description:
         'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus, doloribus',
       imgUrl:
-        'http://cdn.pixabay.com/photo/2015/06/19/21/24/avenue-815297_1280.jpg',
+        'https://cdn.pixabay.com/photo/2015/06/19/21/24/avenue-815297_1280.jpg',
     },
     {
       id: '2',
@@ -36,7 +36,7 @@ const PracticesScreen = ({navigation}: any) => {
       description:
         'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus, doloribus',
       imgUrl:
-        'http://cdn.pixabay.com/photo/2015/06/19/21/24/avenue-815297_1280.jpg',
+        'https://cdn.pixabay.com/photo/2015/06/19/21/24/avenue-815297_1280.jpg',
     },
     {
       id: '3',
@@ -46,7 +46,7 @@ const PracticesScreen = ({navigation}: any) => {
       description:
         'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus, doloribus',
       imgUrl:
-        'http://cdn.pixabay.com/photo/2015/06/19/21/24/avenue-815297_1280.jpg',
+        'https://cdn.pixabay.com/photo/2015/06/19/21/24/avenue-815297_1280.jpg',
     },
     {
       id: '4',
@@ -56,7 +56,7 @@ const PracticesScreen = ({navigation}: any) => {
       description:
         'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus, doloribus',
       imgUrl:
-        'http://cdn.pixabay.com/photo/2015/06/19/21/24/avenue-815297_1280.jpg',
+        'https://cdn.pixabay.com/photo/2015/06/19/21/24/avenue-815297_1280.jpg',
     },
   ];
 
@@ -77,7 +77,7 @@ const PracticesScreen = ({navigation}: any) => {
     }
   };
 
-  const renderItem = (item: any) => {
+  const renderItem = ({item}: any) => {
     return (
       <TouchableOpacity
         key={item.id}
@@ -93,6 +93,7 @@ const PracticesScreen = ({navigation}: any) => {
       </TouchableOpacity>
     );
   };
+
   return (
     <GestureHandlerRootView>
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -111,9 +112,11 @@ const PracticesScreen = ({navigation}: any) => {
               <Text style={styles.textCategory}>Yoga 🧘‍♀️</Text>
             </View>
           </View>
+
           <View style={styles.primaryContent}>
-            {dummydata.map(item => renderItem(item))}
+            {dummydata.map(item => renderItem({item}))}
           </View>
+
           <BottomSheetComponent
             isVisible={isBottomSheetVisible}
             toggleBottomSheet={toggleBottomSheet}
@@ -164,19 +167,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255,255,255, 0.2)',
     borderColor: 'rgba(255,255,255, 0.1)',
   },
-  bellStyle: {
-    marginBottom: 25,
-    borderRadius: 80,
-    borderWidth: 1,
-    paddingHorizontal: 2,
-    paddingVertical: 6,
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: 38,
-    fontWeight: '700',
-    backgroundColor: 'rgba(255,255,255, 0.2)',
-    borderColor: 'rgba(255,255,255, 0.1)',
-  },
+
   iconsHeader: {
     flexDirection: 'row',
     justifyContent: 'center',
@@ -184,7 +175,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 25,
   },
   primaryContent: {
-    rowGap: 8,
+    rowGap: 15,
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
     borderWidth: 1,

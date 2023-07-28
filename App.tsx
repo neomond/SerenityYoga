@@ -39,8 +39,6 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 const Tab = createBottomTabNavigator<BottomTabParamList>();
 
 const HomeTabNavigator: React.FC = () => {
-  const isFocused = useIsFocused();
-
   return (
     <Tab.Navigator
       screenOptions={() => ({

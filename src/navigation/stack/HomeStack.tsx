@@ -25,7 +25,7 @@ export const HomeStackNavigator: React.FC = () => {
       <HomeStack.Screen
         name="ProfileScreen"
         component={ProfileScreen}
-        options={{headerShown: false}}
+        options={{headerShown: false, presentation: 'modal'}}
       />
       <HomeStack.Screen
         name="DetailsScreen"

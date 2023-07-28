@@ -143,27 +143,16 @@ const ProfileScreen = ({navigation}: any) => {
     };
   }, []);
 
-  // to not show bottom bar in this screen
-  useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', () => {
-      navigation.getParent()?.setOptions({tabBarStyle: {display: 'none'}});
-    });
-    return () => {
-      navigation.getParent()?.setOptions({tabBarStyle: {display: 'flex'}});
-      unsubscribe();
-    };
-  }, [navigation]);
-  /////////////////////////////
-
   return (
     <GestureHandlerRootView>
-      <LinearGradient
-        colors={['#62CBF7', '#6EC3FA', '#6DB9FE', '#6EBAFE']}
-        start={{x: 0, y: 0.2}}
-        end={{x: 1, y: 0}}
-        style={styles.linearGradient}>
-        <ProfileHeader navigation={navigation} />
-        <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <LinearGradient
+          colors={['#62CBF7', '#6FBBFE', '#6DB9FE']}
+          start={{x: 0, y: 0.2}}
+          end={{x: 1, y: 0}}
+          style={styles.linearGradient}>
+          <ProfileHeader navigation={navigation} />
+
           <View style={styles.primaryContent}>
             <WeeklyGoal
               selectedDays={selectedDays}
@@ -232,8 +221,8 @@ const ProfileScreen = ({navigation}: any) => {
               <Text style={styles.closeButton}>Done</Text>
             </TouchableOpacity>
           </BottomSheetComponent>
-        </ScrollView>
-      </LinearGradient>
+        </LinearGradient>
+      </ScrollView>
     </GestureHandlerRootView>
   );
 };
@@ -242,7 +231,7 @@ export default ProfileScreen;
 
 const styles = StyleSheet.create({
   linearGradient: {
-    paddingTop: 60,
+    paddingTop: 40,
   },
   continueBtn: {
     backgroundColor: '#8F6FFE',

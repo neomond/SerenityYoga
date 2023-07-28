@@ -25,7 +25,7 @@ export const PracticesStackNavigator: React.FC = () => {
       <PracticesStack.Screen
         name="PracticeCollection"
         component={PracticesCollectionScreen}
-        options={{headerShown: false}}
+        options={{headerShown: false, presentation: 'modal'}}
       />
       <PracticesStack.Screen
         name="PracticePreview"

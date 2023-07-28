@@ -1,4 +1,5 @@
 import {
+  FlatList,
   Image,
   ScrollView,
   StyleSheet,
@@ -12,74 +13,105 @@ import SvgDuration from '../../../assets/DurationIcon';
 import SvgBack from '../../../assets/BackIcon';
 
 const PracticesCollectionScreen = ({navigation}: any) => {
-  // to not show bottom bar in this screen
-  useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', () => {
-      navigation.getParent()?.setOptions({tabBarStyle: {display: 'none'}});
-    });
-    return () => {
-      navigation.getParent()?.setOptions({tabBarStyle: {display: 'flex'}});
-      unsubscribe();
-    };
-  }, [navigation]);
-  /////////////////////////////
-  return (
-    <View style={styles.mainWrapper}>
-      <ScrollView>
-        <Image
-          style={styles.image}
-          source={require('../../../assets/test.png')}
-        />
-        <View style={styles.favoritesMainContent}>
-          <TouchableOpacity onPress={() => navigation.goBack()}>
-            <SvgBack stroke="#fff" />
-          </TouchableOpacity>
-        </View>
-        <View style={styles.secondaryCollectionWrapper}>
-          <Text style={styles.textCollFirst}>10 meditations</Text>
-          <Text style={styles.textCollSecond}>Remember to breathe</Text>
-          <Text style={styles.textCollThird}>
-            Bring awareness Back onto the menu. Reconnect with yourself
-          </Text>
-          <View style={styles.secondaryWrapper}>
-            <Text style={styles.secondaryText}>
-              Meditations in this collection
-            </Text>
-            {/* rendered item starts */}
-            <View style={styles.favoritesItem}>
-              <View style={styles.imageContentSubtop}>
-                <SvgDuration />
-                <Text style={styles.titleColor}>11:00</Text>
-              </View>
-              <Image
-                style={styles.imageFav}
-                source={require('../../../assets/test.png')}
-              />
+  const dummydata = [
+    {
+      id: '1',
+      subtitle: 'Remember to breathe',
+      author: 'with Adriene',
+      duration: '10:00',
+      activityLevel: '✦ low intensity',
+      description:
+        'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus, doloribus',
+      imgUrl:
+        'https://cdn.pixabay.com/photo/2015/06/19/21/24/avenue-815297_1280.jpg',
+    },
+    {
+      id: '2',
+      subtitle: 'Remember to sleep',
+      activityLevel: '✦✦ middle intensity',
+      author: 'with Adriene',
+      duration: '10:00',
+      description:
+        'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus, doloribus',
+      imgUrl:
+        'https://cdn.pixabay.com/photo/2015/06/19/21/24/avenue-815297_1280.jpg',
+    },
+    {
+      id: '3',
+      subtitle: 'Remember to live',
+      author: 'with Adriene',
+      duration: '10:00',
+      activityLevel: '✦✦✦ high intensity',
+      description:
+        'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus, doloribus',
+      imgUrl:
+        'https://cdn.pixabay.com/photo/2015/06/19/21/24/avenue-815297_1280.jpg',
+    },
+    {
+      id: '4',
+      subtitle: 'Remember to be special',
+      activityLevel: '✦✦✦ high intensity',
+      author: 'with Adriene',
+      duration: '10:00',
+      description:
+        'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus, doloribus',
+      imgUrl:
+        'https://cdn.pixabay.com/photo/2015/06/19/21/24/avenue-815297_1280.jpg',
+    },
+  ];
 
-              <View style={styles.favoritesItemSecondary}>
-                <Text style={styles.textFav}>Meow</Text>
-                <View style={styles.favoritesItemSecondaryBottom}>
-                  <TouchableOpacity
-                    style={styles.btnFav}
-                    // onPress={() => handlePlay(item)}
-                  >
-                    <Text>Start</Text>
-                    {/* <Text>{pause === 'paused' ? 'Play' : 'Pause'}</Text> */}
-                  </TouchableOpacity>
-
-                  <TouchableOpacity
-                  // onPress={() => handleRemove(item)}
-                  >
-                    <SvgLikeIcon fill="#815cff" />
-                  </TouchableOpacity>
-                </View>
-              </View>
-            </View>
-            {/* rendered item ends */}
+  const renderMeditationItem = ({item}: any) => (
+    <View key={item.id} style={styles.favoritesItem}>
+      <View style={styles.imageContentSubtop}>
+        <SvgDuration />
+        <Text style={styles.titleColor}>{item.duration}</Text>
+      </View>
+      <View style={{flexDirection: 'row', columnGap: 15, marginHorizontal: 25}}>
+        <Image style={styles.imageFav} source={{uri: item.imgUrl}} />
+        <View style={styles.favoritesItemSecondary}>
+          <Text style={styles.textFav}>{item.subtitle}</Text>
+          <Text style={styles.textType}>{item.activityLevel}</Text>
+          <View style={styles.favoritesItemSecondaryBottom}>
+            <TouchableOpacity style={styles.btnFav}>
+              <Text>Start</Text>
+            </TouchableOpacity>
+            <TouchableOpacity>
+              <SvgLikeIcon fill="#815cff" />
+            </TouchableOpacity>
           </View>
         </View>
-      </ScrollView>
+      </View>
     </View>
+  );
+
+  return (
+    <FlatList
+      data={dummydata}
+      renderItem={renderMeditationItem}
+      keyExtractor={item => item.id}
+      style={styles.mainWrapper}
+      showsVerticalScrollIndicator={false}
+      ListHeaderComponent={
+        <>
+          <Image
+            style={styles.image}
+            source={require('../../../assets/test.png')}
+          />
+          <View style={styles.favoritesMainContent}>
+            <TouchableOpacity onPress={() => navigation.goBack()}>
+              <SvgBack stroke="#fff" />
+            </TouchableOpacity>
+          </View>
+          <View style={styles.secondaryCollectionWrapper}>
+            <Text style={styles.textCollFirst}>10 meditations</Text>
+            <Text style={styles.textCollSecond}>Remember to breathe</Text>
+            <Text style={styles.textCollThird}>
+              Bring awareness Back onto the menu. Reconnect with yourself
+            </Text>
+          </View>
+        </>
+      }
+    />
   );
 };
 
@@ -92,7 +124,7 @@ const styles = StyleSheet.create({
   },
   image: {
     width: '100%',
-    height: 300,
+    height: 200,
   },
   secondaryCollectionWrapper: {
     paddingHorizontal: 20,
@@ -119,7 +151,7 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   favoritesItem: {
-    columnGap: 30,
+    columnGap: 15,
     flexDirection: 'row',
     borderBottomColor: '#f0f0f0',
     borderBottomWidth: 1.2,
@@ -131,8 +163,8 @@ const styles = StyleSheet.create({
     columnGap: 3,
     alignItems: 'center',
     position: 'absolute',
-    top: 35,
-    left: 10,
+    top: 38,
+    left: 35,
     zIndex: 1,
   },
   imageFav: {
@@ -141,14 +173,21 @@ const styles = StyleSheet.create({
     borderRadius: 15,
   },
   textFav: {
+    marginBottom: -5,
     fontSize: 16,
   },
   titleColor: {
     color: '#fff',
     fontSize: 14,
   },
+  textType: {
+    alignItems: 'center',
+    color: 'gray',
+    paddingBottom: 6,
+  },
   favoritesItemSecondary: {
-    justifyContent: 'space-between',
+    justifyContent: 'center',
+    rowGap: 10,
   },
   favoritesItemSecondaryBottom: {
     flexDirection: 'row',
@@ -164,7 +203,7 @@ const styles = StyleSheet.create({
   },
   favoritesMainContent: {
     position: 'absolute',
-    marginTop: 70,
+    marginTop: 40,
     marginHorizontal: 20,
     alignItems: 'center',
     flexDirection: 'row',
