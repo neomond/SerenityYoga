@@ -7,15 +7,18 @@ import {
   View,
 } from 'react-native';
 import React from 'react';
-import SvgLikeIcon from '../../assets/LikeIcon';
-import SvgDuration from '../../assets/DurationIcon';
-import SvgBack from '../../assets/BackIcon';
+import SvgLikeIcon from '../../../assets/LikeIcon';
+import SvgBack from '../../../assets/BackIcon';
+import SvgDuration from '../../../assets/DurationIcon';
 
 const MeditationsCollectionScreen = ({navigation}: any) => {
   return (
     <View style={styles.mainWrapper}>
       <ScrollView>
-        <Image style={styles.image} source={require('../../assets/test.png')} />
+        <Image
+          style={styles.image}
+          source={require('../../../assets/test.png')}
+        />
         <View style={styles.favoritesMainContent}>
           <TouchableOpacity onPress={() => navigation.goBack()}>
             <SvgBack stroke="#fff" />
@@ -39,7 +42,7 @@ const MeditationsCollectionScreen = ({navigation}: any) => {
               </View>
               <Image
                 style={styles.imageFav}
-                source={require('../../assets/test.png')}
+                source={require('../../../assets/test.png')}
               />
 
               <View style={styles.favoritesItemSecondary}>

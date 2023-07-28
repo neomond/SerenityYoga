@@ -183,6 +183,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     color: 'gray',
     paddingBottom: 6,
+    fontSize: 12,
   },
   favoritesItemSecondary: {
     justifyContent: 'center',

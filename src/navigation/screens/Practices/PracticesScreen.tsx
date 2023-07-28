@@ -9,7 +9,6 @@ import {
   View,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import SvgSettings from '../../../assets/SettingsIcon';
 import BottomSheetComponent from '../../../components/bottomsheet/BottomSheet';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import SvgCheckBox from '../../../assets/CheckBoxicon';
@@ -199,7 +198,7 @@ const styles = StyleSheet.create({
   },
   image: {
     width: '100%',
-    height: 150,
+    height: 160,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     borderBottomLeftRadius: 0,
@@ -262,7 +261,7 @@ const styles = StyleSheet.create({
     color: 'gray',
   },
   shadowForImage: {
-    height: 150,
+    height: 160,
     width: '100%',
     backgroundColor: 'rgba(255,255,255, 0.09)',
     position: 'absolute',

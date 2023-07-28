@@ -8,11 +8,11 @@ import {
   View,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import BottomSheetComponent from '../../components/bottomsheet/BottomSheet';
+import BottomSheetComponent from '../../../components/bottomsheet/BottomSheet';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
-import SvgCheckBox from '../../assets/CheckBoxicon';
-import SvgCheckBoxFill from '../../assets/CheckBoxiconFilled';
-import SvgProfile from '../../assets/Profile';
+import SvgCheckBox from '../../../assets/CheckBoxicon';
+import SvgCheckBoxFill from '../../../assets/CheckBoxiconFilled';
+import SvgProfile from '../../../assets/Profile';
 
 const MeditationsScreen = ({navigation}: any) => {
   const [isBottomSheetVisible, setBottomSheetVisible] = useState(false);
@@ -56,7 +56,7 @@ const MeditationsScreen = ({navigation}: any) => {
             onPress={() => navigation.navigate('MeditationsCollection')}>
             <Image
               style={styles.image}
-              source={require('../../assets/test.png')}
+              source={require('../../../assets/test.png')}
             />
             <View style={styles.secondaryCollectionWrapper}>
               <Text style={styles.textCollFirst}>10 meditations</Text>

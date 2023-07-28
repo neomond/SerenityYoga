@@ -1,7 +1,7 @@
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import MeditationsScreen from '../screens/MeditationsScreen';
-import MeditationsCollectionScreen from '../screens/MeditationsCollectionScreen';
-import MeditationsPlayerScreen from '../screens/MeditationsPlayerScreen';
+import MeditationsScreen from '../screens/Meditations/MeditationsScreen';
+import MeditationsCollectionScreen from '../screens/Meditations/MeditationsCollectionScreen';
+import MeditationsPlayerScreen from '../screens/Meditations/MeditationsPlayerScreen';
 
 type MeditationsStackParamList = {
   MeditationsMain: undefined;
