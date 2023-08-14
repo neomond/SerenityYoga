@@ -223,7 +223,6 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 14,
   },
-
   primaryContent: {
     rowGap: 8,
     borderTopLeftRadius: 30,

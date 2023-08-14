@@ -1,5 +1,6 @@
 import {
   Image,
+  Platform,
   ScrollView,
   StyleSheet,
   Text,
@@ -98,7 +99,6 @@ const CategoryMoodScreen = ({navigation, route}: any) => {
               <SvgCloseIcon stroke="#E5DEFF" fill="transparent" />
             </TouchableOpacity>
           </View>
-
           <Text style={styles.headerText}>
             {category.name} {''}
             {getEmojiForCategory(category.name)}
@@ -143,7 +143,7 @@ export default CategoryMoodScreen;
 
 const styles = StyleSheet.create({
   linearGradient: {
-    paddingTop: 60,
+    paddingTop: Platform.OS === 'ios' ? 60 : 30,
   },
   primaryContent: {
     rowGap: 8,
@@ -160,7 +160,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   profileStyle: {
-    marginBottom: 25,
+    marginBottom: Platform.OS === 'ios' ? 20 : 0,
     marginRight: 20,
     borderRadius: 80,
     borderWidth: 1,

@@ -161,7 +161,7 @@ const styles = StyleSheet.create({
     paddingBottom: 15,
   },
   linearGradient: {
-    paddingTop: 60,
+    paddingTop: Platform.OS === 'ios' ? 60 : 30,
   },
   primaryContent: {
     rowGap: 8,
