@@ -13,12 +13,22 @@ import SvgDuration from '../../../assets/DurationIcon';
 import SvgBack from '../../../assets/BackIcon';
 import SvgSetting from '../../../assets/SettingsIcon';
 import BottomSheetComponent from '../../../components/bottomsheet/BottomSheet';
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import SvgCheckBox from '../../../assets/CheckBoxicon';
 import SvgCheckBoxFill from '../../../assets/CheckBoxiconFilled';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 
 const PracticesCollectionScreen = ({navigation}: any) => {
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      navigation.getParent()?.setOptions({tabBarStyle: {display: 'none'}});
+    });
+    return () => {
+      navigation.getParent()?.setOptions({tabBarStyle: {display: 'flex'}});
+      unsubscribe();
+    };
+  }, [navigation]);
+
   const dummydata = [
     {
       id: '1',

@@ -3,6 +3,7 @@ import PracticesScreen from '../screens/Practices/PracticesScreen';
 import PracticePreviewScreen from '../screens/Practices/PracticePreviewScreen';
 import PracticeVideoScreen from '../screens/Practices/PracticeVideoScreen';
 import PracticesCollectionScreen from '../screens/Practices/PracticeCollectionScreen';
+import {Platform} from 'react-native';
 
 type PracticesStackParamList = {
   PracticesMain: undefined;
@@ -25,7 +26,18 @@ export const PracticesStackNavigator: React.FC = () => {
       <PracticesStack.Screen
         name="PracticeCollection"
         component={PracticesCollectionScreen}
-        options={{headerShown: false, presentation: 'modal'}}
+        options={{
+          headerShown: false,
+          ...Platform.select({
+            android: {
+              animation: 'slide_from_bottom',
+              tabBarVisible: false,
+            },
+            ios: {
+              presentation: 'modal',
+            },
+          }),
+        }}
       />
       <PracticesStack.Screen
         name="PracticePreview"

@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import {
   Image,
+  Platform,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -93,7 +94,7 @@ const PracticesScreen = ({navigation}: any) => {
 
 const styles = StyleSheet.create({
   linearGradient: {
-    paddingTop: 60,
+    paddingTop: Platform.OS === 'ios' ? 60 : 30,
   },
 
   iconsHeader: {

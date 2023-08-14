@@ -143,7 +143,7 @@ export default CategoryMoodScreen;
 
 const styles = StyleSheet.create({
   linearGradient: {
-    paddingTop: Platform.OS === 'ios' ? 60 : 30,
+    paddingTop: Platform.OS === 'ios' ? 35 : 30,
   },
   primaryContent: {
     rowGap: 8,
