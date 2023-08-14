@@ -4,6 +4,7 @@ import {
   TouchableOpacity,
   View,
   TextInput,
+  Platform,
 } from 'react-native';
 import React, {useState} from 'react';
 import SvgLogo from '../../assets/Logo';
@@ -82,7 +83,7 @@ const styles = StyleSheet.create({
     marginBottom: 30,
   },
   thirdContent: {
-    rowGap: 35,
+    rowGap: Platform.OS === 'ios' ? 90 : 40,
   },
   step1field: {
     height: 55,

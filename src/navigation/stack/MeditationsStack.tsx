@@ -2,6 +2,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import MeditationsScreen from '../screens/Meditations/MeditationsScreen';
 import MeditationsCollectionScreen from '../screens/Meditations/MeditationsCollectionScreen';
 import MeditationsPlayerScreen from '../screens/Meditations/MeditationsPlayerScreen';
+import {Platform} from 'react-native';
 
 type MeditationsStackParamList = {
   MeditationsMain: undefined;
@@ -23,7 +24,18 @@ export const MeditationsStackNavigator: React.FC = () => {
       <MeditationsStack.Screen
         name="MeditationsCollection"
         component={MeditationsCollectionScreen}
-        options={{headerShown: false}}
+        options={{
+          headerShown: false,
+          ...Platform.select({
+            android: {
+              animation: 'slide_from_bottom',
+              tabBarVisible: false,
+            },
+            ios: {
+              presentation: 'modal',
+            },
+          }),
+        }}
       />
       <MeditationsStack.Screen
         name="MeditationsPlayer"

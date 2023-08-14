@@ -153,7 +153,7 @@ const styles = StyleSheet.create({
   },
   favoritesMainContent: {
     position: 'absolute',
-    marginTop: 70,
+    marginTop: 30,
     marginHorizontal: 20,
     alignItems: 'center',
     flexDirection: 'row',
