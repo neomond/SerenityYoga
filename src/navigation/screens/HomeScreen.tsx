@@ -1,5 +1,6 @@
 import {
   Image,
+  Platform,
   ScrollView,
   StyleSheet,
   Text,
@@ -9,7 +10,6 @@ import {
 import React, {useEffect} from 'react';
 import LinearGradient from 'react-native-linear-gradient';
 import {useDispatch, useSelector} from 'react-redux';
-// import {fetchCategories} from '../../redux/slices/CategoriesSlice';
 import {AppDispatch, RootState} from '../../redux';
 import {ActivityIndicator} from 'react-native-paper';
 import SvgProfile from '../../assets/Profile';
@@ -22,8 +22,6 @@ import {
   loadLikedItems,
   removeItem,
 } from '../../redux/slices/LikedItemsSlice';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import SvgFlower from '../../assets/Flower';
 import {getEmojiForCategory} from '../../utils/emojis';
 import {
   fetchCategories,
@@ -202,7 +200,7 @@ export default HomeScreen;
 
 const styles = StyleSheet.create({
   linearGradient: {
-    paddingTop: 60,
+    paddingTop: Platform.OS === 'ios' ? 60 : 30,
   },
   profileStyle: {
     marginBottom: 25,
@@ -247,7 +245,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#fff',
     backgroundColor: '#fff',
-    paddingVertical: 40,
+    paddingVertical: Platform.OS === 'ios' ? 40 : 25,
     paddingBottom: 200,
     height: '100%',
   },
@@ -329,7 +327,7 @@ const styles = StyleSheet.create({
   },
   renderItemCont: {
     paddingLeft: 20,
-    paddingBottom: 20,
+    paddingBottom: Platform.OS === 'ios' ? 20 : 8,
     // height: '200%',
   },
   renderItemContSecond: {
