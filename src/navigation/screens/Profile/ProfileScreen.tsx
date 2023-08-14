@@ -19,6 +19,7 @@ import BottomSheetDays from './BottomSheetDays';
 import {LogoutConfirmationModal} from './LogoutConfirmationModal';
 
 import {debounce} from 'lodash';
+
 // motivational words
 const motivationalPhrases = [
   "Keep going! You're doing great!",
@@ -42,6 +43,16 @@ const ProfileScreen = ({navigation}: any) => {
 
   // Use useRef to store the animation function without triggering re-renders
   const animationRef = useRef<any>();
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      navigation.getParent()?.setOptions({tabBarStyle: {display: 'none'}});
+    });
+    return () => {
+      navigation.getParent()?.setOptions({tabBarStyle: {display: 'flex'}});
+      unsubscribe();
+    };
+  }, [navigation]);
 
   const storeActiveDaysInLocalStorage = async (days: number) => {
     try {

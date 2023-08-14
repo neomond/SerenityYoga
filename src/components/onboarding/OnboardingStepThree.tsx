@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     columnGap: 15,
-    marginTop: Platform.OS === 'ios' ? '75%' : '65%',
+    marginTop: Platform.OS === 'ios' ? '75%' : '50%',
   },
   nextBtn: {
     borderRadius: 30,

@@ -172,7 +172,7 @@ const styles = StyleSheet.create({
   },
   textFav: {
     fontSize: 16,
-    width: '90%',
+    width: '80%',
   },
   titleColor: {
     color: '#fff',
