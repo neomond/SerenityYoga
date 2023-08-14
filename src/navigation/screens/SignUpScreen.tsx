@@ -1,4 +1,5 @@
 import {
+  Platform,
   ScrollView,
   StyleSheet,
   Text,
@@ -191,7 +192,7 @@ export default SignUpScreen;
 
 const styles = StyleSheet.create({
   linearGradient: {
-    paddingTop: 80,
+    paddingTop: Platform.OS === 'ios' ? 80 : 30,
   },
   tinyLogo: {
     paddingBottom: 20,
@@ -208,7 +209,7 @@ const styles = StyleSheet.create({
     borderColor: '#fff',
     backgroundColor: '#fff',
     paddingVertical: 35,
-    paddingBottom: 70,
+    paddingBottom: 40,
   },
   primaryText: {
     fontSize: 28,
@@ -216,7 +217,8 @@ const styles = StyleSheet.create({
   },
   secondaryText: {
     color: '#bbbbbb',
-    fontWeight: '500',
+    fontWeight: '400',
+    fontSize: 16,
   },
   signUpBtn: {
     color: '#8866ff',
@@ -244,7 +246,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   signInBtn: {
-    marginBottom: 8,
+    marginBottom: Platform.OS === 'ios' ? 8 : 3,
     width: 355,
     height: 50,
     alignItems: 'center',

@@ -1,4 +1,5 @@
 import {
+  Platform,
   ScrollView,
   StyleSheet,
   Text,
@@ -154,7 +155,7 @@ export default SignInScreen;
 
 const styles = StyleSheet.create({
   linearGradient: {
-    paddingTop: 80,
+    paddingTop: Platform.OS === 'ios' ? 80 : 50,
   },
   primaryContent: {
     flex: 1,
@@ -177,10 +178,12 @@ const styles = StyleSheet.create({
   primaryText: {
     fontSize: 28,
     fontWeight: '600',
+    color: '#000',
   },
   secondaryText: {
     color: '#bbbbbb',
-    fontWeight: '500',
+    fontWeight: '400',
+    fontSize: 16,
   },
   signUpBtn: {
     color: '#8866ff',
