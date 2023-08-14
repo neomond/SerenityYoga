@@ -75,3 +75,15 @@ const styles = StyleSheet.create({
 });
 
 export default BottomSheetComponent;
+
+{
+  /* <CheckBox
+     disabled={false}
+    value={isChecked}
+    style={styles.checkbox}
+    hideBox
+    boxType="square"
+    onValueChange={handleCheckboxChange}
+    onCheckColor="#8866ff"
+    /> */
+}

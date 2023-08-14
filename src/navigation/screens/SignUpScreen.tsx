@@ -1,5 +1,6 @@
 import {
   Platform,
+  Pressable,
   ScrollView,
   StyleSheet,
   Text,
@@ -21,12 +22,17 @@ import SvgViewEye from '../../assets/ViewEyeIcon';
 import SvgHideEye from '../../assets/HideEyeIcon';
 import CheckBox from '@react-native-community/checkbox';
 import SvgLogo from '../../assets/Logo';
+import SvgCheckBoxFill from '../../assets/CheckBoxiconFilled';
+import SvgCheckBox from '../../assets/CheckBoxicon';
 
 const SignUpScreen = ({navigation}: any) => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
 
+  const handleToggle = () => {
+    setIsChecked(!isChecked);
+  };
   //for password secure entry
 
   const dispatch = useDispatch<AppDispatch>();
@@ -139,16 +145,17 @@ const SignUpScreen = ({navigation}: any) => {
                   </TouchableOpacity>
                 </View>
                 <View style={styles.checkboxContainer}>
-                  <CheckBox
-                    disabled={false}
-                    value={isChecked}
-                    style={styles.checkbox}
-                    hideBox
-                    boxType="square"
-                    onValueChange={handleCheckboxChange}
-                    onCheckColor="#8866ff"
-                  />
                   <View style={styles.privacyTextCont}>
+                    <Pressable onPress={handleToggle}>
+                      {isChecked ? (
+                        <>
+                          <Text style={styles.selectedItem}>✓</Text>
+                          <SvgCheckBoxFill />
+                        </>
+                      ) : (
+                        <SvgCheckBox />
+                      )}
+                    </Pressable>
                     <Text style={styles.checkboxLabel}>I agree with</Text>
                     <Text>Privacy&Policy</Text>
                   </View>
@@ -313,5 +320,23 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: '#DADADA',
   },
-  privacyTextCont: {flexDirection: 'row', columnGap: 4},
+  privacyTextCont: {flexDirection: 'row', columnGap: 4, alignItems: 'center'},
+  checkboxItem: {
+    paddingHorizontal: 15,
+    paddingVertical: 20,
+    marginHorizontal: 25,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    backgroundColor: '#f6f6f6',
+    borderRadius: 10,
+    marginBottom: 12,
+  },
+  selectedItem: {
+    position: 'absolute',
+    left: 7,
+    top: Platform.OS === 'ios' ? 3 : 1,
+    zIndex: 999,
+    color: '#fff',
+  },
 });

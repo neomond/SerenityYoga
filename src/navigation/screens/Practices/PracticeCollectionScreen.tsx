@@ -81,6 +81,7 @@ const PracticesCollectionScreen = ({navigation}: any) => {
     setBottomSheetVisible(!isBottomSheetVisible);
   };
   const items = ['Basic', 'Morning', 'Evening', 'General'];
+
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
 
   const handleItemSelect = (item: string) => {
