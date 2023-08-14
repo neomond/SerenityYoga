@@ -41,15 +41,16 @@ const Tab = createBottomTabNavigator<BottomTabParamList>();
 const HomeTabNavigator: React.FC = () => {
   return (
     <Tab.Navigator
-      screenOptions={() => ({
+      screenOptions={{
         tabBarStyle: {
           borderTopWidth: 0,
+          elevation: 0,
         },
         tabBarActiveTintColor: '#815CFF',
         tabBarInactiveTintColor: '#444444',
         headerShown: false,
         tabBarShowLabel: false,
-      })}>
+      }}>
       <Tab.Screen
         name="Home"
         options={{
