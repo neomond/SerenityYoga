@@ -1,4 +1,4 @@
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {Platform, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React, {useState} from 'react';
 import LinearGradient from 'react-native-linear-gradient';
 import {OnboardingStepOne} from '../../components/onboarding/OnboardingStepOne';
@@ -88,20 +88,19 @@ export default Onboarding;
 
 const styles = StyleSheet.create({
   linearGradient: {
-    paddingTop: 80,
+    paddingTop: Platform.OS === 'ios' ? 80 : 50,
   },
   primaryContent: {
-    paddingHorizontal: 18,
     rowGap: 8,
+    height: '100%',
+    paddingVertical: 50,
+    paddingHorizontal: 18,
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
     borderWidth: 1,
     borderColor: '#fff',
     backgroundColor: '#fff',
-    paddingVertical: 50,
-    paddingBottom: 200,
     flexDirection: 'column',
-    height: '100%',
   },
   secondaryContent: {
     textAlign: 'center',

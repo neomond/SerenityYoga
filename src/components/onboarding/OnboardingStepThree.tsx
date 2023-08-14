@@ -4,6 +4,7 @@ import {
   TouchableOpacity,
   View,
   TextInput,
+  Platform,
 } from 'react-native';
 import React, {useState} from 'react';
 import SvgLogo from '../../assets/Logo';
@@ -76,7 +77,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     columnGap: 15,
-    marginTop: '50%',
+    marginTop: Platform.OS === 'ios' ? '75%' : '65%',
   },
   nextBtn: {
     borderRadius: 30,

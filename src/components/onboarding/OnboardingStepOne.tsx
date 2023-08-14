@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   StyleSheet,
   Image,
+  Platform,
 } from 'react-native';
 import SvgLogo from '../../assets/Logo';
 
@@ -38,7 +39,7 @@ export const OnboardingStepOne = ({
 
 const styles = StyleSheet.create({
   onboardingStep1Container: {
-    paddingBottom: 50,
+    // marginTop: 40,
   },
   secondaryContent: {
     textAlign: 'center',
@@ -60,7 +61,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     columnGap: 15,
-    marginTop: '80%',
+    marginTop: Platform.OS === 'ios' ? '80%' : '65%',
   },
   nextBtn: {
     borderRadius: 30,
