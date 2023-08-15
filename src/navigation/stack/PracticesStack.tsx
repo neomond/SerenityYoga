@@ -34,7 +34,9 @@ export const PracticesStackNavigator: React.FC = () => {
               tabBarVisible: false,
             },
             ios: {
-              presentation: 'modal',
+              // presentation: 'modal',
+              animation: 'slide_from_bottom',
+              tabBarVisible: false,
             },
           }),
         }}
@@ -42,7 +44,7 @@ export const PracticesStackNavigator: React.FC = () => {
       <PracticesStack.Screen
         name="PracticePreview"
         component={PracticePreviewScreen}
-        options={{headerShown: false}}
+        options={{headerShown: false, animation: 'slide_from_bottom'}}
       />
       <PracticesStack.Screen
         name="PracticeVideo"

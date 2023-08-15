@@ -81,7 +81,7 @@ const PracticesCollectionScreen = ({navigation, route}: any) => {
     setBottomSheetVisible(!isBottomSheetVisible);
   };
   const items = ['Basic', 'Morning', 'Evening', 'General'];
-
+  // for background image
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
 
   const handleItemSelect = (item: string) => {
@@ -106,7 +106,9 @@ const PracticesCollectionScreen = ({navigation, route}: any) => {
           <Text style={styles.textFav}>{item.subtitle}</Text>
           <Text style={styles.textType}>{item.activityLevel}</Text>
           <View style={styles.favoritesItemSecondaryBottom}>
-            <TouchableOpacity style={styles.btnFav}>
+            <TouchableOpacity
+              style={styles.btnFav}
+              onPress={() => navigation.navigate('PracticePreview')}>
               <Text>Start</Text>
             </TouchableOpacity>
             <TouchableOpacity>

@@ -78,7 +78,7 @@ const MeditationsCollectionScreen = ({navigation, route}: any) => {
           <Text style={styles.textFav}>{item.subtitle}</Text>
           <View style={styles.favoritesItemSecondaryBottom}>
             <TouchableOpacity style={styles.btnFav}>
-              <Text>Start</Text>
+              <Text>Listen</Text>
             </TouchableOpacity>
             <TouchableOpacity>
               <SvgLikeIcon fill="#815cff" />
