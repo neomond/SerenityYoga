@@ -1,74 +1,131 @@
 import {
+  FlatList,
   Image,
-  ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from 'react-native';
-import React from 'react';
+import React, {useEffect} from 'react';
 import SvgLikeIcon from '../../../assets/LikeIcon';
 import SvgBack from '../../../assets/BackIcon';
 import SvgDuration from '../../../assets/DurationIcon';
 
-const MeditationsCollectionScreen = ({navigation}: any) => {
-  return (
-    <View style={styles.mainWrapper}>
-      <ScrollView>
-        <Image
-          style={styles.image}
-          source={require('../../../assets/test.png')}
-        />
-        <View style={styles.favoritesMainContent}>
-          <TouchableOpacity onPress={() => navigation.goBack()}>
-            <SvgBack stroke="#fff" />
-          </TouchableOpacity>
-        </View>
-        <View style={styles.secondaryCollectionWrapper}>
-          <Text style={styles.textCollFirst}>10 meditations</Text>
-          <Text style={styles.textCollSecond}>Remember to breathe</Text>
-          <Text style={styles.textCollThird}>
-            Bring awareness Back onto the menu. Reconnect with yourself
-          </Text>
-          <View style={styles.secondaryWrapper}>
-            <Text style={styles.secondaryText}>
-              Meditations in this collection
-            </Text>
-            {/* rendered item starts */}
-            <View style={styles.favoritesItem}>
-              <View style={styles.imageContentSubtop}>
-                <SvgDuration />
-                <Text style={styles.titleColor}>11:00</Text>
-              </View>
-              <Image
-                style={styles.imageFav}
-                source={require('../../../assets/test.png')}
-              />
+const dummydata = [
+  {
+    id: '1',
+    subtitle: 'Remember to breathe',
+    author: 'by Adriene',
+    duration: '10:00',
+    description:
+      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus, doloribus',
+    imgUrl:
+      'https://img.freepik.com/premium-photo/abstract-creative-background-using-your-project-ui-ux-design_155807-1066.jpg',
+  },
+  {
+    id: '2',
+    subtitle: 'Remember to sleep',
+    author: 'by Adriene',
+    duration: '10:00',
+    description:
+      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus, doloribus',
+    imgUrl:
+      'https://img.freepik.com/premium-photo/abstract-creative-background-using-your-project-ui-ux-design_155807-1066.jpg',
+  },
+  {
+    id: '3',
+    subtitle: 'Remember to live',
+    author: 'by Adriene',
+    duration: '10:00',
+    description:
+      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus, doloribus',
+    imgUrl:
+      'https://img.freepik.com/premium-photo/abstract-creative-background-using-your-project-ui-ux-design_155807-1066.jpg',
+  },
+  {
+    id: '4',
+    subtitle: 'Remember to be special',
+    author: 'by Adriene',
+    duration: '10:00',
+    description:
+      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus, doloribus',
+    imgUrl:
+      'https://img.freepik.com/premium-photo/abstract-creative-background-using-your-project-ui-ux-design_155807-1066.jpg',
+  },
+];
 
-              <View style={styles.favoritesItemSecondary}>
-                <Text style={styles.textFav}>Meow</Text>
-                <View style={styles.favoritesItemSecondaryBottom}>
-                  <TouchableOpacity
-                    style={styles.btnFav}
-                    // onPress={() => handlePlay(item)}
-                  >
-                    <Text>Start</Text>
-                    {/* <Text>{pause === 'paused' ? 'Play' : 'Pause'}</Text> */}
-                  </TouchableOpacity>
+const MeditationsCollectionScreen = ({navigation, route}: any) => {
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      navigation.getParent()?.setOptions({tabBarStyle: {display: 'none'}});
+    });
+    return () => {
+      navigation.getParent()?.setOptions({tabBarStyle: {display: 'flex'}});
+      unsubscribe();
+    };
+  }, [navigation]);
+  const selectedImageUrl = route.params?.selectedImageUrl || null;
 
-                  <TouchableOpacity
-                  // onPress={() => handleRemove(item)}
-                  >
-                    <SvgLikeIcon fill="#815cff" />
-                  </TouchableOpacity>
-                </View>
-              </View>
-            </View>
-            {/* rendered item ends */}
+  const renderMeditationItem = ({item}: any) => (
+    <View key={item.id} style={styles.favoritesItem}>
+      <View style={styles.imageContentSubtop}>
+        <SvgDuration />
+        <Text style={styles.titleColor}>{item.duration}</Text>
+      </View>
+      <View style={{flexDirection: 'row', columnGap: 15, marginHorizontal: 25}}>
+        <Image style={styles.imageFav} source={{uri: item.imgUrl}} />
+        <View style={styles.favoritesItemSecondary}>
+          <Text style={styles.textFav}>{item.subtitle}</Text>
+          <View style={styles.favoritesItemSecondaryBottom}>
+            <TouchableOpacity style={styles.btnFav}>
+              <Text>Start</Text>
+            </TouchableOpacity>
+            <TouchableOpacity>
+              <SvgLikeIcon fill="#815cff" />
+            </TouchableOpacity>
           </View>
         </View>
-      </ScrollView>
+      </View>
     </View>
+  );
+
+  return (
+    <FlatList
+      data={dummydata}
+      renderItem={renderMeditationItem}
+      keyExtractor={item => item.id}
+      style={styles.mainWrapper}
+      showsVerticalScrollIndicator={false}
+      ListHeaderComponent={
+        <>
+          {selectedImageUrl && (
+            <Image style={styles.image} source={{uri: selectedImageUrl}} />
+          )}
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              top: 30,
+              position: 'absolute',
+              width: '100%',
+            }}>
+            <TouchableOpacity
+              style={styles.goBackBtnStyle}
+              onPress={() => navigation.goBack()}>
+              <SvgBack stroke="#fff" />
+            </TouchableOpacity>
+          </View>
+          <View style={styles.secondaryCollectionWrapper}>
+            <Text style={styles.textCollFirst}>10 meditations</Text>
+            <Text style={styles.textCollSecond}>Remember to breathe</Text>
+            <Text style={styles.textCollThird}>
+              Bring awareness Back onto the menu. Reconnect with yourself
+            </Text>
+          </View>
+        </>
+      }
+    />
   );
 };
 
@@ -163,5 +220,13 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(229,222,255, 0.2)',
     backgroundColor: 'rgba(229,222,255, 0.2)',
     padding: 5,
+  },
+  goBackBtnStyle: {
+    borderWidth: 1,
+    borderRadius: 50,
+    borderColor: 'rgba(229,222,255, 0.2)',
+    backgroundColor: 'rgba(229,222,255, 0.2)',
+    padding: 5,
+    marginLeft: 20,
   },
 });

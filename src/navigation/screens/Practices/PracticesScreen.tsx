@@ -2,7 +2,6 @@ import React, {useState} from 'react';
 import {
   Image,
   Platform,
-  Pressable,
   ScrollView,
   StyleSheet,
   Text,
@@ -55,12 +54,19 @@ const PracticesScreen = ({navigation}: any) => {
     },
   ];
 
+  const [selectedImageUrl, setSelectedImageUrl] = useState<string | null>(null);
+
   const renderItem = ({item}: any) => {
     return (
       <TouchableOpacity
         key={item.id}
         style={styles.mainCollectionWrapper}
-        onPress={() => navigation.navigate('PracticeCollection')}>
+        onPress={() => {
+          setSelectedImageUrl(item.imgUrl);
+          navigation.navigate('PracticeCollection', {
+            selectedImageUrl: item.imgUrl,
+          });
+        }}>
         <View style={styles.shadowForImage}></View>
         <Image style={styles.image} source={{uri: item.imgUrl}} />
         <View style={styles.secondaryCollectionWrapper}>
@@ -96,7 +102,6 @@ const styles = StyleSheet.create({
   linearGradient: {
     paddingTop: Platform.OS === 'ios' ? 60 : 30,
   },
-
   iconsHeader: {
     flexDirection: 'row',
     justifyContent: 'center',

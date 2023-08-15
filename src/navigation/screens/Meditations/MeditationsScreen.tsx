@@ -3,6 +3,7 @@ import {
   Image,
   Platform,
   Pressable,
+  ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -10,53 +11,80 @@ import {
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 
-const MeditationsScreen = ({navigation}: any) => {
-  const [isBottomSheetVisible, setBottomSheetVisible] = useState(false);
-  const toggleBottomSheet = () => {
-    setBottomSheetVisible(!isBottomSheetVisible);
-  };
-  const items = ['Basic', 'Morning', 'Evening', 'General'];
-  const [selectedItems, setSelectedItems] = useState<string[]>([]);
+const dummydata = [
+  {
+    id: '1',
+    title: '5 meditations',
+    subtitle: 'Remember to breathe',
+    type: 'morning',
+    description:
+      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus, doloribus',
+    imgUrl:
+      'https://img.freepik.com/premium-photo/abstract-creative-background-using-your-project-ui-ux-design_155807-1066.jpg',
+  },
+  {
+    id: '2',
+    title: '6 meditations',
+    subtitle: 'Remember to sleep',
+    type: 'evening',
+    description:
+      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus, doloribus',
+    imgUrl:
+      'https://img.freepik.com/premium-photo/abstract-creative-background-using-your-project-ui-ux-design_155807-1066.jpg',
+  },
+  {
+    id: '3',
+    title: '3 meditations',
+    subtitle: 'Remember to be special',
+    type: 'special',
+    description:
+      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus, doloribus',
+    imgUrl:
+      'https://img.freepik.com/premium-photo/abstract-creative-background-using-your-project-ui-ux-design_155807-1066.jpg',
+  },
+];
 
-  const handleItemSelect = (item: string) => {
-    if (selectedItems.includes(item)) {
-      setSelectedItems(
-        selectedItems.filter(selectedItem => selectedItem !== item),
-      );
-    } else {
-      setSelectedItems([...selectedItems, item]);
-    }
+const MeditationsScreen = ({navigation}: any) => {
+  const [selectedImageUrl, setSelectedImageUrl] = useState<string | null>(null);
+
+  const renderItem = ({item}: any) => {
+    return (
+      <TouchableOpacity
+        key={item.id}
+        style={styles.mainCollectionWrapper}
+        onPress={() => {
+          setSelectedImageUrl(item.imgUrl);
+          navigation.navigate('MeditationsCollection', {
+            selectedImageUrl: item.imgUrl,
+          });
+        }}>
+        <View style={styles.shadowForImage}></View>
+        <Image style={styles.image} source={{uri: item.imgUrl}} />
+        <View style={styles.secondaryCollectionWrapper}>
+          <Text style={styles.textCollFirst}>{item.title}</Text>
+          <Text style={styles.textType}>✦ {item.type}</Text>
+          <Text style={styles.textCollSecond}>{item.subtitle}</Text>
+          <Text style={styles.textCollThird}>{item.description}</Text>
+        </View>
+      </TouchableOpacity>
+    );
   };
 
   return (
-    <LinearGradient
-      colors={['#c47afb', '#A07AFA', '#8380fb', '#8866ff']}
-      start={{x: 0, y: 0.2}}
-      end={{x: 1, y: 0}}
-      style={styles.linearGradient}>
-      <View style={styles.iconsHeader}>
-        <Text style={styles.textCategory}>Meditations 🧘‍♀️</Text>
-      </View>
-      <View style={styles.primaryContent}>
-        {/* render item will start here  */}
-        <TouchableOpacity
-          style={styles.mainCollectionWrapper}
-          onPress={() => navigation.navigate('MeditationsCollection')}>
-          <Image
-            style={styles.image}
-            source={require('../../../assets/test.png')}
-          />
-          <View style={styles.secondaryCollectionWrapper}>
-            <Text style={styles.textCollFirst}>10 meditations</Text>
-            <Text style={styles.textCollSecond}>Remember to breathe</Text>
-            <Text style={styles.textCollThird}>
-              Bring awareness Back onto the menu. Reconnect with yourself
-            </Text>
-          </View>
-        </TouchableOpacity>
-        {/* render item will end here  */}
-      </View>
-    </LinearGradient>
+    <ScrollView showsVerticalScrollIndicator={false}>
+      <LinearGradient
+        colors={['#c47afb', '#A07AFA', '#8380fb', '#8866ff']}
+        start={{x: 0, y: 0.2}}
+        end={{x: 1, y: 0}}
+        style={styles.linearGradient}>
+        <View style={styles.iconsHeader}>
+          <Text style={styles.textCategory}>Meditations 🧘‍♀️</Text>
+        </View>
+        <View style={styles.primaryContent}>
+          {dummydata.map(item => renderItem({item}))}
+        </View>
+      </LinearGradient>
+    </ScrollView>
   );
 };
 
@@ -71,14 +99,13 @@ const styles = StyleSheet.create({
     marginHorizontal: 25,
   },
   primaryContent: {
-    rowGap: 8,
+    rowGap: 15,
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
     borderWidth: 1,
     borderColor: '#fff',
     backgroundColor: '#fff',
-    paddingVertical: 40,
-    paddingBottom: 200,
+    paddingVertical: 30,
     height: '100%',
   },
   textCategory: {
@@ -93,6 +120,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     borderColor: '#f5f5f5',
     backgroundColor: '#f5f5f5',
+    paddingBottom: 8,
   },
   image: {
     width: '100%',
@@ -118,6 +146,19 @@ const styles = StyleSheet.create({
   },
   textCollThird: {
     fontSize: 15,
+  },
+
+  textType: {
+    alignItems: 'center',
+    color: 'gray',
+  },
+  shadowForImage: {
+    height: 160,
+    width: '100%',
+    backgroundColor: 'rgba(255,255,255, 0.09)',
+    position: 'absolute',
+    zIndex: 99999,
+    top: 0,
   },
 });
 

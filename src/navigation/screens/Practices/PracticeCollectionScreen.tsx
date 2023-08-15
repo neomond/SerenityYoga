@@ -18,7 +18,7 @@ import SvgCheckBox from '../../../assets/CheckBoxicon';
 import SvgCheckBoxFill from '../../../assets/CheckBoxiconFilled';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 
-const PracticesCollectionScreen = ({navigation}: any) => {
+const PracticesCollectionScreen = ({navigation, route}: any) => {
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       navigation.getParent()?.setOptions({tabBarStyle: {display: 'none'}});
@@ -75,7 +75,7 @@ const PracticesCollectionScreen = ({navigation}: any) => {
         'https://img.freepik.com/premium-photo/abstract-creative-background-using-your-project-ui-ux-design_155807-1066.jpg',
     },
   ];
-
+  const selectedImageUrl = route.params?.selectedImageUrl || null;
   const [isBottomSheetVisible, setBottomSheetVisible] = useState(false);
   const toggleBottomSheet = () => {
     setBottomSheetVisible(!isBottomSheetVisible);
@@ -127,10 +127,9 @@ const PracticesCollectionScreen = ({navigation}: any) => {
       showsVerticalScrollIndicator={false}
       ListHeaderComponent={
         <GestureHandlerRootView>
-          <Image
-            style={styles.image}
-            source={require('../../../assets/test.png')}
-          />
+          {selectedImageUrl && (
+            <Image style={styles.image} source={{uri: selectedImageUrl}} />
+          )}
           <View
             style={{
               flexDirection: 'row',
@@ -203,7 +202,7 @@ const styles = StyleSheet.create({
   },
   image: {
     width: '100%',
-    height: 200,
+    height: 300,
   },
   secondaryCollectionWrapper: {
     paddingHorizontal: 20,
