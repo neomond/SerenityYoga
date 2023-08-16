@@ -133,15 +133,7 @@ const PracticesCollectionScreen = ({navigation, route}: any) => {
           {selectedImageUrl && (
             <Image style={styles.image} source={{uri: selectedImageUrl}} />
           )}
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              top: 30,
-              position: 'absolute',
-              width: '100%',
-            }}>
+          <View style={styles.topNav}>
             <TouchableOpacity
               style={styles.goBackBtnStyle}
               onPress={() => navigation.goBack()}>
@@ -336,5 +328,13 @@ const styles = StyleSheet.create({
     color: '#fff',
     textAlign: 'center',
     padding: 15,
+  },
+  topNav: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    top: 60,
+    position: 'absolute',
+    width: '100%',
   },
 });

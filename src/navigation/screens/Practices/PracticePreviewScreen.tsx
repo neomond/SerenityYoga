@@ -1,6 +1,7 @@
 import {
   Image,
   ImageBackground,
+  Platform,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -30,7 +31,7 @@ const PracticePreviewScreen = ({navigation}: any) => {
       </ImageBackground>
       <BottomSheetComponentWithoutOverlay
         isVisible={true}
-        snapPoints={['25%', '26%', '80%']}>
+        snapPoints={['25%', '26%', '88%']}>
         <View style={styles.bottomSheetContent}>
           <View style={styles.bottomshtopCont}>
             <View>
@@ -124,7 +125,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    top: 60,
+    top: Platform.OS === 'ios' ? 50 : 25,
     position: 'absolute',
     width: '100%',
   },
@@ -185,6 +186,6 @@ const styles = StyleSheet.create({
     marginTop: 3,
     marginRight: 5,
     flexDirection: 'row',
-    columnGap: -2,
+    columnGap: -3,
   },
 });

@@ -36,6 +36,7 @@ export const PracticesStackNavigator: React.FC = () => {
             ios: {
               // presentation: 'modal',
               animation: 'slide_from_bottom',
+              tabBarVisible: false,
             },
           }),
         }}
