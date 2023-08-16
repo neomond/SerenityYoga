@@ -4,7 +4,7 @@ import BottomSheet from '@gorhom/bottom-sheet';
 
 interface BottomSheetProps {
   isVisible: boolean;
-  toggleBottomSheet: () => void;
+  // toggleBottomSheet: () => void;
   children: React.ReactNode;
   showHandleIndicator?: boolean;
   snapPoints?: string[];
@@ -12,7 +12,7 @@ interface BottomSheetProps {
 
 const BottomSheetComponentWithoutOverlay: React.FC<BottomSheetProps> = ({
   isVisible,
-  toggleBottomSheet,
+  // toggleBottomSheet,
   children,
   showHandleIndicator = true,
   snapPoints = ['25%', '60%'],

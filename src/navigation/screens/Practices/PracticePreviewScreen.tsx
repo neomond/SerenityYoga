@@ -7,10 +7,12 @@ import {
   View,
 } from 'react-native';
 import React from 'react';
-import BottomSheetComponent from '../../../components/bottomsheet/BottomSheet';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import SvgBack from '../../../assets/BackIcon';
 import BottomSheetComponentWithoutOverlay from '../../../components/bottomsheet/BottomSheetComponentWithoutOverlay';
+import SvgClock from '../../../assets/Clock';
+import SvgActivity from '../../../assets/Activity';
+import SvgActivityActive from '../../../assets/ActivityActive';
 
 const PracticePreviewScreen = ({navigation}: any) => {
   return (
@@ -28,10 +30,7 @@ const PracticePreviewScreen = ({navigation}: any) => {
       </ImageBackground>
       <BottomSheetComponentWithoutOverlay
         isVisible={true}
-        snapPoints={['25%', '27%', '80%']}
-        toggleBottomSheet={() => {
-          console.log('meow');
-        }}>
+        snapPoints={['25%', '26%', '80%']}>
         <View style={styles.bottomSheetContent}>
           <View style={styles.bottomshtopCont}>
             <View>
@@ -47,21 +46,27 @@ const PracticePreviewScreen = ({navigation}: any) => {
             <Text style={styles.startBtnText}>Start Workout</Text>
           </TouchableOpacity>
         </View>
-        <View
-          style={{
-            backgroundColor: '#f5f5f5',
-            width: '100%',
-            height: '100%',
-          }}>
+        <View style={styles.descWrapper}>
           <View style={styles.descFirst}>
-            <View>
+            <View style={styles.descSubWrapper}>
+              <SvgClock />
               <Text>10 min</Text>
             </View>
-            <View>
-              <Text>Low intensity</Text>
+            <View
+              style={{
+                borderLeftWidth: 1,
+                borderLeftColor: '#d9d9d9',
+              }}>
+              <View style={styles.activityMain}>
+                <View style={styles.activityDots}>
+                  <SvgActivityActive />
+                  <SvgActivity />
+                  <SvgActivity />
+                </View>
+                <Text>Low intensity</Text>
+              </View>
             </View>
           </View>
-
           <Text style={{marginHorizontal: 20, fontSize: 16}}>
             Lorem ipsum dolor, sit amet consectetur adipisicing elit. Iusto
             sequi nisi illum quisquam doloribus quasi ut, eos deleniti
@@ -69,32 +74,16 @@ const PracticePreviewScreen = ({navigation}: any) => {
             blanditiis, nobis a impedit dolor. Lorem ipsum dolor sit amet
             consectetur adipisicing elit.Namaste
           </Text>
-          <View style={{marginHorizontal: 20, marginVertical: 20}}>
-            <Text style={styles.bottomshHeaderText}>Workout Structure</Text>
-            <View
-              style={{
-                marginTop: 12,
-              }}>
-              <View
-                style={{
-                  backgroundColor: '#fff',
-                  borderRadius: 12,
-                  padding: 18,
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  marginBottom: 8,
-                }}>
+          <View style={{marginHorizontal: 20, marginTop: 20}}>
+            <Text style={[styles.bottomshHeaderText, {paddingBottom: 15}]}>
+              Workout Structure
+            </Text>
+            <View>
+              <View style={styles.workoutSctruct}>
                 <Text>🧘‍♀️ Workout</Text>
                 <Text>10 min</Text>
               </View>
-              <View
-                style={{
-                  backgroundColor: '#fff',
-                  borderRadius: 12,
-                  padding: 18,
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                }}>
+              <View style={styles.workoutSctruct}>
                 <Text>😌 Shavasana meditation</Text>
                 <Text>5 min</Text>
               </View>
@@ -127,8 +116,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 50,
     borderColor: 'rgba(229,222,255, 0.2)',
-    backgroundColor: 'rgba(229,222,255, 0.2)',
-    padding: 5,
+    backgroundColor: 'rgba(229,222,255, 0.3)',
+    padding: 8,
     marginLeft: 20,
   },
   topBackBtn: {
@@ -139,7 +128,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     width: '100%',
   },
-  bottomshHeaderText: {fontSize: 20, fontWeight: '600', paddingBottom: 5},
+  bottomshHeaderText: {fontSize: 20, fontWeight: '600', paddingBottom: 8},
   bottomshtopCont: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -151,6 +140,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#815cff',
     paddingVertical: 15,
     borderRadius: 30,
+    marginBottom: 15,
   },
   startBtnText: {
     textAlign: 'center',
@@ -162,10 +152,39 @@ const styles = StyleSheet.create({
     marginVertical: 20,
     marginHorizontal: 20,
     backgroundColor: '#fff',
-    padding: 25,
+    padding: 20,
     flexDirection: 'row',
+    alignItems: 'center',
     columnGap: 20,
-    // justifyContent: 'space-between',
     borderRadius: 20,
+  },
+  descWrapper: {
+    backgroundColor: '#f5f5f5',
+    width: '100%',
+    height: '100%',
+  },
+  descSubWrapper: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    columnGap: 5,
+  },
+  workoutSctruct: {
+    backgroundColor: '#fff',
+    borderRadius: 12,
+    padding: 18,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 8,
+  },
+  activityMain: {
+    marginLeft: 20,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  activityDots: {
+    marginTop: 3,
+    marginRight: 5,
+    flexDirection: 'row',
+    columnGap: -2,
   },
 });
