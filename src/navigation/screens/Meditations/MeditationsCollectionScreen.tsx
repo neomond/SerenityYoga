@@ -77,7 +77,9 @@ const MeditationsCollectionScreen = ({navigation, route}: any) => {
         <View style={styles.favoritesItemSecondary}>
           <Text style={styles.textFav}>{item.subtitle}</Text>
           <View style={styles.favoritesItemSecondaryBottom}>
-            <TouchableOpacity style={styles.btnFav}>
+            <TouchableOpacity
+              style={styles.btnFav}
+              onPress={() => navigation.navigate('PracticePreview')}>
               <Text>Listen</Text>
             </TouchableOpacity>
             <TouchableOpacity>

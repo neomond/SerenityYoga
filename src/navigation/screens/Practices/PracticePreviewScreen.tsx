@@ -10,6 +10,7 @@ import React from 'react';
 import BottomSheetComponent from '../../../components/bottomsheet/BottomSheet';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import SvgBack from '../../../assets/BackIcon';
+import BottomSheetComponentWithoutOverlay from '../../../components/bottomsheet/BottomSheetComponentWithoutOverlay';
 
 const PracticePreviewScreen = ({navigation}: any) => {
   return (
@@ -25,7 +26,7 @@ const PracticePreviewScreen = ({navigation}: any) => {
           </TouchableOpacity>
         </View>
       </ImageBackground>
-      <BottomSheetComponent
+      <BottomSheetComponentWithoutOverlay
         isVisible={true}
         snapPoints={['25%', '27%', '80%']}
         toggleBottomSheet={() => {
@@ -100,7 +101,7 @@ const PracticePreviewScreen = ({navigation}: any) => {
             </View>
           </View>
         </View>
-      </BottomSheetComponent>
+      </BottomSheetComponentWithoutOverlay>
     </GestureHandlerRootView>
   );
 };

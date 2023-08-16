@@ -75,6 +75,7 @@ const PracticesCollectionScreen = ({navigation, route}: any) => {
         'https://img.freepik.com/premium-photo/abstract-creative-background-using-your-project-ui-ux-design_155807-1066.jpg',
     },
   ];
+
   const selectedImageUrl = route.params?.selectedImageUrl || null;
   const [isBottomSheetVisible, setBottomSheetVisible] = useState(false);
   const toggleBottomSheet = () => {
