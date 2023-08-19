@@ -12,6 +12,7 @@ export const OTPStepOne = ({
   handleInputChange,
   handleNextStep,
 }: any) => {
+  console.log('Rendering OTPStepOne');
   return (
     <View style={styles.step1Container}>
       <View style={styles.tinyLogo}>
@@ -27,11 +28,19 @@ export const OTPStepOne = ({
           placeholder="Email"
           style={styles.step1field}
           value={userData.name}
-          onChangeText={value => handleInputChange('name', value)}
+          onChangeText={value => {
+            console.log('Email input changed:', value);
+            handleInputChange('name', value);
+          }}
         />
       </View>
       <View style={styles.step1btns}>
-        <TouchableOpacity style={styles.nextBtn} onPress={handleNextStep}>
+        <TouchableOpacity
+          style={styles.nextBtn}
+          onPress={() => {
+            console.log('Sending OTP');
+            handleNextStep();
+          }}>
           <Text style={styles.textColor}>Send a code</Text>
         </TouchableOpacity>
       </View>

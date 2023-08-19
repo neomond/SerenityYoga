@@ -7,13 +7,7 @@ import {OTPStepThree} from '../../components/otp/OTPStepThree';
 
 const ForgotPwdScreen = ({navigation}: any) => {
   const [step, setStep] = useState(1);
-  const [userData, setUserData] = useState({
-    name: '',
-    gender: '',
-    goal: '',
-    age: '',
-    weight: '',
-  });
+  const [userData, setUserData] = useState({});
 
   const handleNextStep = () => {
     setStep(step + 1);

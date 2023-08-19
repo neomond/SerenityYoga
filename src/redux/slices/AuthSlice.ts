@@ -1,4 +1,4 @@
-import {createSlice, createAsyncThunk, PayloadAction} from '@reduxjs/toolkit';
+import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
 import axios from 'axios';
 import {RootState} from '..';
 import {Auth} from '../../models/Auth';
@@ -76,6 +76,36 @@ export const signupUser = createAsyncThunk(
   },
 );
 
+export const sendOtp = createAsyncThunk(
+  'auth/sendOtp',
+  async ({email}: {email: string}, {rejectWithValue}) => {
+    try {
+      const response = await axios.post(
+        'http://localhost:8080/api/auth/send-otp',
+        {email},
+      );
+      return response.data;
+    } catch (error: any) {
+      return rejectWithValue(error.response.data);
+    }
+  },
+);
+
+export const confirmAndResetPassword = createAsyncThunk(
+  'auth/confirmAndResetPassword',
+  async ({email, otp, newPassword}: any, {rejectWithValue}) => {
+    try {
+      const response = await axios.post(
+        'http://localhost:8080/api/auth/confirm-reset-password',
+        {email, otp, newPassword},
+      );
+      return response.data;
+    } catch (error: any) {
+      return rejectWithValue(error.response.data);
+    }
+  },
+);
+
 const authSlice = createSlice({
   name: 'auth',
   initialState,
@@ -126,6 +156,39 @@ const authSlice = createSlice({
         state.error = action.payload || 'Signup failed';
         state.token = null;
       });
+
+    //-------FOR OTP---------
+    builder
+      .addCase(sendOtp.pending, (state: any) => {
+        state.loading = 'pending';
+        state.error = null;
+      })
+      .addCase(sendOtp.fulfilled, (state: any) => {
+        state.loading = 'fulfilled';
+        state.error = null;
+      })
+      .addCase(sendOtp.rejected, (state: InitialStateType, action: any) => {
+        state.loading = 'rejected';
+        state.error = action.payload;
+      });
+
+    // -------FOR CONFIRMING AND RESETTING PWD-------
+    builder
+      .addCase(confirmAndResetPassword.pending, (state: any) => {
+        state.loading = 'pending';
+        state.error = null;
+      })
+      .addCase(confirmAndResetPassword.fulfilled, (state: any) => {
+        state.loading = 'fulfilled';
+        state.error = null;
+      })
+      .addCase(
+        confirmAndResetPassword.rejected,
+        (state: InitialStateType, action: any) => {
+          state.loading = 'rejected';
+          state.error = action.payload;
+        },
+      );
   },
 });
 
