@@ -13,6 +13,7 @@ export const OTPStepOne = ({
   handleNextStep,
 }: any) => {
   console.log('Rendering OTPStepOne');
+
   return (
     <View style={styles.step1Container}>
       <View style={styles.tinyLogo}>

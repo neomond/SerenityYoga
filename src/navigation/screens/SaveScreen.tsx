@@ -6,6 +6,7 @@ import {
   View,
   Image,
   FlatList,
+  SectionList,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import SvgLikeIcon from '../../assets/LikeIcon';
@@ -61,6 +62,17 @@ const SaveScreen = ({navigation}: any) => {
     }
   };
 
+  // here i filter by keywords and divide liked items
+  const likedPractices = likedItems.filter(
+    item => !item.title.toLowerCase().includes('meditation'),
+  );
+
+  const likedMeditations = likedItems.filter(item =>
+    item.title.toLowerCase().includes('meditation'),
+  );
+
+  const combinedData = likedPractices.concat(likedMeditations);
+
   const renderItem = ({item}: {item: any}) => {
     return (
       <View key={item._id} style={styles.favoritesItem}>
@@ -95,17 +107,28 @@ const SaveScreen = ({navigation}: any) => {
 
   return (
     <SafeAreaView style={styles.wrapper}>
-      <View style={styles.favoritesMainContent}>
-        <View style={styles.centerContainer}>
-          <Text style={styles.textMain}>Liked Practices</Text>
-        </View>
-        <Text>✨</Text>
+      <View>
+        <Text style={{textAlign: 'center', fontSize: 18, paddingBottom: 10}}>
+          Favorites
+        </Text>
       </View>
-      {likedItems.length > 0 ? (
-        <FlatList
-          data={likedItems}
-          renderItem={renderItem}
+
+      {combinedData.length > 0 ? (
+        <SectionList
+          sections={[
+            {title: 'Practices', data: likedPractices},
+            {title: 'Meditations', data: likedMeditations},
+          ]}
           keyExtractor={(item: Session) => item._id}
+          renderItem={renderItem}
+          renderSectionHeader={({section: {title}}) => (
+            <View style={styles.favoritesMainContent}>
+              <View style={styles.centerContainer}>
+                <Text style={styles.textMain}>{title}</Text>
+              </View>
+              <Text>✨</Text>
+            </View>
+          )}
           showsVerticalScrollIndicator={false}
         />
       ) : (
@@ -119,6 +142,8 @@ const SaveScreen = ({navigation}: any) => {
       {/* {renderPlayer()} */}
     </SafeAreaView>
   );
+
+  /* {renderPlayer()} */
 };
 
 export default SaveScreen;
@@ -246,7 +271,7 @@ const styles = StyleSheet.create({
     top: -20,
   },
   centerContainer: {
-    flex: 1,
+    // flex: 1,
     alignItems: 'center',
   },
   playerCondStyles: {flexDirection: 'row', alignItems: 'center', columnGap: 10},
