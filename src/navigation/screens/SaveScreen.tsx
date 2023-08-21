@@ -8,7 +8,7 @@ import {
   FlatList,
   SectionList,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import SvgLikeIcon from '../../assets/LikeIcon';
 import SvgDownload from '../../assets/DownloadIcon';
 import {useDispatch, useSelector} from 'react-redux';
@@ -154,15 +154,17 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   favoritesMainContent: {
-    paddingVertical: 10,
+    paddingTop: 10,
     paddingHorizontal: 20,
     alignItems: 'center',
     flexDirection: 'row',
     justifyContent: 'space-between',
+    backgroundColor: '#fff',
   },
   textMain: {
-    fontSize: 18,
+    fontSize: 20,
     textAlign: 'center',
+    fontWeight: '500',
   },
   categoryHeader: {
     fontSize: 20,
@@ -188,7 +190,8 @@ const styles = StyleSheet.create({
     borderBottomColor: '#f0f0f0',
     borderBottomWidth: 1.2,
     paddingBottom: 20,
-    paddingTop: 25,
+    paddingTop: 15,
+    marginBottom: 20,
   },
   imageFav: {
     width: 150,
