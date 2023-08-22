@@ -4,13 +4,44 @@ import LinearGradient from 'react-native-linear-gradient';
 import {OTPStepOne} from '../../components/otp/OTPStepOne';
 import {OTPStepTwo} from '../../components/otp/OTPStepTwo';
 import {OTPStepThree} from '../../components/otp/OTPStepThree';
+import {useDispatch} from 'react-redux';
+import {confirmAndResetPassword, sendOtp} from '../../redux/slices/AuthSlice';
+import {AppDispatch} from '../../redux';
+import {ConfirmAndResetPasswordParams, SendOtpParams} from '../../models/Auth';
 
 const ForgotPwdScreen = ({navigation}: any) => {
   const [step, setStep] = useState(1);
-  const [userData, setUserData] = useState({});
+  const [email, setEmail] = useState('');
+  const [otp, setOtp] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [userData, setUserData] = useState<
+    SendOtpParams | ConfirmAndResetPasswordParams
+  >({email: ''});
+  const dispatch = useDispatch<AppDispatch>();
 
-  const handleNextStep = () => {
-    setStep(step + 1);
+  const handleNextStep = async (otp: string) => {
+    if (step === 1) {
+      // 1) user sends otp
+      console.log('Sending OTP...');
+      try {
+        await dispatch(sendOtp({email: userData.email}));
+        console.log('OTP sent successfully');
+        setStep(prevStep => prevStep + 1);
+        console.log('Step after incrementing:', step);
+      } catch (error) {
+        console.log('Error sending OTP:', error);
+      }
+    } else if (step === 2) {
+      // 2) user confirms and resets pwd
+      console.log('Confirming and resetting password...');
+      try {
+        await dispatch(confirmAndResetPassword({email, otp, newPassword}));
+        console.log('Password reset successfully');
+        navigation.navigate('HomeMain');
+      } catch (error) {
+        console.log('Error confirming and resetting password:', error);
+      }
+    }
   };
 
   const handlePreviousStep = () => {

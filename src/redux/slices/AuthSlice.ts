@@ -1,7 +1,11 @@
 import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
 import axios from 'axios';
 import {RootState} from '..';
-import {Auth} from '../../models/Auth';
+import {
+  Auth,
+  ConfirmAndResetPasswordParams,
+  SendOtpParams,
+} from '../../models/Auth';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 interface InitialStateType {
@@ -78,7 +82,7 @@ export const signupUser = createAsyncThunk(
 
 export const sendOtp = createAsyncThunk(
   'auth/sendOtp',
-  async ({email}: {email: string}, {rejectWithValue}) => {
+  async ({email}: SendOtpParams, {rejectWithValue}) => {
     try {
       const response = await axios.post(
         'http://localhost:8080/api/auth/send-otp',
@@ -93,7 +97,10 @@ export const sendOtp = createAsyncThunk(
 
 export const confirmAndResetPassword = createAsyncThunk(
   'auth/confirmAndResetPassword',
-  async ({email, otp, newPassword}: any, {rejectWithValue}) => {
+  async (
+    {email, otp, newPassword}: ConfirmAndResetPasswordParams,
+    {rejectWithValue},
+  ) => {
     try {
       const response = await axios.post(
         'http://localhost:8080/api/auth/confirm-reset-password',
@@ -187,6 +194,7 @@ const authSlice = createSlice({
         (state: InitialStateType, action: any) => {
           state.loading = 'rejected';
           state.error = action.payload;
+          console.log('sendOtp error:', action.payload);
         },
       );
   },

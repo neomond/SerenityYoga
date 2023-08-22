@@ -6,12 +6,16 @@ import {
   StyleSheet,
 } from 'react-native';
 import SvgLogo from '../../assets/Logo';
+import {useState} from 'react';
 
 export const OTPStepThree = ({
   userData,
   handleInputChange,
   handleNextStep,
 }: any) => {
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+
   return (
     <View style={styles.step1Container}>
       <View style={styles.tinyLogo}>
@@ -37,7 +41,9 @@ export const OTPStepThree = ({
         />
       </View>
       <View style={styles.step1btns}>
-        <TouchableOpacity style={styles.nextBtn} onPress={handleNextStep}>
+        <TouchableOpacity
+          style={styles.nextBtn}
+          onPress={() => handleNextStep(password)}>
           <Text style={styles.textColor}>Reset Password</Text>
         </TouchableOpacity>
       </View>

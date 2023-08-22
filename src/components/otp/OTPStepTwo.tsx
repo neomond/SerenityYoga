@@ -75,7 +75,9 @@ export const OTPStepTwo = ({
         </View>
       </View>
       <View style={styles.step1btns}>
-        <TouchableOpacity style={styles.nextBtn} onPress={handleNextStep}>
+        <TouchableOpacity
+          style={styles.nextBtn}
+          onPress={() => handleNextStep(otp)}>
           <Text style={styles.textColor}>Continue</Text>
         </TouchableOpacity>
       </View>
