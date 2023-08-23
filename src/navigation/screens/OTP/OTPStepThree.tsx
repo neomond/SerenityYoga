@@ -19,6 +19,7 @@ export const OTPStepThree = ({navigation, route}: any) => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [passwordError, setPasswordError] = useState('');
 
   const dispatch = useDispatch<AppDispatch>();
 
@@ -36,9 +37,10 @@ export const OTPStepThree = ({navigation, route}: any) => {
 
   const handleResetPassword = () => {
     if (password !== confirmPassword) {
-      console.log('Passwords do not match');
+      setPasswordError('Passwords do not match');
       return;
     }
+    setPasswordError('');
     dispatch(
       confirmAndResetPassword({email, otp: otpCode, newPassword: password}),
     )
@@ -99,6 +101,9 @@ export const OTPStepThree = ({navigation, route}: any) => {
                 {showConfirmPassword ? <SvgViewEye /> : <SvgHideEye />}
               </TouchableOpacity>
             </View>
+            {passwordError && (
+              <Text style={styles.errorText}>{passwordError}</Text>
+            )}
           </View>
           <View style={styles.step1btns}>
             <TouchableOpacity
@@ -188,5 +193,11 @@ const styles = StyleSheet.create({
     right: 20,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  errorText: {
+    color: 'tomato',
+    fontSize: 14,
+    marginBottom: 10,
+    textAlign: 'center',
   },
 });

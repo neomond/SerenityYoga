@@ -22,6 +22,7 @@ const initialState: any = {
   error: null,
   user: null,
   token: null,
+  otpCode: '',
 };
 
 export const loginUser = createAsyncThunk(
@@ -174,6 +175,7 @@ const authSlice = createSlice({
         state.loading = 'fulfilled';
         state.error = null;
         state.password = action.payload.password;
+        state.otpCode = action.payload.otpCode;
       })
       .addCase(sendOtp.rejected, (state: InitialStateType, action: any) => {
         state.loading = 'rejected';

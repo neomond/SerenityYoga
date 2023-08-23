@@ -19,15 +19,21 @@ export const OTPStepOne = ({navigation}: any) => {
   const dispatch = useDispatch<AppDispatch>();
 
   const handleSendOtp = async () => {
+    if (!email) {
+      setError('Email field is required');
+      return;
+    }
     try {
+      console.log('Sending OTP for email:', email);
       const sendOtpParams = {email};
       const response: any = await dispatch(sendOtp(sendOtpParams));
 
-      if (response !== 'Email not found') {
+      console.log('Response from sendOtp:', response);
+      if (response.payload.errors && response.payload.errors.length > 0) {
+        setError('Email not found in the database');
+      } else {
         setError('');
         navigation.navigate('OtpSecond', {email});
-      } else {
-        setError('Email not found');
       }
     } catch (err) {
       console.log('Error sending OTP:', err);
@@ -50,7 +56,6 @@ export const OTPStepOne = ({navigation}: any) => {
             <Text style={styles.textSecondary}>
               Enter your email so we can send you a password
             </Text>
-
             <TextInput
               placeholder="Email"
               style={styles.step1field}
@@ -104,7 +109,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#f6f6f6',
     borderRadius: 12,
     paddingLeft: 15,
-    marginBottom: 25,
+    marginBottom: 20,
   },
   step1btns: {
     flexDirection: 'row',
@@ -120,6 +125,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#815CFF',
     borderColor: '#815CFF',
     alignItems: 'center',
+    marginTop: 5,
   },
   textColor: {
     color: '#fff',
@@ -141,7 +147,8 @@ const styles = StyleSheet.create({
   errorText: {
     color: 'tomato',
     fontSize: 14,
-    marginTop: 5,
+    marginBottom: 15,
     marginLeft: 15,
+    marginTop: -10,
   },
 });

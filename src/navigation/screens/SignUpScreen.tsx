@@ -20,7 +20,6 @@ import {signUpInitialValues, signUpSchema} from '../../schema/authSchema';
 import {useState} from 'react';
 import SvgViewEye from '../../assets/ViewEyeIcon';
 import SvgHideEye from '../../assets/HideEyeIcon';
-import CheckBox from '@react-native-community/checkbox';
 import SvgLogo from '../../assets/Logo';
 import SvgCheckBoxFill from '../../assets/CheckBoxiconFilled';
 import SvgCheckBox from '../../assets/CheckBoxicon';
