@@ -16,7 +16,6 @@ import {HomeStackNavigator} from './src/navigation/stack/HomeStack';
 import {PracticesStackNavigator} from './src/navigation/stack/PracticesStack';
 import {MeditationsStackNavigator} from './src/navigation/stack/MeditationsStack';
 import {SaveStackNavigator} from './src/navigation/stack/SaveStack';
-import TabBarAnimations from './src/utils/TabBarAnimations';
 import AuthStack from './src/navigation/stack/AuthStack';
 import {Text, View} from 'react-native';
 

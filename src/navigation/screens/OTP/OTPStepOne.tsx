@@ -7,28 +7,31 @@ import {
 } from 'react-native';
 import SvgLogo from '../../../assets/Logo';
 import LinearGradient from 'react-native-linear-gradient';
-import {useDispatch, useSelector} from 'react-redux';
-import {AppDispatch, RootState} from '../../../redux';
+import {useDispatch} from 'react-redux';
+import {AppDispatch} from '../../../redux';
 import {sendOtp} from '../../../redux/slices/AuthSlice';
 import {useState} from 'react';
-import {SendOtpParams} from '../../../models/Auth';
 
 export const OTPStepOne = ({navigation}: any) => {
   console.log('Rendering OTPStepOne');
-
+  const [error, setError] = useState('');
   const [email, setEmail] = useState('');
   const dispatch = useDispatch<AppDispatch>();
-  const password = useSelector((state: RootState) => state.authSlice.password);
 
-  const handleSendOtp = () => {
-    const sendOtpParams = {email};
-    dispatch(sendOtp(sendOtpParams))
-      .then(() => {
+  const handleSendOtp = async () => {
+    try {
+      const sendOtpParams = {email};
+      const response: any = await dispatch(sendOtp(sendOtpParams));
+
+      if (response !== 'Email not found') {
+        setError('');
         navigation.navigate('OtpSecond', {email});
-      })
-      .catch(err => {
-        console.log('Error sending OTP:', err);
-      });
+      } else {
+        setError('Email not found');
+      }
+    } catch (err) {
+      console.log('Error sending OTP:', err);
+    }
   };
 
   return (
@@ -54,6 +57,7 @@ export const OTPStepOne = ({navigation}: any) => {
               value={email}
               onChangeText={setEmail}
             />
+            {error ? <Text style={styles.errorText}>{error}</Text> : null}
           </View>
           <View style={styles.step1btns}>
             <TouchableOpacity style={styles.nextBtn} onPress={handleSendOtp}>
@@ -133,5 +137,11 @@ const styles = StyleSheet.create({
     marginBottom: 35,
     color: '#979797',
     fontSize: 15,
+  },
+  errorText: {
+    color: 'tomato',
+    fontSize: 14,
+    marginTop: 5,
+    marginLeft: 15,
   },
 });

@@ -3,7 +3,6 @@ import HomeScreen from '../screens/HomeScreen';
 import ProfileScreen from '../screens/Profile/ProfileScreen';
 import DetailsScreen from '../screens/DetailsScreen';
 import CategoryMoodScreen from '../screens/CategoryMoodScreen';
-import {Platform} from 'react-native';
 
 type HomeStackParamList = {
   HomeScreen: undefined;
@@ -27,16 +26,18 @@ export const HomeStackNavigator: React.FC = () => {
         component={ProfileScreen}
         options={{
           headerShown: false,
-          ...Platform.select({
-            android: {
-              animation: 'slide_from_bottom',
-              tabBarVisible: false,
-            },
-            ios: {
-              // presentation: 'modal',
-              animation: 'slide_from_bottom',
-            },
-          }),
+          presentation: 'modal',
+          // animation: 'slide_from_bottom',
+          // ...Platform.select({
+          //   android: {
+          //     animation: 'slide_from_bottom',
+          //     tabBarVisible: false,
+          //   },
+          //   ios: {
+          //     // presentation: 'modal',
+          //     animation: 'slide_from_bottom',
+          //   },
+          // }),
         }}
       />
       <HomeStack.Screen
@@ -49,15 +50,16 @@ export const HomeStackNavigator: React.FC = () => {
         component={CategoryMoodScreen}
         options={{
           headerShown: false,
-          ...Platform.select({
-            android: {
-              animation: 'slide_from_bottom',
-              tabBarVisible: false,
-            },
-            ios: {
-              presentation: 'modal',
-            },
-          }),
+          // ...Platform.select({
+          //   android: {
+          //     animation: 'slide_from_bottom',
+          //     tabBarVisible: false,
+          //   },
+          //   ios: {
+          //     presentation: 'modal',
+          //   },
+          // }),
+          presentation: 'modal',
         }}
       />
     </HomeStack.Navigator>

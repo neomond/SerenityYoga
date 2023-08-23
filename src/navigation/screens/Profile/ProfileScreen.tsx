@@ -19,6 +19,7 @@ import BottomSheetDays from './BottomSheetDays';
 import {LogoutConfirmationModal} from './LogoutConfirmationModal';
 
 import {debounce} from 'lodash';
+import {useUnsubscribe} from '../../../utils/unsubscribe';
 
 // motivational words
 const motivationalPhrases = [
@@ -31,6 +32,16 @@ const motivationalPhrases = [
 ];
 
 const ProfileScreen = ({navigation}: any) => {
+  useUnsubscribe();
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      navigation.getParent()?.setOptions({tabBarStyle: {display: 'none'}});
+    });
+    return () => {
+      navigation.getParent()?.setOptions({tabBarStyle: {display: 'flex'}});
+      unsubscribe();
+    };
+  }, [navigation]);
   const [selectedDays, setSelectedDays] = useState<number[]>([]);
   const [activeDays, setActiveDays] = useState(0); // for active days out of selected from bottom sheeet's circular bar
   const [isLogoutModalVisible, setIsLogoutModalVisible] = useState(false);
@@ -43,16 +54,6 @@ const ProfileScreen = ({navigation}: any) => {
 
   // Use useRef to store the animation function without triggering re-renders
   const animationRef = useRef<any>();
-
-  useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', () => {
-      navigation.getParent()?.setOptions({tabBarStyle: {display: 'none'}});
-    });
-    return () => {
-      navigation.getParent()?.setOptions({tabBarStyle: {display: 'flex'}});
-      unsubscribe();
-    };
-  }, [navigation]);
 
   const storeActiveDaysInLocalStorage = async (days: number) => {
     try {
@@ -187,6 +188,7 @@ const ProfileScreen = ({navigation}: any) => {
               onClose={() => setIsLogoutModalVisible(false)}
               onLogout={() => {
                 setIsLogoutModalVisible(false);
+                navigation.popToTop();
                 navigation.navigate('Login');
               }}
             />

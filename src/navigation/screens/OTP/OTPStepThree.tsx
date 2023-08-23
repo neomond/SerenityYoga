@@ -11,14 +11,28 @@ import {useState} from 'react';
 import {AppDispatch} from '../../../redux';
 import {useDispatch} from 'react-redux';
 import {confirmAndResetPassword} from '../../../redux/slices/AuthSlice';
+import SvgViewEye from '../../../assets/ViewEyeIcon';
+import SvgHideEye from '../../../assets/HideEyeIcon';
 
 export const OTPStepThree = ({navigation, route}: any) => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
   const dispatch = useDispatch<AppDispatch>();
 
   const {email, otpCode} = route.params;
   console.log('Received OTP code in Step 3:', otpCode);
+
+  //for password secure entry
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
+  const toggleConfirmPasswordVisibility = () => {
+    setShowConfirmPassword(!showConfirmPassword);
+  };
 
   const handleResetPassword = () => {
     if (password !== confirmPassword) {
@@ -52,25 +66,39 @@ export const OTPStepThree = ({navigation, route}: any) => {
             <Text style={styles.textSecondary}>
               Create a new strong password
             </Text>
-            <TextInput
-              style={styles.step1field}
-              placeholder="Password"
-              secureTextEntry={true}
-              value={password}
-              onChangeText={setPassword}
-              //   value={userData.name}
-              //   onChangeText={value => handleInputChange('name', value)}
-            />
-            <TextInput
-              style={styles.step1field}
-              placeholder="Confirm Password"
-              secureTextEntry={true}
-              value={confirmPassword}
-              onChangeText={setConfirmPassword}
-              //   value={formik.values.password}
-              //   onChangeText={formik.handleChange('password')}
-              //   onBlur={formik.handleBlur('password')}
-            />
+            <View>
+              <TextInput
+                style={styles.step1field}
+                placeholder="Password"
+                secureTextEntry={!showPassword}
+                value={password}
+                onChangeText={setPassword}
+                //   value={userData.name}
+                //   onChangeText={value => handleInputChange('name', value)}
+              />
+              <TouchableOpacity
+                onPress={togglePasswordVisibility}
+                style={[styles.togglePwdStyles]}>
+                {showPassword ? <SvgViewEye /> : <SvgHideEye />}
+              </TouchableOpacity>
+            </View>
+            <View>
+              <TextInput
+                style={styles.step1field}
+                placeholder="Confirm Password"
+                secureTextEntry={!showConfirmPassword}
+                value={confirmPassword}
+                onChangeText={setConfirmPassword}
+                //   value={formik.values.password}
+                //   onChangeText={formik.handleChange('password')}
+                //   onBlur={formik.handleBlur('password')}
+              />
+              <TouchableOpacity
+                onPress={toggleConfirmPasswordVisibility}
+                style={styles.togglePwdStyles}>
+                {showConfirmPassword ? <SvgViewEye /> : <SvgHideEye />}
+              </TouchableOpacity>
+            </View>
           </View>
           <View style={styles.step1btns}>
             <TouchableOpacity
@@ -153,5 +181,12 @@ const styles = StyleSheet.create({
     marginBottom: 25,
     color: '#979797',
     fontSize: 15,
+  },
+  togglePwdStyles: {
+    position: 'absolute',
+    top: '25%',
+    right: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });

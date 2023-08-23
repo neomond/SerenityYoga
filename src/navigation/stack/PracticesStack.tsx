@@ -28,17 +28,18 @@ export const PracticesStackNavigator: React.FC = () => {
         component={PracticesCollectionScreen}
         options={{
           headerShown: false,
-          ...Platform.select({
-            android: {
-              animation: 'slide_from_bottom',
-              tabBarVisible: false,
-            },
-            ios: {
-              // presentation: 'modal',
-              animation: 'slide_from_bottom',
-              tabBarVisible: false,
-            },
-          }),
+          presentation: 'modal',
+          // ...Platform.select({
+          //   android: {
+          //     animation: 'slide_from_bottom',
+          //     tabBarVisible: false,
+          //   },
+          //   ios: {
+          //     // presentation: 'modal',
+          //     animation: 'slide_from_bottom',
+          //     tabBarVisible: false,
+          //   },
+          // }),
         }}
       />
       <PracticesStack.Screen

@@ -7,6 +7,7 @@ import {
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
+import {useUnsubscribe} from '../../../utils/unsubscribe';
 
 interface LogoutConfirmationModalProps {
   isVisible: boolean;
@@ -17,6 +18,7 @@ interface LogoutConfirmationModalProps {
 export const LogoutConfirmationModal: React.FC<
   LogoutConfirmationModalProps
 > = ({isVisible, onClose, onLogout}) => {
+  useUnsubscribe();
   return (
     <Modal visible={isVisible} transparent={true} animationType="fade">
       <TouchableWithoutFeedback onPress={onClose}>

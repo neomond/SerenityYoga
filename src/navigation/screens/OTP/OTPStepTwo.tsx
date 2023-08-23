@@ -8,13 +8,10 @@ import {
 import SvgLogo from '../../../assets/Logo';
 import {useRef, useState} from 'react';
 import LinearGradient from 'react-native-linear-gradient';
-import {useDispatch} from 'react-redux';
-import {AppDispatch} from '../../../redux';
 
 export const OTPStepTwo = ({navigation, route}: any) => {
   const [otp, setOtp] = useState('');
   const inputRefs = useRef<Array<TextInput | null>>([]);
-  // const dispatch = useDispatch<AppDispatch>();
 
   const handleOtpChange = (index: number, value: string) => {
     setOtp(prevOtp => {
