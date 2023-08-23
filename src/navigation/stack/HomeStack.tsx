@@ -33,7 +33,8 @@ export const HomeStackNavigator: React.FC = () => {
               tabBarVisible: false,
             },
             ios: {
-              presentation: 'modal',
+              // presentation: 'modal',
+              animation: 'slide_from_bottom',
             },
           }),
         }}
