@@ -170,9 +170,10 @@ const authSlice = createSlice({
         state.loading = 'pending';
         state.error = null;
       })
-      .addCase(sendOtp.fulfilled, (state: any) => {
+      .addCase(sendOtp.fulfilled, (state: any, action: any) => {
         state.loading = 'fulfilled';
         state.error = null;
+        state.password = action.payload.password;
       })
       .addCase(sendOtp.rejected, (state: InitialStateType, action: any) => {
         state.loading = 'rejected';

@@ -8,10 +8,13 @@ import {
 import SvgLogo from '../../../assets/Logo';
 import {useRef, useState} from 'react';
 import LinearGradient from 'react-native-linear-gradient';
+import {useDispatch} from 'react-redux';
+import {AppDispatch} from '../../../redux';
 
-export const OTPStepTwo = ({navigation}: any) => {
+export const OTPStepTwo = ({navigation, route}: any) => {
   const [otp, setOtp] = useState('');
   const inputRefs = useRef<Array<TextInput | null>>([]);
+  // const dispatch = useDispatch<AppDispatch>();
 
   const handleOtpChange = (index: number, value: string) => {
     setOtp(prevOtp => {
@@ -24,6 +27,15 @@ export const OTPStepTwo = ({navigation}: any) => {
       const nextIndex = index + 1;
       inputRefs.current[nextIndex]?.focus();
     }
+  };
+
+  const handleContinue = () => {
+    const {email} = route.params;
+    const otpCode = otp;
+    console.log('successsssssssss');
+    console.log('Received OTP code:', otpCode);
+
+    navigation.navigate('OtpThird', {email, otpCode});
   };
 
   return (
@@ -78,9 +90,7 @@ export const OTPStepTwo = ({navigation}: any) => {
             </View>
           </View>
           <View style={styles.step1btns}>
-            <TouchableOpacity
-              style={styles.nextBtn}
-              onPress={() => navigation.navigate('OtpThird')}>
+            <TouchableOpacity style={styles.nextBtn} onPress={handleContinue}>
               <Text style={styles.textColor}>Continue</Text>
             </TouchableOpacity>
           </View>

@@ -7,9 +7,29 @@ import {
 } from 'react-native';
 import SvgLogo from '../../../assets/Logo';
 import LinearGradient from 'react-native-linear-gradient';
+import {useDispatch, useSelector} from 'react-redux';
+import {AppDispatch, RootState} from '../../../redux';
+import {sendOtp} from '../../../redux/slices/AuthSlice';
+import {useState} from 'react';
+import {SendOtpParams} from '../../../models/Auth';
 
 export const OTPStepOne = ({navigation}: any) => {
   console.log('Rendering OTPStepOne');
+
+  const [email, setEmail] = useState('');
+  const dispatch = useDispatch<AppDispatch>();
+  const password = useSelector((state: RootState) => state.authSlice.password);
+
+  const handleSendOtp = () => {
+    const sendOtpParams = {email};
+    dispatch(sendOtp(sendOtpParams))
+      .then(() => {
+        navigation.navigate('OtpSecond', {email});
+      })
+      .catch(err => {
+        console.log('Error sending OTP:', err);
+      });
+  };
 
   return (
     <LinearGradient
@@ -31,19 +51,12 @@ export const OTPStepOne = ({navigation}: any) => {
             <TextInput
               placeholder="Email"
               style={styles.step1field}
-              // value={userData.name}
-              onChangeText={value => {
-                console.log('Email input changed:', value);
-              }}
+              value={email}
+              onChangeText={setEmail}
             />
           </View>
           <View style={styles.step1btns}>
-            <TouchableOpacity
-              style={styles.nextBtn}
-              onPress={() => {
-                console.log('Sending OTP');
-                navigation.navigate('OtpSecond');
-              }}>
+            <TouchableOpacity style={styles.nextBtn} onPress={handleSendOtp}>
               <Text style={styles.textColor}>Send a code</Text>
             </TouchableOpacity>
           </View>

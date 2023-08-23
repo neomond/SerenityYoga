@@ -7,8 +7,35 @@ import {
 } from 'react-native';
 import SvgLogo from '../../../assets/Logo';
 import LinearGradient from 'react-native-linear-gradient';
+import {useState} from 'react';
+import {AppDispatch} from '../../../redux';
+import {useDispatch} from 'react-redux';
+import {confirmAndResetPassword} from '../../../redux/slices/AuthSlice';
 
-export const OTPStepThree = ({navigation}: any) => {
+export const OTPStepThree = ({navigation, route}: any) => {
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const dispatch = useDispatch<AppDispatch>();
+
+  const {email, otpCode} = route.params;
+  console.log('Received OTP code in Step 3:', otpCode);
+
+  const handleResetPassword = () => {
+    if (password !== confirmPassword) {
+      console.log('Passwords do not match');
+      return;
+    }
+    dispatch(
+      confirmAndResetPassword({email, otp: otpCode, newPassword: password}),
+    )
+      .then(() => {
+        navigation.navigate('HomeMain');
+      })
+      .catch(error => {
+        console.log('Error resetting password:', error);
+      });
+  };
+
   return (
     <LinearGradient
       colors={['#F7C076', '#FCAE7A', '#FCA879', '#FEB790']}
@@ -29,6 +56,8 @@ export const OTPStepThree = ({navigation}: any) => {
               style={styles.step1field}
               placeholder="Password"
               secureTextEntry={true}
+              value={password}
+              onChangeText={setPassword}
               //   value={userData.name}
               //   onChangeText={value => handleInputChange('name', value)}
             />
@@ -36,6 +65,8 @@ export const OTPStepThree = ({navigation}: any) => {
               style={styles.step1field}
               placeholder="Confirm Password"
               secureTextEntry={true}
+              value={confirmPassword}
+              onChangeText={setConfirmPassword}
               //   value={formik.values.password}
               //   onChangeText={formik.handleChange('password')}
               //   onBlur={formik.handleBlur('password')}
@@ -44,7 +75,7 @@ export const OTPStepThree = ({navigation}: any) => {
           <View style={styles.step1btns}>
             <TouchableOpacity
               style={styles.nextBtn}
-              onPress={() => navigation.navigate('HomeMain')}>
+              onPress={handleResetPassword}>
               <Text style={styles.textColor}>Reset Password</Text>
             </TouchableOpacity>
           </View>
