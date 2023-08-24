@@ -8,14 +8,27 @@ import {
 } from 'react-native';
 import React, {useState} from 'react';
 import SvgLogo from '../../../assets/Logo';
-import AgePicker from '../../../components/helpers/AgePicker';
 import LinearGradient from 'react-native-linear-gradient';
+import DateTimePicker from '@react-native-community/datetimepicker';
+import SvgArrDown from '../../../assets/ArrowDown';
 
 export const OnboardingStepThree = ({navigation}: any) => {
-  const [age, setAge] = useState<string>('');
-  const handleAgeChange = (value: string) => {
-    setAge(value);
+  const [weight, setWeight] = useState('');
+  const [height, setHeight] = useState('');
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [showDatePicker, setShowDatePicker] = useState(false);
+
+  const handleDateChange = (event: Event, date?: Date | undefined) => {
+    if (date) {
+      setSelectedDate(date);
+    }
+    setShowDatePicker(false);
   };
+
+  const closeDatePicker = () => {
+    setShowDatePicker(false);
+  };
+
   return (
     <LinearGradient
       colors={['#68C3F6', '#70ADFB', '#739DFD', '#85AEFE']}
@@ -36,18 +49,42 @@ export const OnboardingStepThree = ({navigation}: any) => {
             Please, tell us more about yourself
           </Text>
           <View style={styles.thirdContent}>
-            {/* <AgePicker value={age} onChange={handleAgeChange} /> */}
-            <AgePicker value={age} onChange={handleAgeChange} />
-
+            {showDatePicker && <TouchableOpacity onPress={closeDatePicker} />}
+            <View>
+              {selectedDate && !showDatePicker ? null : (
+                <View style={styles.agePickerIcon}>
+                  <SvgArrDown />
+                </View>
+              )}
+              {showDatePicker ? (
+                <DateTimePicker
+                  value={selectedDate || new Date()}
+                  mode="date"
+                  display="spinner"
+                  onChange={handleDateChange}
+                />
+              ) : (
+                <TouchableOpacity
+                  onPress={() => setShowDatePicker(true)}
+                  style={styles.agePicker}>
+                  <Text>
+                    {selectedDate ? selectedDate.toDateString() : 'Age'}
+                  </Text>
+                </TouchableOpacity>
+              )}
+            </View>
             <TextInput
-              placeholder="Weight"
+              placeholder="Weight / kg"
               style={styles.step1field}
-              // value={userData.name}
+              value={weight}
+              onChangeText={setWeight}
+              keyboardType="numeric"
             />
             <TextInput
-              placeholder="Height"
+              placeholder="Height / cm"
               style={styles.step1field}
-              // value={userData.name}
+              value={height}
+              onChangeText={setHeight}
               keyboardType="numeric"
             />
             <View style={styles.step1btns}>
@@ -107,7 +144,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     columnGap: 15,
-    marginTop: Platform.OS === 'ios' ? '75%' : '50%',
+    marginTop: Platform.OS === 'ios' ? '63%' : '50%',
   },
   nextBtn: {
     borderRadius: 30,
@@ -134,5 +171,20 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     textAlign: 'center',
+  },
+  agePicker: {
+    height: 55,
+    backgroundColor: '#f6f6f6',
+    borderRadius: 12,
+    paddingHorizontal: 15,
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    flexDirection: 'row',
+  },
+  agePickerIcon: {
+    position: 'absolute',
+    right: 15,
+    top: 18,
+    zIndex: 1,
   },
 });
