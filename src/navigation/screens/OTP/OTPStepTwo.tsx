@@ -13,6 +13,8 @@ export const OTPStepTwo = ({navigation, route}: any) => {
   const [otp, setOtp] = useState('');
   const inputRefs = useRef<Array<TextInput | null>>([]);
 
+  const [otpError, setOtpError] = useState('');
+
   const handleOtpChange = (index: number, value: string) => {
     setOtp(prevOtp => {
       const otpArray = prevOtp.split('');
@@ -28,11 +30,18 @@ export const OTPStepTwo = ({navigation, route}: any) => {
 
   const handleContinue = () => {
     const {email} = route.params;
-    const otpCode = otp;
-    console.log('successsssssssss');
-    console.log('Received OTP code:', otpCode);
+    const enteredOtp = otp;
 
-    navigation.navigate('OtpThird', {email, otpCode});
+    const expectedOtp = route.params.otpCode;
+
+    console.log('successsssssssss');
+    console.log('Received OTP code:', enteredOtp);
+
+    if (enteredOtp === expectedOtp) {
+      navigation.navigate('OtpThird', {email, otpCode: enteredOtp});
+    } else {
+      setOtpError('Entered OTP is incorrect.');
+    }
   };
 
   return (
@@ -85,6 +94,7 @@ export const OTPStepTwo = ({navigation, route}: any) => {
                 keyboardType="numeric"
               />
             </View>
+            {otpError && <Text style={styles.errorText}>{otpError}</Text>}
           </View>
           <View style={styles.step1btns}>
             <TouchableOpacity style={styles.nextBtn} onPress={handleContinue}>
@@ -179,5 +189,11 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginHorizontal: 5,
     fontSize: 20,
+  },
+  errorText: {
+    color: 'tomato',
+    fontSize: 14,
+    marginBottom: 10,
+    textAlign: 'center',
   },
 });

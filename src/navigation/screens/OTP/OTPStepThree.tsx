@@ -30,7 +30,6 @@ export const OTPStepThree = ({navigation, route}: any) => {
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
-
   const toggleConfirmPasswordVisibility = () => {
     setShowConfirmPassword(!showConfirmPassword);
   };
