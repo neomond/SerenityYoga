@@ -1,10 +1,10 @@
-import React, {useEffect} from 'react';
-import {NavigationContainer, useIsFocused} from '@react-navigation/native';
-import {Provider, useSelector} from 'react-redux';
+import React, {useEffect, useState} from 'react';
+import {NavigationContainer} from '@react-navigation/native';
+import {Provider} from 'react-redux';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 
-import store, {RootState} from './src/redux';
+import store from './src/redux';
 
 import SplashScreen from 'react-native-splash-screen';
 
@@ -19,6 +19,9 @@ import {SaveStackNavigator} from './src/navigation/stack/SaveStack';
 import AuthStack from './src/navigation/stack/AuthStack';
 import {Text, View} from 'react-native';
 import {OnboardingStackNavigator} from './src/navigation/stack/OnboardingStack';
+import {ActivityIndicator} from 'react-native-paper';
+
+import LottieView from 'lottie-react-native';
 
 type RootStackParamList = {
   AuthMain: undefined;
@@ -41,6 +44,26 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 const Tab = createBottomTabNavigator<BottomTabParamList>();
 
 const HomeTabNavigator: React.FC = () => {
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 2000);
+  }, []);
+
+  if (isLoading) {
+    return (
+      <View style={{alignItems: 'center', justifyContent: 'center', flex: 1}}>
+        <LottieView
+          style={{width: 200, height: 200}}
+          source={require('./src/assets/lottie/loading.json')}
+          autoPlay
+        />
+      </View>
+    );
+  }
+
   return (
     <Tab.Navigator
       screenOptions={{

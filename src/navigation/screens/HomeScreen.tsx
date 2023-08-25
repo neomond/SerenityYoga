@@ -32,18 +32,23 @@ import {
   fetchSessionsAll,
   getMeditationSessions,
   getRandomSessions,
-  getSessions,
+  // getSessions,
 } from '../../redux/slices/SessionSlice';
 import {Session} from '../../models/Session';
+import {selectEnteredName} from '../../redux/slices/OnboardingSlice';
 
 const HomeScreen = ({navigation}: any) => {
   const dispatch = useDispatch<AppDispatch>();
   const {categories} = useSelector(getCategories);
-  const sessions = useSelector(getSessions);
+  // const sessions = useSelector(getSessions);
   const randomSessions = useSelector((state: RootState) =>
     getRandomSessions(state),
   );
+
   console.log('random', randomSessions);
+
+  const enteredName = useSelector(selectEnteredName);
+  console.log('meh', enteredName);
 
   const isLoading = useSelector((state: RootState) => state.sessions.loading);
   const meditationSessions = useSelector(getMeditationSessions);
@@ -76,6 +81,7 @@ const HomeScreen = ({navigation}: any) => {
       console.error('Failed to clear liked items:', error);
     }
   };
+
   if (isLoading) {
     return (
       <View
@@ -105,7 +111,7 @@ const HomeScreen = ({navigation}: any) => {
           <SvgProfile stroke="#E5DEFF" fill="transparent" />
         </TouchableOpacity>
       </View>
-      <Text style={styles.headerText}>Welcome, Nazrin!</Text>
+      <Text style={styles.headerText}>Welcome, {enteredName}!</Text>
       <Text style={styles.subheaderText}>How are you feeling today?</Text>
       <View>
         <ScrollView

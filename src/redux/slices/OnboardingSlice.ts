@@ -1,6 +1,7 @@
 import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
 import axios from 'axios';
 import API_URL from '../../utils/apiConfig';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 interface OnboardingState {
   name?: string;
@@ -30,6 +31,10 @@ const onboardingSlice = createSlice({
   name: 'onboarding',
   initialState,
   reducers: {
+    setEnteredName: (state, action) => {
+      state.name = action.payload;
+      AsyncStorage.setItem('enteredName', action.payload);
+    },
     setOnboardingData: (state, action: PayloadAction<OnboardingState>) => {
       return {...state, ...action.payload};
     },
@@ -41,5 +46,7 @@ const onboardingSlice = createSlice({
   },
 });
 
-export const {setOnboardingData} = onboardingSlice.actions;
+export const {setOnboardingData, setEnteredName} = onboardingSlice.actions;
 export default onboardingSlice.reducer;
+
+export const selectEnteredName = (state: any) => state.onboarding.name;

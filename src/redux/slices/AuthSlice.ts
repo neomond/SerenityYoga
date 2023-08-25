@@ -143,7 +143,7 @@ const authSlice = createSlice({
         state.user = action.payload.user;
         try {
           AsyncStorage.setItem('token', JSON.stringify(action.payload.token));
-          console.log('stooorrring');
+          console.log('stooorrring', action.payload.token);
         } catch (error) {
           console.log('Error storing token in AsyncStorage:', error);
         }
@@ -163,7 +163,7 @@ const authSlice = createSlice({
       .addCase(signupUser.fulfilled, (state: InitialStateType, action: any) => {
         state.loading = 'fulfilled';
         state.error = null;
-        //   state.user = action.payload;
+        // state.user = action.payload;
         state.token = action.payload;
       })
       .addCase(signupUser.rejected, (state: InitialStateType, action: any) => {

@@ -11,7 +11,8 @@ import LinearGradient from 'react-native-linear-gradient';
 import {useDispatch} from 'react-redux';
 import {AppDispatch} from '../../../redux';
 import {useState} from 'react';
-import {fetchOnboardingData} from '../../../redux/slices/OnboardingSlice';
+import {setEnteredName} from '../../../redux/slices/OnboardingSlice';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const OnboardingStepOne = ({navigation}: any) => {
   const dispatch = useDispatch<AppDispatch>();
@@ -40,13 +41,14 @@ export const OnboardingStepOne = ({navigation}: any) => {
       return;
     }
 
-    console.log('Entered Name:', name);
-
     try {
-      await dispatch(fetchOnboardingData());
+      await AsyncStorage.setItem('enteredName', name);
+
+      console.log('Entered Name:', name);
+      dispatch(setEnteredName(name));
       navigation.navigate('OnboardingStepTwo');
     } catch (error) {
-      console.error('Error fetching onboarding data:', error);
+      console.error('Error storing enteredName in AsyncStorage:', error);
     }
   };
 
