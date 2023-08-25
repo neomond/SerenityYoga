@@ -8,8 +8,32 @@ import {
 } from 'react-native';
 import SvgLogo from '../../../assets/Logo';
 import LinearGradient from 'react-native-linear-gradient';
+import {useDispatch} from 'react-redux';
+import {AppDispatch} from '../../../redux';
+import {useState} from 'react';
+import {setOnboardingData} from '../../../redux/slices/OnboardingSlice';
 
 export const OnboardingStepOne = ({navigation}: any) => {
+  const dispatch = useDispatch<AppDispatch>();
+  const [name, setName] = useState('');
+  const [error, setError] = useState('');
+
+  const handleNameChange = (text: string) => {
+    setName(text);
+    setError('');
+  };
+
+  const handleContinue = () => {
+    if (name.trim() === '') {
+      setError('Please enter your name before proceeding.');
+      return;
+    }
+    console.log('Entered Name:', name);
+    dispatch(setOnboardingData({name}));
+
+    navigation.navigate('OnboardingStepTwo');
+  };
+
   return (
     <LinearGradient
       colors={['#68C3F6', '#70ADFB', '#739DFD', '#85AEFE']}
@@ -22,7 +46,7 @@ export const OnboardingStepOne = ({navigation}: any) => {
         <Text style={styles.skipOnbText}>Skip</Text>
       </TouchableOpacity>
       <View style={styles.primaryContent}>
-        <View style={styles.onboardingStep1Container}>
+        <View>
           <View style={styles.tinyLogo}>
             <SvgLogo fontSize={24} />
           </View>
@@ -31,13 +55,12 @@ export const OnboardingStepOne = ({navigation}: any) => {
             <TextInput
               placeholder="Name"
               style={styles.step1field}
-              // value={userData.name}
-              // onChangeText={value => handleInputChange('name', value)}
+              value={name}
+              onChangeText={handleNameChange}
             />
+            {error ? <Text style={styles.errorText}>{error}</Text> : null}
             <View style={styles.step1btns}>
-              <TouchableOpacity
-                style={styles.nextBtn}
-                onPress={() => navigation.navigate('OnboardingStepTwo')}>
+              <TouchableOpacity style={styles.nextBtn} onPress={handleContinue}>
                 <Text style={styles.textColor}>Continue</Text>
               </TouchableOpacity>
             </View>
@@ -66,9 +89,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     flexDirection: 'column',
   },
-  onboardingStep1Container: {
-    // marginTop: 40,
-  },
+
   secondaryContent: {
     textAlign: 'center',
     fontSize: 22,
@@ -76,7 +97,7 @@ const styles = StyleSheet.create({
     marginBottom: 30,
   },
   thirdContent: {
-    rowGap: 100,
+    rowGap: 20,
   },
   step1field: {
     height: 55,
@@ -89,7 +110,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     columnGap: 15,
-    marginTop: Platform.OS === 'ios' ? '80%' : '65%',
+    marginTop: Platform.OS === 'ios' ? '95%' : '75%',
   },
   nextBtn: {
     borderRadius: 30,
@@ -99,6 +120,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#815CFF',
     borderColor: '#815CFF',
     alignItems: 'center',
+    marginTop: 30,
   },
   textColor: {
     color: '#fff',
@@ -110,5 +132,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     textAlign: 'center',
+  },
+  errorText: {
+    color: 'tomato',
+    fontSize: 14,
+    position: 'absolute',
+    top: '19%',
+    left: '12%',
   },
 });

@@ -11,22 +11,57 @@ import SvgLogo from '../../../assets/Logo';
 import LinearGradient from 'react-native-linear-gradient';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import SvgArrDown from '../../../assets/ArrowDown';
+import {useDispatch} from 'react-redux';
+import {AppDispatch} from '../../../redux';
+import {setOnboardingData} from '../../../redux/slices/OnboardingSlice';
 
 export const OnboardingStepThree = ({navigation}: any) => {
+  const dispatch = useDispatch<AppDispatch>();
+
   const [weight, setWeight] = useState('');
   const [height, setHeight] = useState('');
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [showDatePicker, setShowDatePicker] = useState(false);
+  const [error, setError] = useState('');
 
   const handleDateChange = (event: Event, date?: Date | undefined) => {
     if (date) {
       setSelectedDate(date);
+      console.log('Selected Date:', date.toISOString());
     }
     setShowDatePicker(false);
   };
 
   const closeDatePicker = () => {
     setShowDatePicker(false);
+  };
+
+  const handleContinue = () => {
+    if (weight && height && selectedDate) {
+      const formattedDate = selectedDate.toISOString();
+      dispatch(setOnboardingData({weight, height, birthdate: formattedDate}));
+      navigation.navigate('HomeMain');
+    } else {
+      setError('Please fill in all fields');
+    }
+  };
+
+  const handleWeightChange = (text: string) => {
+    setWeight(text);
+    setError('');
+    console.log('Weight:', text);
+  };
+
+  const handleHeightChange = (text: string) => {
+    setHeight(text);
+    setError('');
+    console.log('Height:', text);
+  };
+
+  const handleDatePress = () => {
+    setShowDatePicker(true);
+    setError('');
+    console.log('Date picker opened');
   };
 
   return (
@@ -65,7 +100,7 @@ export const OnboardingStepThree = ({navigation}: any) => {
                 />
               ) : (
                 <TouchableOpacity
-                  onPress={() => setShowDatePicker(true)}
+                  onPress={handleDatePress}
                   style={styles.agePicker}>
                   <Text>
                     {selectedDate ? selectedDate.toDateString() : 'Age'}
@@ -77,25 +112,24 @@ export const OnboardingStepThree = ({navigation}: any) => {
               placeholder="Weight / kg"
               style={styles.step1field}
               value={weight}
-              onChangeText={setWeight}
+              onChangeText={handleWeightChange}
               keyboardType="numeric"
             />
             <TextInput
               placeholder="Height / cm"
               style={styles.step1field}
               value={height}
-              onChangeText={setHeight}
+              onChangeText={handleHeightChange}
               keyboardType="numeric"
             />
+            {error ? <Text style={styles.errorText}>{error}</Text> : null}
             <View style={styles.step1btns}>
               <TouchableOpacity
                 style={styles.backBtn}
                 onPress={() => navigation.goBack()}>
                 <Text>Back</Text>
               </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.nextBtn}
-                onPress={() => navigation.navigate('HomeMain')}>
+              <TouchableOpacity style={styles.nextBtn} onPress={handleContinue}>
                 <Text style={styles.textColor}>Continue</Text>
               </TouchableOpacity>
             </View>
@@ -186,5 +220,11 @@ const styles = StyleSheet.create({
     right: 15,
     top: 18,
     zIndex: 1,
+  },
+  errorText: {
+    color: 'tomato',
+    fontSize: 14,
+    textAlign: 'center',
+    marginBottom: -35,
   },
 });

@@ -1,20 +1,30 @@
-import {
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-  TextInput,
-  Platform,
-} from 'react-native';
+import {StyleSheet, Text, TouchableOpacity, View, Platform} from 'react-native';
 import React, {useState} from 'react';
 import SvgLogo from '../../../assets/Logo';
 import {RadioButton} from '../../../components/helpers/radiobuttons';
 import LinearGradient from 'react-native-linear-gradient';
+import {AppDispatch} from '../../../redux';
+import {useDispatch} from 'react-redux';
+import {setOnboardingData} from '../../../redux/slices/OnboardingSlice';
 
 export const OnboardingStepTwo = ({navigation}: any) => {
-  const [selectedOption, setSelectedOption] = useState('');
+  const dispatch = useDispatch<AppDispatch>();
+  const [selectedOption, setSelectedOption] = useState<any>('');
+  const [error, setError] = useState('');
+
   const handleOptionChange = (option: any) => {
     setSelectedOption(option);
+    setError('');
+  };
+
+  const handleContinue = () => {
+    if (selectedOption) {
+      console.log('Selected option:', selectedOption);
+      dispatch(setOnboardingData({activityLevel: selectedOption}));
+      navigation.navigate('OnboardingStepThree');
+    } else {
+      setError('Please select an option.');
+    }
   };
 
   return (
@@ -72,16 +82,16 @@ export const OnboardingStepTwo = ({navigation}: any) => {
                   onPress={() => handleOptionChange('option4')}
                 />
               </View>
+              {error ? <Text style={styles.errorText}>{error}</Text> : null}
             </View>
+
             <View style={styles.step1btns}>
               <TouchableOpacity
                 style={styles.backBtn}
                 onPress={() => navigation.goBack()}>
                 <Text>Back</Text>
               </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.nextBtn}
-                onPress={() => navigation.navigate('OnboardingStepThree')}>
+              <TouchableOpacity style={styles.nextBtn} onPress={handleContinue}>
                 <Text style={styles.textColor}>Continue</Text>
               </TouchableOpacity>
             </View>
@@ -168,4 +178,10 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   radioText: {fontSize: 16, fontWeight: '400'},
+  errorText: {
+    color: 'tomato',
+    fontSize: 14,
+    textAlign: 'center',
+    marginBottom: -35,
+  },
 });
