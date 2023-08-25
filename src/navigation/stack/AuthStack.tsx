@@ -2,12 +2,12 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import SignInScreen from '../screens/SignInScreen';
 import SignUpScreen from '../screens/SignUpScreen';
 import {OtpStackNavigator} from './OtpStack';
-import {OnboardingStackNavigator} from './OnboardingStack';
+// import {OnboardingStackNavigator} from './OnboardingStack';
 
 type AuthenticationStackParamList = {
   Login: undefined;
   Register: undefined;
-  Onboarding: undefined;
+  // Onboarding: undefined;
   Home: undefined;
   ForgotPwd: undefined;
 };
@@ -27,11 +27,11 @@ const AuthStack: React.FC = () => {
         component={SignUpScreen}
         options={{headerShown: false}}
       />
-      <Stack.Screen
+      {/* <Stack.Screen
         name="Onboarding"
         component={OnboardingStackNavigator}
         options={{headerShown: false}}
-      />
+      /> */}
       <Stack.Screen
         name="ForgotPwd"
         component={OtpStackNavigator}

@@ -1,4 +1,6 @@
-import {createSlice, PayloadAction} from '@reduxjs/toolkit';
+import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
+import axios from 'axios';
+import API_URL from '../../utils/apiConfig';
 
 interface OnboardingState {
   name?: string;
@@ -16,6 +18,14 @@ const initialState: OnboardingState = {
   birthdate: '',
 };
 
+export const fetchOnboardingData = createAsyncThunk(
+  'onboarding/fetchData',
+  async () => {
+    const response = await axios.get(`${API_URL}/onboarding`);
+    return response.data;
+  },
+);
+
 const onboardingSlice = createSlice({
   name: 'onboarding',
   initialState,
@@ -23,6 +33,11 @@ const onboardingSlice = createSlice({
     setOnboardingData: (state, action: PayloadAction<OnboardingState>) => {
       return {...state, ...action.payload};
     },
+  },
+  extraReducers: builder => {
+    builder.addCase(fetchOnboardingData.fulfilled, (state, action) => {
+      return {...state, ...action.payload};
+    });
   },
 });
 

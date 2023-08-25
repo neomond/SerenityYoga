@@ -121,6 +121,15 @@ const authSlice = createSlice({
     setAuthenticated: (state, action) => {
       state.isAuthenticated = action.payload;
     },
+    logoutUser: state => {
+      state.loading = null;
+      state.users = [];
+      state.error = null;
+      state.user = null;
+      state.token = null;
+      state.otpCode = '';
+      // Optionally, you can clear the AsyncStorage here if needed
+    },
   },
   extraReducers: (builder: any) => {
     //-------FOR LOGIN---------
@@ -200,6 +209,16 @@ const authSlice = createSlice({
           console.log('sendOtp error:', action.payload);
         },
       );
+    // -------FOR LOGOUT-------
+    builder.addCase(authSlice.actions.logoutUser, (state: any) => {
+      state.loading = null;
+      state.users = [];
+      state.error = null;
+      state.user = null;
+      state.token = null;
+      state.otpCode = '';
+      // Optionally, you can clear the AsyncStorage here if needed
+    });
   },
 });
 

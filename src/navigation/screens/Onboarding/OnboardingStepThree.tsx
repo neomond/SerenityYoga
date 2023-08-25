@@ -11,16 +11,19 @@ import SvgLogo from '../../../assets/Logo';
 import LinearGradient from 'react-native-linear-gradient';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import SvgArrDown from '../../../assets/ArrowDown';
-import {useDispatch} from 'react-redux';
-import {AppDispatch} from '../../../redux';
+import {useDispatch, useSelector} from 'react-redux';
+import {AppDispatch, RootState} from '../../../redux';
 import {setOnboardingData} from '../../../redux/slices/OnboardingSlice';
 
 export const OnboardingStepThree = ({navigation}: any) => {
   const dispatch = useDispatch<AppDispatch>();
+  const onboardingData = useSelector((state: RootState) => state.onboarding);
 
-  const [weight, setWeight] = useState('');
-  const [height, setHeight] = useState('');
-  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [weight, setWeight] = useState(onboardingData.weight || '');
+  const [height, setHeight] = useState(onboardingData.height || '');
+  const [selectedDate, setSelectedDate] = useState<Date | null>(
+    onboardingData.birthdate ? new Date(onboardingData.birthdate) : null,
+  );
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [error, setError] = useState('');
 
@@ -63,7 +66,6 @@ export const OnboardingStepThree = ({navigation}: any) => {
     setError('');
     console.log('Date picker opened');
   };
-
   return (
     <LinearGradient
       colors={['#68C3F6', '#70ADFB', '#739DFD', '#85AEFE']}

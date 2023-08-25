@@ -1,10 +1,10 @@
 import React, {useEffect} from 'react';
 import {NavigationContainer, useIsFocused} from '@react-navigation/native';
-import {Provider} from 'react-redux';
+import {Provider, useSelector} from 'react-redux';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 
-import store from './src/redux';
+import store, {RootState} from './src/redux';
 
 import SplashScreen from 'react-native-splash-screen';
 
@@ -18,12 +18,14 @@ import {MeditationsStackNavigator} from './src/navigation/stack/MeditationsStack
 import {SaveStackNavigator} from './src/navigation/stack/SaveStack';
 import AuthStack from './src/navigation/stack/AuthStack';
 import {Text, View} from 'react-native';
+import {OnboardingStackNavigator} from './src/navigation/stack/OnboardingStack';
 
 type RootStackParamList = {
   AuthMain: undefined;
   HomeMain: undefined;
   ProfileMain: undefined;
   SaveMain: undefined;
+  Onboarding: undefined;
 };
 
 type BottomTabParamList = {
@@ -32,6 +34,7 @@ type BottomTabParamList = {
   Liked: undefined;
   Meditations: undefined;
   Practices: undefined;
+  // Onboarding:undefined
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -128,14 +131,22 @@ const App: React.FC = () => {
   useEffect(() => {
     SplashScreen.hide();
   }, []);
+  // const isLoggedIn = useSelector((state: RootState) => state.authSlice.token);
 
   return (
     <Provider store={store}>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="AuthMain">
+        <Stack.Navigator
+          // initialRouteName={isLoggedIn ? 'HomeMain' : 'AuthMain'}
+          initialRouteName={'AuthMain'}>
           <Stack.Screen
             name="AuthMain"
             component={AuthStack}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="Onboarding"
+            component={OnboardingStackNavigator}
             options={{headerShown: false}}
           />
           <Stack.Screen

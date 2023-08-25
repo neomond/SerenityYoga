@@ -3,13 +3,16 @@ import React, {useState} from 'react';
 import SvgLogo from '../../../assets/Logo';
 import {RadioButton} from '../../../components/helpers/radiobuttons';
 import LinearGradient from 'react-native-linear-gradient';
-import {AppDispatch} from '../../../redux';
-import {useDispatch} from 'react-redux';
+import {AppDispatch, RootState} from '../../../redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {setOnboardingData} from '../../../redux/slices/OnboardingSlice';
 
 export const OnboardingStepTwo = ({navigation}: any) => {
   const dispatch = useDispatch<AppDispatch>();
-  const [selectedOption, setSelectedOption] = useState<any>('');
+  const onboardingData = useSelector((state: RootState) => state.onboarding);
+  const [selectedOption, setSelectedOption] = useState<string | null>(
+    onboardingData.activityLevel || null,
+  );
   const [error, setError] = useState('');
 
   const handleOptionChange = (option: any) => {

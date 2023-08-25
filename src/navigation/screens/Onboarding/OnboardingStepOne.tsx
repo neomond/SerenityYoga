@@ -11,7 +11,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import {useDispatch} from 'react-redux';
 import {AppDispatch} from '../../../redux';
 import {useState} from 'react';
-import {setOnboardingData} from '../../../redux/slices/OnboardingSlice';
+import {fetchOnboardingData} from '../../../redux/slices/OnboardingSlice';
 
 export const OnboardingStepOne = ({navigation}: any) => {
   const dispatch = useDispatch<AppDispatch>();
@@ -23,15 +23,31 @@ export const OnboardingStepOne = ({navigation}: any) => {
     setError('');
   };
 
-  const handleContinue = () => {
+  // const handleContinue = () => {
+  //   if (name.trim() === '') {
+  //     setError('Please enter your name before proceeding.');
+  //     return;
+  //   }
+  //   console.log('Entered Name:', name);
+  //   dispatch(setOnboardingData({name}));
+
+  //   navigation.navigate('OnboardingStepTwo');
+  // };
+
+  const handleContinue = async () => {
     if (name.trim() === '') {
       setError('Please enter your name before proceeding.');
       return;
     }
-    console.log('Entered Name:', name);
-    dispatch(setOnboardingData({name}));
 
-    navigation.navigate('OnboardingStepTwo');
+    console.log('Entered Name:', name);
+
+    try {
+      await dispatch(fetchOnboardingData());
+      navigation.navigate('OnboardingStepTwo');
+    } catch (error) {
+      console.error('Error fetching onboarding data:', error);
+    }
   };
 
   return (
