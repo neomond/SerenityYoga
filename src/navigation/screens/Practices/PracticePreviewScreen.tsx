@@ -7,28 +7,45 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React from 'react';
+import React, {useCallback, useState} from 'react';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import SvgBack from '../../../assets/BackIcon';
 import BottomSheetComponentWithoutOverlay from '../../../components/bottomsheet/BottomSheetComponentWithoutOverlay';
 import SvgClock from '../../../assets/Clock';
 import SvgActivity from '../../../assets/Activity';
 import SvgActivityActive from '../../../assets/ActivityActive';
+import YoutubePlayer from 'react-native-youtube-iframe';
+import SvgFlower from '../../../assets/Flower';
 
 const PracticePreviewScreen = ({navigation}: any) => {
+  const [playing, setPlaying] = useState(false);
+  const togglePlaying = useCallback(() => {
+    setPlaying(prev => !prev);
+  }, []);
   return (
     <GestureHandlerRootView style={styles.container}>
-      <ImageBackground
+      {/* <ImageBackground
         source={require('../../../assets/test.png')}
-        style={styles.backgroundImage}>
-        <View style={styles.topBackBtn}>
-          <TouchableOpacity
-            style={styles.goBackBtnStyle}
-            onPress={() => navigation.goBack()}>
-            <SvgBack stroke="#fff" />
-          </TouchableOpacity>
+        style={styles.backgroundImage}> */}
+      <View style={styles.topBackBtn}>
+        <TouchableOpacity
+          style={styles.goBackBtnStyle}
+          onPress={() => navigation.goBack()}>
+          <SvgBack stroke="#fff" />
+        </TouchableOpacity>
+      </View>
+      <View
+        style={{
+          width: '100%',
+          paddingVertical: 100,
+          marginBottom: 80,
+        }}>
+        <YoutubePlayer height={230} videoId={'reASzZP63HQ'} play={playing} />
+        <View style={styles.flowerIcon}>
+          <SvgFlower />
         </View>
-      </ImageBackground>
+      </View>
+      {/* </ImageBackground> */}
       <BottomSheetComponentWithoutOverlay
         isVisible={true}
         snapPoints={['25%', '26%', '88%']}>
@@ -43,16 +60,10 @@ const PracticePreviewScreen = ({navigation}: any) => {
               source={require('../../../assets/test.png')}
             />
           </View>
-          <TouchableOpacity
-            style={styles.startBtn}
-            onPress={() => {
-              // navigation.reset({
-              //   index: 0,
-              //   routes: [{name: 'PracticeVideo'}],
-              // });
-              navigation.navigate('PracticeVideo');
-            }}>
-            <Text style={styles.startBtnText}>Start Workout</Text>
+          <TouchableOpacity style={styles.startBtn} onPress={togglePlaying}>
+            <Text style={styles.startBtnText}>
+              {playing ? 'Stop' : 'Start Workout'}
+            </Text>
           </TouchableOpacity>
         </View>
         <View style={styles.descWrapper}>
@@ -111,6 +122,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: 'rgba(229,222,255, 0.2)',
   },
   backgroundImage: {
     flex: 1,
@@ -125,7 +137,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 50,
     borderColor: 'rgba(229,222,255, 0.2)',
-    backgroundColor: 'rgba(229,222,255, 0.3)',
+    backgroundColor: 'rgba(129, 92, 255, 0.8)',
     padding: 8,
     marginLeft: 20,
   },
@@ -145,7 +157,7 @@ const styles = StyleSheet.create({
   },
   startBtn: {
     width: '100%',
-    marginTop: 30,
+    marginTop: Platform.OS === 'ios' ? 30 : 20,
     backgroundColor: '#815cff',
     paddingVertical: 15,
     borderRadius: 30,
@@ -195,5 +207,13 @@ const styles = StyleSheet.create({
     marginRight: 5,
     flexDirection: 'row',
     columnGap: -3,
+  },
+  flowerIcon: {
+    width: 100,
+    height: 100,
+    position: 'absolute',
+    top: Platform.OS === 'ios' ? '-28%' : '-13%',
+    left: 0,
+    zIndex: -1,
   },
 });

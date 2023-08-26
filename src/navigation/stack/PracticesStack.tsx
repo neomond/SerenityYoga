@@ -1,16 +1,13 @@
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import PracticesScreen from '../screens/Practices/PracticesScreen';
 import PracticePreviewScreen from '../screens/Practices/PracticePreviewScreen';
-import PracticeVideoScreen from '../screens/Practices/PracticeVideoScreen';
 import PracticesCollectionScreen from '../screens/Practices/PracticeCollectionScreen';
-import {Platform} from 'react-native';
 
 type PracticesStackParamList = {
   PracticesMain: undefined;
   PracticeCollection: undefined;
   Settings: undefined;
   PracticePreview: undefined;
-  PracticeVideo: undefined;
 };
 
 const PracticesStack = createNativeStackNavigator<PracticesStackParamList>();
@@ -28,7 +25,7 @@ export const PracticesStackNavigator: React.FC = () => {
         component={PracticesCollectionScreen}
         options={{
           headerShown: false,
-          presentation: 'modal',
+          // presentation: 'modal',
           // ...Platform.select({
           //   android: {
           //     animation: 'slide_from_bottom',
@@ -47,13 +44,8 @@ export const PracticesStackNavigator: React.FC = () => {
         component={PracticePreviewScreen}
         options={{
           headerShown: false,
-          presentation: 'modal',
+          // presentation: 'modal',
         }}
-      />
-      <PracticesStack.Screen
-        name="PracticeVideo"
-        component={PracticeVideoScreen}
-        options={{headerShown: false}}
       />
     </PracticesStack.Navigator>
   );
