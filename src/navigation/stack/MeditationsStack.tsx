@@ -25,6 +25,7 @@ export const MeditationsStackNavigator: React.FC = () => {
         component={MeditationsCollectionScreen}
         options={{
           headerShown: false,
+          presentation: 'modal',
           // presentation: 'modal',
           // ...Platform.select({
           //   android: {
@@ -40,7 +41,7 @@ export const MeditationsStackNavigator: React.FC = () => {
       <MeditationsStack.Screen
         name="MeditationsPlayer"
         component={MeditationsPlayerScreen}
-        options={{headerShown: false}}
+        options={{headerShown: false, presentation: 'modal'}}
       />
     </MeditationsStack.Navigator>
   );

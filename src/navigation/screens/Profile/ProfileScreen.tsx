@@ -180,6 +180,10 @@ const ProfileScreen = ({navigation}: any) => {
               style={styles.logOutBtn}
               onPress={() => {
                 setIsLogoutModalVisible(true);
+                // navigation.reset({
+                //   index: 0,
+                //   routes: [{name: 'Login'}],
+                // });
               }}>
               <Text>Log Out</Text>
             </TouchableOpacity>
@@ -190,6 +194,10 @@ const ProfileScreen = ({navigation}: any) => {
                 setIsLogoutModalVisible(false);
                 navigation.popToTop();
                 navigation.navigate('Login');
+                // navigation.reset({
+                //   index: 0,
+                //   routes: [{name: 'Login'}],
+                // });
               }}
             />
           </View>

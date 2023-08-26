@@ -47,6 +47,7 @@ export const PracticesStackNavigator: React.FC = () => {
         component={PracticePreviewScreen}
         options={{
           headerShown: false,
+          presentation: 'modal',
         }}
       />
       <PracticesStack.Screen

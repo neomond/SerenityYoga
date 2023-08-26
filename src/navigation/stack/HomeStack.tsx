@@ -27,7 +27,8 @@ export const HomeStackNavigator: React.FC = () => {
         options={{
           headerShown: false,
           // presentation: 'modal',
-          // animation: 'slide_from_bottom',
+          animation: 'slide_from_bottom',
+
           // ...Platform.select({
           //   android: {
           //     animation: 'slide_from_bottom',

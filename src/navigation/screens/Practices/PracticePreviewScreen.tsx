@@ -43,7 +43,15 @@ const PracticePreviewScreen = ({navigation}: any) => {
               source={require('../../../assets/test.png')}
             />
           </View>
-          <TouchableOpacity style={styles.startBtn}>
+          <TouchableOpacity
+            style={styles.startBtn}
+            onPress={() => {
+              // navigation.reset({
+              //   index: 0,
+              //   routes: [{name: 'PracticeVideo'}],
+              // });
+              navigation.navigate('PracticeVideo');
+            }}>
             <Text style={styles.startBtnText}>Start Workout</Text>
           </TouchableOpacity>
         </View>
