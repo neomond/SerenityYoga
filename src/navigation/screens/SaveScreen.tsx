@@ -267,12 +267,7 @@ const styles = StyleSheet.create({
     marginRight: 8,
     borderRadius: 8,
   },
-  progressBar: {
-    width: '110%',
-    position: 'absolute',
-    flexDirection: 'row',
-    top: -20,
-  },
+
   centerContainer: {
     // flex: 1,
     alignItems: 'center',
@@ -281,27 +276,11 @@ const styles = StyleSheet.create({
   playerLeftStyles: {flexDirection: 'row', alignItems: 'center', columnGap: 2},
 });
 
-// const setUpPlayer = async () => {
-//   await TrackPlayer.setupPlayer();
-//   await TrackPlayer.add(tracks);
-// };
-
 //?????? check if player has already been initialized before calling TrackPlayer.setupPlayer():
 // let isPlayerInitialized = false;
 
 // console.log('Liked Items:', likedItems);
-// const handlePlay = async (item: any) => {
-//   setSelectedItem(item);
-//   await TrackPlayer.reset();
-//   await TrackPlayer.add(tracks);
-//   await TrackPlayer.play();
-//   setPause('playing');
-// };
 
-// const handleClosePlayer = () => {
-//   setSelectedItem(null);
-//   TrackPlayer.stop();
-// };
 // console.log('meeeeoooooowww', likedItems);
 
 //////////// FOR PLAYER
@@ -349,10 +328,6 @@ const styles = StyleSheet.create({
 // };
 // console.log('wtttttffff', likedItems);
 /////////////////PLAYER
-// const playbackState = usePlaybackState();
-// const progress = useProgress();
-// const [pause, setPause] = useState('paused');
-// const [sliderValue, setSliderValue] = useState(0);
 
 // const setUpPlayer = async () => {
 //   if (!isPlayerInitialized) {
@@ -362,18 +337,4 @@ const styles = StyleSheet.create({
 //   await TrackPlayer.add(tracks);
 // };
 
-// useEffect(() => {
-//   setUpPlayer();
-// }, []);
-
-// const togglePause = () => {
-//   if (pause == 'paused') {
-//     TrackPlayer.play();
-//     setPause('playing');
-//   } else {
-//     TrackPlayer.pause();
-//     setPause('paused');
-//   }
-// };
 /////////////////PLAYER
-// const [selectedItem, setSelectedItem] = useState<DataItem | null>(null);

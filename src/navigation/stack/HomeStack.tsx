@@ -26,7 +26,7 @@ export const HomeStackNavigator: React.FC = () => {
         component={ProfileScreen}
         options={{
           headerShown: false,
-          presentation: 'modal',
+          // presentation: 'modal',
           // animation: 'slide_from_bottom',
           // ...Platform.select({
           //   android: {

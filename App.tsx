@@ -19,7 +19,6 @@ import {SaveStackNavigator} from './src/navigation/stack/SaveStack';
 import AuthStack from './src/navigation/stack/AuthStack';
 import {Text, View} from 'react-native';
 import {OnboardingStackNavigator} from './src/navigation/stack/OnboardingStack';
-import {ActivityIndicator} from 'react-native-paper';
 
 import LottieView from 'lottie-react-native';
 

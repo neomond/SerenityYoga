@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Svg, {Path} from 'react-native-svg';
-const SvgPlay = props => (
+const SvgRotateLeft = props => (
   <Svg
     xmlns="http://www.w3.org/2000/svg"
     width={24}
@@ -11,10 +11,9 @@ const SvgPlay = props => (
       stroke="#fff"
       strokeLinecap="round"
       strokeLinejoin="round"
-      strokeMiterlimit={10}
       strokeWidth={1.5}
-      d="M4 12V8.44c0-4.42 3.13-6.23 6.96-4.02l3.09 1.78 3.09 1.78c3.83 2.21 3.83 5.83 0 8.04l-3.09 1.78-3.09 1.78C7.13 21.79 4 19.98 4 15.56V12Z"
+      d="M9.11 5.08c.87-.26 1.83-.43 2.89-.43 4.79 0 8.67 3.88 8.67 8.67s-3.88 8.67-8.67 8.67-8.67-3.88-8.67-8.67c0-1.78.54-3.44 1.46-4.82M7.87 5.32 10.76 2M7.87 5.32l3.37 2.46"
     />
   </Svg>
 );
-export default SvgPlay;
+export default SvgRotateLeft;
