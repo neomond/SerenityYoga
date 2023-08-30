@@ -1,8 +1,7 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Image,
   Platform,
-  Pressable,
   ScrollView,
   StyleSheet,
   Text,
@@ -10,51 +9,65 @@ import {
   View,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
+import {useDispatch, useSelector} from 'react-redux';
+import {AppDispatch, RootState} from '../../../redux';
+import {
+  fetchMeditations,
+  getMeditations,
+} from '../../../redux/slices/MeditationSlice';
 
-const dummydata = [
-  {
-    id: '1',
-    title: '5 meditations',
-    subtitle: 'Remember to breathe',
-    type: 'morning',
-    description:
-      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus, doloribus',
-    imgUrl:
-      'https://img.freepik.com/premium-photo/abstract-creative-background-using-your-project-ui-ux-design_155807-1066.jpg',
-  },
-  {
-    id: '2',
-    title: '6 meditations',
-    subtitle: 'Remember to sleep',
-    type: 'evening',
-    description:
-      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus, doloribus',
-    imgUrl:
-      'https://img.freepik.com/premium-photo/abstract-creative-background-using-your-project-ui-ux-design_155807-1066.jpg',
-  },
-  {
-    id: '3',
-    title: '3 meditations',
-    subtitle: 'Remember to be special',
-    type: 'special',
-    description:
-      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus, doloribus',
-    imgUrl:
-      'https://img.freepik.com/premium-photo/abstract-creative-background-using-your-project-ui-ux-design_155807-1066.jpg',
-  },
-];
+// const dummydata = [
+//   {
+//     id: '1',
+//     title: '5 meditations',
+//     subtitle: 'Remember to breathe',
+//     type: 'morning',
+//     description:
+//       'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus, doloribus',
+//     imgUrl:
+//       'https://img.freepik.com/premium-photo/abstract-creative-background-using-your-project-ui-ux-design_155807-1066.jpg',
+//   },
+//   {
+//     id: '2',
+//     title: '6 meditations',
+//     subtitle: 'Remember to sleep',
+//     type: 'evening',
+//     description:
+//       'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus, doloribus',
+//     imgUrl:
+//       'https://img.freepik.com/premium-photo/abstract-creative-background-using-your-project-ui-ux-design_155807-1066.jpg',
+//   },
+//   {
+//     id: '3',
+//     title: '3 meditations',
+//     subtitle: 'Remember to be special',
+//     type: 'special',
+//     description:
+//       'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus, doloribus',
+//     imgUrl:
+//       'https://img.freepik.com/premium-photo/abstract-creative-background-using-your-project-ui-ux-design_155807-1066.jpg',
+//   },
+// ];
 
 const MeditationsScreen = ({navigation}: any) => {
+  const dispatch = useDispatch<AppDispatch>();
+  const meditations = useSelector((state: RootState) => getMeditations(state));
+
   const [selectedImageUrl, setSelectedImageUrl] = useState<string | null>(null);
+
+  useEffect(() => {
+    dispatch(fetchMeditations());
+  }, [dispatch]);
 
   const renderItem = ({item}: any) => {
     return (
       <TouchableOpacity
-        key={item.id}
+        key={item._id}
         style={styles.mainCollectionWrapper}
         onPress={() => {
           setSelectedImageUrl(item.imgUrl);
           navigation.navigate('MeditationsCollection', {
+            selectedMeditation: item,
             selectedImageUrl: item.imgUrl,
           });
         }}>
@@ -73,15 +86,15 @@ const MeditationsScreen = ({navigation}: any) => {
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
       <LinearGradient
-        colors={['#c47afb', '#A07AFA', '#8380fb', '#8866ff']}
-        start={{x: 0, y: 0.2}}
+        colors={['#C17BFA', '#7F7DFA', '#8283FC']}
+        start={{x: 0, y: 0}}
         end={{x: 1, y: 0}}
         style={styles.linearGradient}>
         <View style={styles.iconsHeader}>
           <Text style={styles.textCategory}>Meditations 🧘‍♀️</Text>
         </View>
         <View style={styles.primaryContent}>
-          {dummydata.map(item => renderItem({item}))}
+          {meditations.meditations.map(item => renderItem({item}))}
         </View>
       </LinearGradient>
     </ScrollView>

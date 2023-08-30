@@ -10,12 +10,14 @@ import React, {useEffect} from 'react';
 import SvgLikeIcon from '../../../assets/LikeIcon';
 import SvgBack from '../../../assets/BackIcon';
 import SvgDuration from '../../../assets/DurationIcon';
+import {useDispatch, useSelector} from 'react-redux';
+import {AppDispatch, RootState} from '../../../redux';
+import {getMeditations} from '../../../redux/slices/MeditationSlice';
 
 const dummydata = [
   {
     id: '1',
     subtitle: 'Remember to breathe',
-    author: 'by Adriene',
     duration: '10:00',
     description:
       'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus, doloribus',
@@ -25,7 +27,6 @@ const dummydata = [
   {
     id: '2',
     subtitle: 'Remember to sleep',
-    author: 'by Adriene',
     duration: '10:00',
     description:
       'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus, doloribus',
@@ -35,7 +36,6 @@ const dummydata = [
   {
     id: '3',
     subtitle: 'Remember to live',
-    author: 'by Adriene',
     duration: '10:00',
     description:
       'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus, doloribus',
@@ -45,7 +45,6 @@ const dummydata = [
   {
     id: '4',
     subtitle: 'Remember to be special',
-    author: 'by Adriene',
     duration: '10:00',
     description:
       'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus, doloribus',
@@ -55,6 +54,8 @@ const dummydata = [
 ];
 
 const MeditationsCollectionScreen = ({navigation, route}: any) => {
+  const dispatch = useDispatch<AppDispatch>();
+
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       navigation.getParent()?.setOptions({tabBarStyle: {display: 'none'}});
@@ -63,8 +64,9 @@ const MeditationsCollectionScreen = ({navigation, route}: any) => {
       navigation.getParent()?.setOptions({tabBarStyle: {display: 'flex'}});
       unsubscribe();
     };
-  }, [navigation]);
+  }, [navigation, dispatch, route]);
   const selectedImageUrl = route.params?.selectedImageUrl || null;
+  const selectedMeditation = route.params?.selectedMeditation || null;
 
   const renderMeditationItem = ({item}: any) => (
     <View key={item.id} style={styles.favoritesItem}>
@@ -118,13 +120,22 @@ const MeditationsCollectionScreen = ({navigation, route}: any) => {
               <SvgBack stroke="#fff" />
             </TouchableOpacity>
           </View>
-          <View style={styles.secondaryCollectionWrapper}>
-            <Text style={styles.textCollFirst}>10 meditations</Text>
-            <Text style={styles.textCollSecond}>Remember to breathe</Text>
-            <Text style={styles.textCollThird}>
-              Bring awareness Back onto the menu. Reconnect with yourself
-            </Text>
-          </View>
+
+          {selectedMeditation && (
+            <>
+              <View style={styles.secondaryCollectionWrapper}>
+                <Text style={styles.textCollFirst}>
+                  {selectedMeditation.title}
+                </Text>
+                <Text style={styles.textCollSecond}>
+                  {selectedMeditation.subtitle}
+                </Text>
+                <Text style={styles.textCollThird}>
+                  {selectedMeditation.description}
+                </Text>
+              </View>
+            </>
+          )}
         </>
       }
     />
@@ -226,8 +237,8 @@ const styles = StyleSheet.create({
   goBackBtnStyle: {
     borderWidth: 1,
     borderRadius: 50,
-    borderColor: 'rgba(229,222,255, 0.2)',
-    backgroundColor: 'rgba(229,222,255, 0.2)',
+    borderColor: 'rgba(229,222,255, 0.4)',
+    backgroundColor: 'rgba(229,222,255, 0.4)',
     padding: 5,
     marginLeft: 20,
   },

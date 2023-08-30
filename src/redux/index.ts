@@ -4,7 +4,7 @@ import categoriesReducer from './slices/CategoriesSlice';
 import likedItemsSliceReducer from './slices/LikedItemsSlice';
 import sessionReducer from './slices/SessionSlice';
 import onboardingReducer from './slices/OnboardingSlice';
-
+import meditationsReducer from './slices/MeditationSlice';
 // const middleware = getDefaultMiddleware({
 //   serializableCheck: false, // Disable serializable state check
 // });
@@ -16,6 +16,7 @@ const store = configureStore({
     likedItems: likedItemsSliceReducer,
     sessions: sessionReducer,
     onboarding: onboardingReducer,
+    meditations: meditationsReducer,
   },
   // middleware,
 });
