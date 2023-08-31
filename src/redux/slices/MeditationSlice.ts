@@ -20,8 +20,13 @@ const initialState: MeditationsState = {
 export const fetchMeditations = createAsyncThunk(
   'api/meditations/fetchMeditations',
   async () => {
-    const response = await axios.get(`${API_URL}/meditations`);
-    return response.data;
+    try {
+      const response = await axios.get(`${API_URL}/meditations`);
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching meditations:', error);
+      throw error;
+    }
   },
 );
 

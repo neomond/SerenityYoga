@@ -12,49 +12,21 @@ import SvgBack from '../../../assets/BackIcon';
 import SvgDuration from '../../../assets/DurationIcon';
 import {useDispatch, useSelector} from 'react-redux';
 import {AppDispatch, RootState} from '../../../redux';
-import {getMeditations} from '../../../redux/slices/MeditationSlice';
 
-const dummydata = [
-  {
-    id: '1',
-    subtitle: 'Remember to breathe',
-    duration: '10:00',
-    description:
-      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus, doloribus',
-    imgUrl:
-      'https://img.freepik.com/premium-photo/abstract-creative-background-using-your-project-ui-ux-design_155807-1066.jpg',
-  },
-  {
-    id: '2',
-    subtitle: 'Remember to sleep',
-    duration: '10:00',
-    description:
-      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus, doloribus',
-    imgUrl:
-      'https://img.freepik.com/premium-photo/abstract-creative-background-using-your-project-ui-ux-design_155807-1066.jpg',
-  },
-  {
-    id: '3',
-    subtitle: 'Remember to live',
-    duration: '10:00',
-    description:
-      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus, doloribus',
-    imgUrl:
-      'https://img.freepik.com/premium-photo/abstract-creative-background-using-your-project-ui-ux-design_155807-1066.jpg',
-  },
-  {
-    id: '4',
-    subtitle: 'Remember to be special',
-    duration: '10:00',
-    description:
-      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus, doloribus',
-    imgUrl:
-      'https://img.freepik.com/premium-photo/abstract-creative-background-using-your-project-ui-ux-design_155807-1066.jpg',
-  },
-];
+import {
+  fetchMeditationSessions,
+  selectMeditationSessionsLoading,
+} from '../../../redux/slices/MeditationSessions';
+import {ActivityIndicator} from 'react-native-paper';
 
 const MeditationsCollectionScreen = ({navigation, route}: any) => {
   const dispatch = useDispatch<AppDispatch>();
+  const loading = useSelector(selectMeditationSessionsLoading);
+
+  const selectedImageUrl = route.params?.selectedImageUrl || null;
+  const selectedMeditation = route.params?.selectedMeditation || null;
+  const selectedRelatedSessions = selectedMeditation?.relatedSessions || [];
+  console.log(selectedRelatedSessions, 'RELATED MEDITATIONS');
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
@@ -65,19 +37,21 @@ const MeditationsCollectionScreen = ({navigation, route}: any) => {
       unsubscribe();
     };
   }, [navigation, dispatch, route]);
-  const selectedImageUrl = route.params?.selectedImageUrl || null;
-  const selectedMeditation = route.params?.selectedMeditation || null;
+
+  useEffect(() => {
+    dispatch(fetchMeditationSessions());
+  }, [dispatch]);
 
   const renderMeditationItem = ({item}: any) => (
-    <View key={item.id} style={styles.favoritesItem}>
+    <View key={item._id} style={styles.favoritesItem}>
       <View style={styles.imageContentSubtop}>
         <SvgDuration />
         <Text style={styles.titleColor}>{item.duration}</Text>
       </View>
       <View style={{flexDirection: 'row', columnGap: 15, marginHorizontal: 25}}>
-        <Image style={styles.imageFav} source={{uri: item.imgUrl}} />
+        <Image style={styles.imageFav} source={{uri: item.imageUrl}} />
         <View style={styles.favoritesItemSecondary}>
-          <Text style={styles.textFav}>{item.subtitle}</Text>
+          <Text style={styles.textFav}>{item.title}</Text>
           <View style={styles.favoritesItemSecondaryBottom}>
             <TouchableOpacity
               style={styles.btnFav}
@@ -95,45 +69,44 @@ const MeditationsCollectionScreen = ({navigation, route}: any) => {
 
   return (
     <FlatList
-      data={dummydata}
+      data={selectedRelatedSessions}
       renderItem={renderMeditationItem}
-      keyExtractor={item => item.id}
+      keyExtractor={item => item._id}
       style={styles.mainWrapper}
       showsVerticalScrollIndicator={false}
       ListHeaderComponent={
         <>
-          {selectedImageUrl && (
-            <Image style={styles.image} source={{uri: selectedImageUrl}} />
-          )}
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              top: 30,
-              position: 'absolute',
-              width: '100%',
-            }}>
-            <TouchableOpacity
-              style={styles.goBackBtnStyle}
-              onPress={() => navigation.goBack()}>
-              <SvgBack stroke="#fff" />
-            </TouchableOpacity>
-          </View>
-
-          {selectedMeditation && (
+          {loading ? (
+            // Display loading indicator here
+            <ActivityIndicator size="large" color="#815cff" />
+          ) : (
             <>
-              <View style={styles.secondaryCollectionWrapper}>
-                <Text style={styles.textCollFirst}>
-                  {selectedMeditation.title}
-                </Text>
-                <Text style={styles.textCollSecond}>
-                  {selectedMeditation.subtitle}
-                </Text>
-                <Text style={styles.textCollThird}>
-                  {selectedMeditation.description}
-                </Text>
+              {selectedImageUrl && (
+                <Image style={styles.image} source={{uri: selectedImageUrl}} />
+              )}
+              <View style={styles.backIcon}>
+                <TouchableOpacity
+                  style={styles.goBackBtnStyle}
+                  onPress={() => navigation.goBack()}>
+                  <SvgBack stroke="#fff" />
+                </TouchableOpacity>
               </View>
+
+              {selectedMeditation && (
+                <>
+                  <View style={styles.secondaryCollectionWrapper}>
+                    <Text style={styles.textCollFirst}>
+                      {selectedMeditation.title}
+                    </Text>
+                    <Text style={styles.textCollSecond}>
+                      {selectedMeditation.subtitle}
+                    </Text>
+                    <Text style={styles.textCollThird}>
+                      {selectedMeditation.description}
+                    </Text>
+                  </View>
+                </>
+              )}
             </>
           )}
         </>
@@ -190,8 +163,8 @@ const styles = StyleSheet.create({
     columnGap: 3,
     alignItems: 'center',
     position: 'absolute',
-    top: 35,
-    left: 10,
+    top: 38,
+    left: 35,
     zIndex: 1,
   },
   imageFav: {
@@ -201,6 +174,7 @@ const styles = StyleSheet.create({
   },
   textFav: {
     fontSize: 16,
+    width: '70%',
   },
   titleColor: {
     color: '#fff',
@@ -241,5 +215,13 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(229,222,255, 0.4)',
     padding: 5,
     marginLeft: 20,
+  },
+  backIcon: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    top: 30,
+    position: 'absolute',
+    width: '100%',
   },
 });

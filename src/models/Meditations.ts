@@ -1,4 +1,4 @@
-import {Category} from './Category';
+import {MeditationSession} from './MeditationSession';
 
 export interface Meditation {
   _id: string;
@@ -7,5 +7,5 @@ export interface Meditation {
   type: string;
   description: string;
   imgUrl: string;
-  categories: Category[];
+  relatedSessions: MeditationSession[];
 }

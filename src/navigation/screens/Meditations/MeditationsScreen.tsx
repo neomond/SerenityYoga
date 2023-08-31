@@ -16,39 +16,6 @@ import {
   getMeditations,
 } from '../../../redux/slices/MeditationSlice';
 
-// const dummydata = [
-//   {
-//     id: '1',
-//     title: '5 meditations',
-//     subtitle: 'Remember to breathe',
-//     type: 'morning',
-//     description:
-//       'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus, doloribus',
-//     imgUrl:
-//       'https://img.freepik.com/premium-photo/abstract-creative-background-using-your-project-ui-ux-design_155807-1066.jpg',
-//   },
-//   {
-//     id: '2',
-//     title: '6 meditations',
-//     subtitle: 'Remember to sleep',
-//     type: 'evening',
-//     description:
-//       'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus, doloribus',
-//     imgUrl:
-//       'https://img.freepik.com/premium-photo/abstract-creative-background-using-your-project-ui-ux-design_155807-1066.jpg',
-//   },
-//   {
-//     id: '3',
-//     title: '3 meditations',
-//     subtitle: 'Remember to be special',
-//     type: 'special',
-//     description:
-//       'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus, doloribus',
-//     imgUrl:
-//       'https://img.freepik.com/premium-photo/abstract-creative-background-using-your-project-ui-ux-design_155807-1066.jpg',
-//   },
-// ];
-
 const MeditationsScreen = ({navigation}: any) => {
   const dispatch = useDispatch<AppDispatch>();
   const meditations = useSelector((state: RootState) => getMeditations(state));
