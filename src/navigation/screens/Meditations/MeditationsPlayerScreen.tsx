@@ -24,6 +24,9 @@ import SvgPause from '../../../assets/PauseIcon';
 import SvgRotateLeft from '../../../assets/RotateLeft';
 import SvgRotateRight from '../../../assets/RotateRight';
 import SvgBack from '../../../assets/BackIcon';
+import {useDispatch, useSelector} from 'react-redux';
+import {AppDispatch} from '../../../redux';
+import {selectMeditationSessions} from '../../../redux/slices/MeditationSessions';
 
 const setUpPlayer = async () => {
   await TrackPlayer.setupPlayer();
@@ -31,7 +34,11 @@ const setUpPlayer = async () => {
   await TrackPlayer.add(tracks);
 };
 
-const MeditationsPlayerScreen = ({navigation}: any) => {
+const MeditationsPlayerScreen = ({navigation, route}: any) => {
+  const {selectedMeditation} = route.params;
+  const meditationSessions = useSelector(selectMeditationSessions);
+  console.log(meditationSessions, 'DATAAAAAAA');
+
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       navigation.getParent()?.setOptions({tabBarStyle: {display: 'none'}});
@@ -51,6 +58,7 @@ const MeditationsPlayerScreen = ({navigation}: any) => {
   useEffect(() => {
     setUpPlayer();
   }, []);
+
   const togglePause = () => {
     if (pause == 'paused') {
       TrackPlayer.play();
@@ -95,23 +103,24 @@ const MeditationsPlayerScreen = ({navigation}: any) => {
 
   return (
     <ImageBackground
+      style={styles.backgroundImage}
       source={{
-        uri: 'https://img.freepik.com/premium-photo/abstract-creative-background-using-your-project-ui-ux-design_155807-1066.jpg',
-      }}
-      style={styles.backgroundImage}>
-      <View style={styles.container}>
+        uri: selectedMeditation.imageUrl,
+      }}>
+      <View style={{zIndex: 999}}>
         <TouchableOpacity
           style={styles.goBackBtnStyle}
           onPress={handleClosePlayer}>
           <SvgBack stroke="#fff" />
         </TouchableOpacity>
-        <Text style={styles.title}>Best Self</Text>
-        <Text style={styles.subtitle}>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Recusandae
-          ipsum odio nesciunt.
-        </Text>
-        <Text style={styles.authortext}>by Steve Muscara</Text>
+      </View>
 
+      <View style={styles.container}>
+        <View style={styles.dataCont}>
+          <Text style={styles.title}>{selectedMeditation.title}</Text>
+          <Text style={styles.subtitle}>{selectedMeditation.subtitle}</Text>
+          <Text style={styles.authortext}>by Buddha</Text>
+        </View>
         <Slider
           style={styles.slider}
           value={progress.position}
@@ -158,7 +167,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    justifyContent: 'center',
+    // justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'rgba(0, 0, 0, 0.35)',
   },
@@ -167,12 +176,15 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 20,
     marginTop: '50%',
+    paddingHorizontal: 10,
+    textAlign: 'center',
     color: '#fff',
   },
   subtitle: {
     fontSize: 16,
     textAlign: 'center',
-    width: '76%',
+    // width: '76%',
+    paddingHorizontal: 15,
     color: '#fff',
     marginBottom: 10,
   },
@@ -222,12 +234,24 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255,255,255, 0.3)',
     padding: 10,
     position: 'absolute',
-    top: Platform.OS === 'ios' ? 60 : 30,
-    left: 20,
-    zIndex: 1,
+    top: Platform.OS === 'ios' ? 30 : 25,
+    left: 12,
+    zIndex: 100,
   },
   backgroundImage: {
     flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.35)',
     resizeMode: 'cover',
+  },
+  dataCont: {
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 50,
+    marginHorizontal: 25,
+    marginVertical: 40,
+    backgroundColor: 'rgba(0,0,0, 0.2)',
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255, 0.3)',
   },
 });

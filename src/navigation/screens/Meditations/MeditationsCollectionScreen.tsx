@@ -6,26 +6,29 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import SvgLikeIcon from '../../../assets/LikeIcon';
 import SvgBack from '../../../assets/BackIcon';
 import SvgDuration from '../../../assets/DurationIcon';
 import {useDispatch, useSelector} from 'react-redux';
 import {AppDispatch, RootState} from '../../../redux';
 
+import {fetchMeditationSessions} from '../../../redux/slices/MeditationSessions';
 import {
-  fetchMeditationSessions,
-  selectMeditationSessionsLoading,
-} from '../../../redux/slices/MeditationSessions';
-import {ActivityIndicator} from 'react-native-paper';
+  addItem,
+  getLikes,
+  removeItem,
+} from '../../../redux/slices/LikedItemsSlice';
+import {Session} from '../../../models/Session';
 
 const MeditationsCollectionScreen = ({navigation, route}: any) => {
   const dispatch = useDispatch<AppDispatch>();
-  const loading = useSelector(selectMeditationSessionsLoading);
 
   const selectedImageUrl = route.params?.selectedImageUrl || null;
   const selectedMeditation = route.params?.selectedMeditation || null;
   const selectedRelatedSessions = selectedMeditation?.relatedSessions || [];
+
+  const likedItems = useSelector((state: RootState) => getLikes(state));
   console.log(selectedRelatedSessions, 'RELATED MEDITATIONS');
 
   useEffect(() => {
@@ -38,9 +41,30 @@ const MeditationsCollectionScreen = ({navigation, route}: any) => {
     };
   }, [navigation, dispatch, route]);
 
+  const isItemLiked = (item: Session) => {
+    return likedItems.some(likedItem => likedItem._id === item._id);
+  };
+
+  const handleLikeItem = (item: Session) => {
+    if (isItemLiked(item)) {
+      dispatch(removeItem(item._id));
+    } else {
+      dispatch(addItem(item));
+    }
+  };
+
+  const handleRefresh = () => {
+    setIsRefreshing(true);
+    dispatch(fetchMeditationSessions()).then(() => {
+      setIsRefreshing(false);
+    });
+  };
+
   useEffect(() => {
-    dispatch(fetchMeditationSessions());
+    handleRefresh();
   }, [dispatch]);
+
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
   const renderMeditationItem = ({item}: any) => (
     <View key={item._id} style={styles.favoritesItem}>
@@ -55,11 +79,18 @@ const MeditationsCollectionScreen = ({navigation, route}: any) => {
           <View style={styles.favoritesItemSecondaryBottom}>
             <TouchableOpacity
               style={styles.btnFav}
-              onPress={() => navigation.navigate('MeditationsPlayer')}>
+              onPress={() =>
+                navigation.navigate('MeditationsPlayer', {
+                  selectedMeditation: item,
+                })
+              }>
               <Text>Listen</Text>
             </TouchableOpacity>
-            <TouchableOpacity>
-              <SvgLikeIcon fill="#815cff" />
+            <TouchableOpacity onPress={() => handleLikeItem(item)}>
+              <SvgLikeIcon
+                fill={isItemLiked(item) ? '#E5DEFF' : 'transparent'}
+                stroke={isItemLiked(item) ? '#815cff' : '#E5DEFF'}
+              />
             </TouchableOpacity>
           </View>
         </View>
@@ -74,39 +105,34 @@ const MeditationsCollectionScreen = ({navigation, route}: any) => {
       keyExtractor={item => item._id}
       style={styles.mainWrapper}
       showsVerticalScrollIndicator={false}
+      onRefresh={handleRefresh}
+      refreshing={isRefreshing}
       ListHeaderComponent={
         <>
-          {loading ? (
-            // Display loading indicator here
-            <ActivityIndicator size="large" color="#815cff" />
-          ) : (
-            <>
-              {selectedImageUrl && (
-                <Image style={styles.image} source={{uri: selectedImageUrl}} />
-              )}
-              <View style={styles.backIcon}>
-                <TouchableOpacity
-                  style={styles.goBackBtnStyle}
-                  onPress={() => navigation.goBack()}>
-                  <SvgBack stroke="#fff" />
-                </TouchableOpacity>
-              </View>
+          {selectedImageUrl && (
+            <Image style={styles.image} source={{uri: selectedImageUrl}} />
+          )}
+          <View style={styles.backIcon}>
+            <TouchableOpacity
+              style={styles.goBackBtnStyle}
+              onPress={() => navigation.goBack()}>
+              <SvgBack stroke="#fff" />
+            </TouchableOpacity>
+          </View>
 
-              {selectedMeditation && (
-                <>
-                  <View style={styles.secondaryCollectionWrapper}>
-                    <Text style={styles.textCollFirst}>
-                      {selectedMeditation.title}
-                    </Text>
-                    <Text style={styles.textCollSecond}>
-                      {selectedMeditation.subtitle}
-                    </Text>
-                    <Text style={styles.textCollThird}>
-                      {selectedMeditation.description}
-                    </Text>
-                  </View>
-                </>
-              )}
+          {selectedMeditation && (
+            <>
+              <View style={styles.secondaryCollectionWrapper}>
+                <Text style={styles.textCollFirst}>
+                  {selectedMeditation.title}
+                </Text>
+                <Text style={styles.textCollSecond}>
+                  {selectedMeditation.subtitle}
+                </Text>
+                <Text style={styles.textCollThird}>
+                  {selectedMeditation.description}
+                </Text>
+              </View>
             </>
           )}
         </>
@@ -174,7 +200,7 @@ const styles = StyleSheet.create({
   },
   textFav: {
     fontSize: 16,
-    width: '70%',
+    width: '95%',
   },
   titleColor: {
     color: '#fff',
