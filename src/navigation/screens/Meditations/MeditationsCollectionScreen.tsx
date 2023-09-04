@@ -82,6 +82,7 @@ const MeditationsCollectionScreen = ({navigation, route}: any) => {
               onPress={() =>
                 navigation.navigate('MeditationsPlayer', {
                   selectedMeditation: item,
+                  randomTrack: true,
                 })
               }>
               <Text>Listen</Text>

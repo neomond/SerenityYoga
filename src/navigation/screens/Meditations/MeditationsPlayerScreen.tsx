@@ -9,13 +9,9 @@ import {
 import React, {useEffect, useState} from 'react';
 import TrackPlayer, {
   Capability,
-  State,
   Event,
-  usePlaybackState,
-  RepeatMode,
   useProgress,
   useTrackPlayerEvents,
-  PlaybackState,
 } from 'react-native-track-player';
 import Slider from '@react-native-community/slider';
 import tracks from '../../../models/tracks';
@@ -24,20 +20,9 @@ import SvgPause from '../../../assets/PauseIcon';
 import SvgRotateLeft from '../../../assets/RotateLeft';
 import SvgRotateRight from '../../../assets/RotateRight';
 import SvgBack from '../../../assets/BackIcon';
-import {useDispatch, useSelector} from 'react-redux';
-import {AppDispatch} from '../../../redux';
-import {selectMeditationSessions} from '../../../redux/slices/MeditationSessions';
-
-const setUpPlayer = async () => {
-  await TrackPlayer.setupPlayer();
-
-  await TrackPlayer.add(tracks);
-};
 
 const MeditationsPlayerScreen = ({navigation, route}: any) => {
   const {selectedMeditation} = route.params;
-  const meditationSessions = useSelector(selectMeditationSessions);
-  console.log(meditationSessions, 'DATAAAAAAA');
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
@@ -49,36 +34,83 @@ const MeditationsPlayerScreen = ({navigation, route}: any) => {
     };
   }, [navigation]);
 
-  const playbackState = usePlaybackState();
   const progress = useProgress();
   const [pause, setPause] = useState('paused');
-  const [selectedItem, setSelectedItem] = useState<any>(null);
-  const [sliderValue, setSliderValue] = useState(0);
 
   useEffect(() => {
-    setUpPlayer();
-  }, []);
+    let isMounted = true;
 
-  const togglePause = () => {
-    if (pause == 'paused') {
-      TrackPlayer.play();
-      setPause('playing');
-    } else {
-      TrackPlayer.pause();
-      setPause('paused');
+    const setUpPlayerFunc = async () => {
+      if (!isMounted) return;
+
+      const playerInitialized = await isPlayerInitialized();
+
+      if (playerInitialized) {
+        try {
+          await TrackPlayer.add(tracks);
+        } catch (error) {
+          console.error('Error setting up player:', error);
+        }
+      }
+    };
+
+    const playRandomTrack = async () => {
+      if (!isMounted) return;
+
+      if (route.params.randomTrack) {
+        try {
+          const randomIndex = Math.floor(Math.random() * tracks.length);
+          const randomTrack: any = tracks[randomIndex];
+
+          await TrackPlayer.reset();
+          await TrackPlayer.add([randomTrack]);
+          await TrackPlayer.play();
+          setPause('playing');
+        } catch (error) {
+          console.error('Error playing random track:', error);
+        }
+      }
+    };
+
+    setUpPlayerFunc();
+
+    if (route.params.randomTrack) {
+      playRandomTrack();
     }
-  };
+
+    return () => {
+      isMounted = false;
+      TrackPlayer.stop();
+    };
+  }, [route.params.randomTrack]);
+
+  async function isPlayerInitialized() {
+    let isPlayerInitialized = false;
+
+    try {
+      await TrackPlayer.setupPlayer();
+      await TrackPlayer.updateOptions({
+        capabilities: [
+          Capability.Play,
+          Capability.Pause,
+          Capability.SkipToNext,
+          Capability.SkipToPrevious,
+        ],
+      });
+
+      isPlayerInitialized = true;
+    } catch (e) {
+      console.log(e, 'eeeerrror in music playerr');
+    }
+
+    return isPlayerInitialized;
+  }
 
   const handleClosePlayer = () => {
-    setSelectedItem(null);
     TrackPlayer.stop();
     navigation.goBack();
   };
 
-  // const handleRotate = async (seconds: number) => {
-  //   const newPosition = Math.max(0, progress.position + seconds);
-  //   await TrackPlayer.seekTo(newPosition);
-  // };
   const handleRotate = async (seconds: number) => {
     const newPosition = progress.position + seconds;
     const duration = progress.duration;
@@ -87,12 +119,21 @@ const MeditationsPlayerScreen = ({navigation, route}: any) => {
     await TrackPlayer.seekTo(validPosition);
   };
 
-  const handlePlay = async (item: any) => {
-    setSelectedItem(item);
-    await TrackPlayer.reset();
-    await TrackPlayer.add(tracks);
-    await TrackPlayer.play();
-    setPause('playing');
+  useTrackPlayerEvents([Event.PlaybackQueueEnded], async event => {
+    if (event.type === Event.PlaybackQueueEnded) {
+      await TrackPlayer.stop();
+      setPause('paused');
+    }
+  });
+
+  const togglePause = async () => {
+    if (pause === 'paused') {
+      await TrackPlayer.play();
+      setPause('playing');
+    } else {
+      await TrackPlayer.pause();
+      setPause('paused');
+    }
   };
 
   const formatTime = (seconds: number) => {
@@ -145,7 +186,7 @@ const MeditationsPlayerScreen = ({navigation, route}: any) => {
             <Text style={styles.timeRotate}>10</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={togglePause} style={styles.playBtn}>
-            {pause == 'paused' ? <SvgPlay /> : <SvgPause />}
+            {pause === 'paused' ? <SvgPlay /> : <SvgPause />}
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => handleRotate(10)}
@@ -167,7 +208,6 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    // justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'rgba(0, 0, 0, 0.35)',
   },
@@ -183,7 +223,6 @@ const styles = StyleSheet.create({
   subtitle: {
     fontSize: 16,
     textAlign: 'center',
-    // width: '76%',
     paddingHorizontal: 15,
     color: '#fff',
     marginBottom: 10,
@@ -198,11 +237,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 20,
     columnGap: 30,
-  },
-  closeButton: {
-    fontSize: 18,
-    color: 'black',
-    marginHorizontal: 20,
   },
   playBtn: {
     backgroundColor: 'rgba(255,255,255, 0.4)',
@@ -247,7 +281,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 50,
+    marginTop: 100,
     marginHorizontal: 25,
     marginVertical: 40,
     backgroundColor: 'rgba(0,0,0, 0.2)',
