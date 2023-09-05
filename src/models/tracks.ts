@@ -16,10 +16,6 @@ const tracks = [
     url: require('../assets/tracks/cathedral-meditation.mp3'),
   },
   {
-    id: 'track5',
-    url: require('../assets/tracks/coniferous-forest-meditation.mp3'),
-  },
-  {
     id: 'track6',
     url: require('../assets/tracks/just-relax-meditation.mp3'),
   },

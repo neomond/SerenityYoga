@@ -5,46 +5,34 @@ import {
   TouchableOpacity,
   View,
   Image,
-  FlatList,
   SectionList,
 } from 'react-native';
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import SvgLikeIcon from '../../assets/LikeIcon';
 import SvgDownload from '../../assets/DownloadIcon';
 import {useDispatch, useSelector} from 'react-redux';
 import {AppDispatch, RootState} from '../../redux';
 import {
   addItem,
-  clearLikedItems,
   getLikes,
   loadLikedItems,
   removeItem,
 } from '../../redux/slices/LikedItemsSlice';
 import SvgFlower from '../../assets/Flower';
 import SvgDuration from '../../assets/DurationIcon';
-// import {DataItem} from '../../redux/slices/CategoriesSlice';
-import SvgCloseIcon from '../../assets/CloseIcon';
-import LinearGradient from 'react-native-linear-gradient';
-import SvgPause from '../../assets/PauseIcon';
-import Slider from '@react-native-community/slider';
-
-import TrackPlayer, {
-  Capability,
-  State,
-  Event,
-  usePlaybackState,
-  RepeatMode,
-  useProgress,
-  useTrackPlayerEvents,
-  PlaybackState,
-} from 'react-native-track-player';
-import tracks from '../../models/tracks';
-import SvgPlay from '../../assets/PlayIcon';
 import {Session} from '../../models/Session';
+import AudioPlayer from '../../components/musicPlayer/AudioPlayer';
 
 const SaveScreen = ({navigation}: any) => {
   const dispatch = useDispatch<AppDispatch>();
   const likedItems = useSelector((state: RootState) => getLikes(state));
+
+  const [showAudioPlayer, setShowAudioPlayer] = useState(false);
+  const [selectedAudioItem, setSelectedAudioItem] = useState(null);
+  const handleListenPress = (item: any) => {
+    setSelectedAudioItem(item);
+    setShowAudioPlayer(true);
+  };
 
   useEffect(() => {
     dispatch(loadLikedItems());
@@ -86,9 +74,21 @@ const SaveScreen = ({navigation}: any) => {
           <View style={styles.favoritesItemSecondaryBottom}>
             <TouchableOpacity
               style={styles.btnFav}
-              // onPress={() => handlePlay(item)}
-            >
-              <Text>Play</Text>
+              onPress={() => {
+                if (item.title.toLowerCase().includes('meditation')) {
+                  // Navigate to MeditationsPlayer for meditations
+                  // navigation.navigate('MeditationsPlayer', {item});
+                  handleListenPress(item);
+                } else {
+                  // Navigate to PracticePreviewScreen for sessions
+                  navigation.navigate('PracticePreviewScreen', {item});
+                }
+              }}>
+              <Text>
+                {item.title.toLowerCase().includes('meditation')
+                  ? 'Listen'
+                  : 'Play'}
+              </Text>
             </TouchableOpacity>
             <TouchableOpacity>
               <SvgDownload />
@@ -140,10 +140,14 @@ const SaveScreen = ({navigation}: any) => {
         </View>
       )}
       {/* {renderPlayer()} */}
+      {showAudioPlayer && selectedAudioItem && (
+        <AudioPlayer
+          selectedItem={selectedAudioItem}
+          onClose={() => setShowAudioPlayer(false)}
+        />
+      )}
     </SafeAreaView>
   );
-
-  /* {renderPlayer()} */
 };
 
 export default SaveScreen;

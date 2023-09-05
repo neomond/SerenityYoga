@@ -146,7 +146,7 @@ const MeditationsPlayerScreen = ({navigation, route}: any) => {
     <ImageBackground
       style={styles.backgroundImage}
       source={{
-        uri: selectedMeditation.imageUrl,
+        uri: selectedMeditation?.imageUrl,
       }}>
       <View style={{zIndex: 999}}>
         <TouchableOpacity
