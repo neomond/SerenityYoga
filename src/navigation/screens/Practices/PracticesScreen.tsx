@@ -1,7 +1,8 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Image,
   Platform,
+  Pressable,
   ScrollView,
   StyleSheet,
   Text,
@@ -9,61 +10,59 @@ import {
   View,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
+import {useDispatch, useSelector} from 'react-redux';
+import {AppDispatch, RootState} from '../../../redux';
+import {
+  fetchYogas,
+  getYogas,
+  selectYogaLoading,
+} from '../../../redux/slices/YogaSlice';
+import {ActivityIndicator} from 'react-native-paper';
+import HeaderAnimation from '../../../utils/HeaderAnimation';
+import {GestureHandlerRootView} from 'react-native-gesture-handler';
+import SvgSetting from '../../../assets/SettingsIcon';
+import BottomSheetComponent from '../../../components/bottomsheet/BottomSheet';
+import SvgCheckBox from '../../../assets/CheckBoxicon';
+import SvgCheckBoxFill from '../../../assets/CheckBoxiconFilled';
 
 const PracticesScreen = ({navigation}: any) => {
-  const dummydata = [
-    {
-      id: '1',
-      title: '10 sessions',
-      subtitle: 'Remember to breathe',
-      type: 'basic',
-      description:
-        'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus, doloribus',
-      imgUrl:
-        'https://img.freepik.com/premium-photo/abstract-creative-background-using-your-project-ui-ux-design_155807-1066.jpg',
-    },
-    {
-      id: '2',
-      title: '5 sessions',
-      subtitle: 'Remember to sleep',
-      type: 'evening',
-      description:
-        'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus, doloribus',
-      imgUrl:
-        'https://img.freepik.com/premium-photo/abstract-creative-background-using-your-project-ui-ux-design_155807-1066.jpg',
-    },
-    {
-      id: '3',
-      title: '8 sessions',
-      subtitle: 'Remember to live',
-      type: 'morning',
-      description:
-        'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus, doloribus',
-      imgUrl:
-        'https://img.freepik.com/premium-photo/abstract-creative-background-using-your-project-ui-ux-design_155807-1066.jpg',
-    },
-    {
-      id: '4',
-      title: '3 sessions',
-      subtitle: 'Remember to be special',
-      type: 'special',
-      description:
-        'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus, doloribus',
-      imgUrl:
-        'https://img.freepik.com/premium-photo/abstract-creative-background-using-your-project-ui-ux-design_155807-1066.jpg',
-    },
-  ];
-
   const [selectedImageUrl, setSelectedImageUrl] = useState<string | null>(null);
+  const dispatch = useDispatch<AppDispatch>();
+
+  const yogas = useSelector((state: RootState) => getYogas(state));
+
+  const isLoading = useSelector((state: RootState) => selectYogaLoading(state));
+
+  const [isBottomSheetVisible, setBottomSheetVisible] = useState(false);
+  const toggleBottomSheet = () => {
+    setBottomSheetVisible(!isBottomSheetVisible);
+  };
+  const items = ['Basic', 'Morning', 'Evening', 'General'];
+  const [selectedItems, setSelectedItems] = useState<string[]>([]);
+
+  const handleItemSelect = (item: string) => {
+    if (selectedItems.includes(item)) {
+      setSelectedItems(
+        selectedItems.filter(selectedItem => selectedItem !== item),
+      );
+    } else {
+      setSelectedItems([...selectedItems, item]);
+    }
+  };
+
+  useEffect(() => {
+    dispatch(fetchYogas());
+  }, [dispatch]);
 
   const renderItem = ({item}: any) => {
     return (
       <TouchableOpacity
-        key={item.id}
+        key={item._id}
         style={styles.mainCollectionWrapper}
         onPress={() => {
           setSelectedImageUrl(item.imgUrl);
           navigation.navigate('PracticeCollection', {
+            selectedYoga: item,
             selectedImageUrl: item.imgUrl,
           });
         }}>
@@ -81,19 +80,61 @@ const PracticesScreen = ({navigation}: any) => {
 
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
-      <LinearGradient
-        colors={['#C17BFA', '#7F7DFA', '#8283FC']}
-        start={{x: 0, y: 0}}
-        end={{x: 1, y: 0}}
-        style={styles.linearGradient}>
-        <View style={styles.iconsHeader}>
-          <Text style={styles.textCategory}>Yoga Sessions 🧘</Text>
-        </View>
-
-        <View style={styles.primaryContent}>
-          {dummydata.map(item => renderItem({item}))}
-        </View>
-      </LinearGradient>
+      <GestureHandlerRootView>
+        <LinearGradient
+          colors={['#C17BFA', '#7F7DFA', '#8283FC']}
+          start={{x: 0, y: 0}}
+          end={{x: 1, y: 0}}
+          style={styles.linearGradient}>
+          <View style={styles.headerTop}>
+            <Text style={styles.textCategory}>Yoga Sessions 🧘</Text>
+            <TouchableOpacity
+              style={styles.settingsStyle}
+              onPress={toggleBottomSheet}>
+              <SvgSetting />
+            </TouchableOpacity>
+          </View>
+          <View style={styles.primaryContent}>
+            {isLoading ? (
+              <ActivityIndicator />
+            ) : (
+              <HeaderAnimation duration={1300}>
+                {yogas.map(item => renderItem({item}))}
+              </HeaderAnimation>
+            )}
+          </View>
+        </LinearGradient>
+        <BottomSheetComponent
+          isVisible={isBottomSheetVisible}
+          toggleBottomSheet={toggleBottomSheet}
+          items={items}
+          selectedItems={selectedItems}
+          onItemSelect={handleItemSelect}>
+          <View style={styles.bottomSheetContent}>
+            {items.map(item => (
+              <Pressable
+                key={item}
+                style={styles.checkboxItem}
+                onPress={() => handleItemSelect(item)}>
+                <Text style={{fontSize: 16}}>{item}</Text>
+                {selectedItems.includes(item) ? (
+                  <>
+                    <Text style={styles.selectedItem}>✓</Text>
+                    <SvgCheckBoxFill />
+                  </>
+                ) : (
+                  <SvgCheckBox />
+                )}
+              </Pressable>
+            ))}
+            <TouchableOpacity
+              onPress={toggleBottomSheet}
+              style={styles.continueBtn}>
+              <Text style={styles.closeButton}>Continue</Text>
+            </TouchableOpacity>
+          </View>
+        </BottomSheetComponent>
+      </GestureHandlerRootView>
     </ScrollView>
   );
 };
@@ -116,7 +157,7 @@ const styles = StyleSheet.create({
     borderColor: '#fff',
     backgroundColor: '#fff',
     paddingVertical: 30,
-    height: '100%',
+    height: '1000%',
   },
   textCategory: {
     marginBottom: 20,
@@ -171,6 +212,102 @@ const styles = StyleSheet.create({
     zIndex: 99999,
     top: 0,
   },
+  settingsStyle: {
+    borderRadius: 80,
+    borderWidth: 1,
+    padding: 4,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'rgba(255,255,255, 0.2)',
+    borderColor: 'rgba(255,255,255, 0.1)',
+    marginRight: 20,
+    marginBottom: 20,
+  },
+
+  bottomSheetContent: {
+    flexDirection: 'column',
+    marginTop: 20,
+  },
+  checkboxItem: {
+    paddingHorizontal: 15,
+    paddingVertical: 20,
+    marginHorizontal: 25,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    backgroundColor: '#f6f6f6',
+    borderRadius: 10,
+    marginBottom: 12,
+  },
+  selectedItem: {
+    position: 'absolute',
+    right: '7%',
+    zIndex: 999,
+    color: '#fff',
+  },
+  continueBtn: {
+    backgroundColor: '#8F6FFE',
+    marginHorizontal: 25,
+    borderRadius: 30,
+    marginTop: 20,
+  },
+  closeButton: {
+    fontSize: 16,
+    fontWeight: '500',
+    color: '#fff',
+    textAlign: 'center',
+    padding: 15,
+  },
+  headerTop: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    columnGap: 30,
+    paddingLeft: 110,
+  },
 });
 
 export default PracticesScreen;
+
+// const dummydata = [
+//   {
+//     id: '1',
+//     title: '10 sessions',
+//     subtitle: 'Remember to breathe',
+//     type: 'basic',
+//     description:
+//       'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus, doloribus',
+//     imgUrl:
+//       'https://img.freepik.com/premium-photo/abstract-creative-background-using-your-project-ui-ux-design_155807-1066.jpg',
+//   },
+//   {
+//     id: '2',
+//     title: '5 sessions',
+//     subtitle: 'Remember to sleep',
+//     type: 'evening',
+//     description:
+//       'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus, doloribus',
+//     imgUrl:
+//       'https://img.freepik.com/premium-photo/abstract-creative-background-using-your-project-ui-ux-design_155807-1066.jpg',
+//   },
+//   {
+//     id: '3',
+//     title: '8 sessions',
+//     subtitle: 'Remember to live',
+//     type: 'morning',
+//     description:
+//       'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus, doloribus',
+//     imgUrl:
+//       'https://img.freepik.com/premium-photo/abstract-creative-background-using-your-project-ui-ux-design_155807-1066.jpg',
+//   },
+//   {
+//     id: '4',
+//     title: '3 sessions',
+//     subtitle: 'Remember to be special',
+//     type: 'special',
+//     description:
+//       'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus, doloribus',
+//     imgUrl:
+//       'https://img.freepik.com/premium-photo/abstract-creative-background-using-your-project-ui-ux-design_155807-1066.jpg',
+//   },
+// ];

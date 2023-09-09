@@ -6,6 +6,7 @@ import sessionReducer from './slices/SessionSlice';
 import onboardingReducer from './slices/OnboardingSlice';
 import meditationsReducer from './slices/MeditationSlice';
 import meditationSessionsReducer from './slices/MeditationSessions';
+import yogaSlice from './slices/YogaSlice';
 
 // const middleware = getDefaultMiddleware({
 //   serializableCheck: false, // Disable serializable state check
@@ -20,6 +21,7 @@ const store = configureStore({
     onboarding: onboardingReducer,
     meditations: meditationsReducer,
     meditationSessions: meditationSessionsReducer,
+    yoga: yogaSlice,
   },
   // middleware,
 });

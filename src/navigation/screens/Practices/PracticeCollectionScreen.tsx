@@ -1,22 +1,27 @@
 import {
   FlatList,
   Image,
-  Pressable,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from 'react-native';
-
 import SvgLikeIcon from '../../../assets/LikeIcon';
 import SvgDuration from '../../../assets/DurationIcon';
 import SvgBack from '../../../assets/BackIcon';
-import SvgSetting from '../../../assets/SettingsIcon';
-import BottomSheetComponent from '../../../components/bottomsheet/BottomSheet';
 import {useEffect, useState} from 'react';
-import SvgCheckBox from '../../../assets/CheckBoxicon';
-import SvgCheckBoxFill from '../../../assets/CheckBoxiconFilled';
-import {GestureHandlerRootView} from 'react-native-gesture-handler';
+import {useDispatch, useSelector} from 'react-redux';
+import {AppDispatch, RootState} from '../../../redux';
+import {
+  fetchSessionsAll,
+  getSessions,
+} from '../../../redux/slices/SessionSlice';
+import {Session} from '../../../models/Session';
+import {
+  addItem,
+  getLikes,
+  removeItem,
+} from '../../../redux/slices/LikedItemsSlice';
 
 const PracticesCollectionScreen = ({navigation, route}: any) => {
   useEffect(() => {
@@ -29,69 +34,33 @@ const PracticesCollectionScreen = ({navigation, route}: any) => {
     };
   }, [navigation]);
 
-  const dummydata = [
-    {
-      id: '1',
-      subtitle: 'Remember to breathe',
-      author: 'with Adriene',
-      duration: '10:00',
-      activityLevel: '✦ low intensity',
-      description:
-        'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus, doloribus',
-      imgUrl:
-        'https://img.freepik.com/premium-photo/abstract-creative-background-using-your-project-ui-ux-design_155807-1066.jpg',
-    },
-    {
-      id: '2',
-      subtitle: 'Remember to sleep',
-      activityLevel: '✦✦ middle intensity',
-      author: 'with Adriene',
-      duration: '10:00',
-      description:
-        'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus, doloribus',
-      imgUrl:
-        'https://img.freepik.com/premium-photo/abstract-creative-background-using-your-project-ui-ux-design_155807-1066.jpg',
-    },
-    {
-      id: '3',
-      subtitle: 'Remember to live',
-      author: 'with Adriene',
-      duration: '10:00',
-      activityLevel: '✦✦✦ high intensity',
-      description:
-        'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus, doloribus',
-      imgUrl:
-        'https://img.freepik.com/premium-photo/abstract-creative-background-using-your-project-ui-ux-design_155807-1066.jpg',
-    },
-    {
-      id: '4',
-      subtitle: 'Remember to be special',
-      activityLevel: '✦✦✦ high intensity',
-      author: 'with Adriene',
-      duration: '10:00',
-      description:
-        'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus, doloribus',
-      imgUrl:
-        'https://img.freepik.com/premium-photo/abstract-creative-background-using-your-project-ui-ux-design_155807-1066.jpg',
-    },
-  ];
-
+  const dispatch = useDispatch<AppDispatch>();
+  const sessions = useSelector((state: RootState) => getSessions(state));
   const selectedImageUrl = route.params?.selectedImageUrl || null;
-  const [isBottomSheetVisible, setBottomSheetVisible] = useState(false);
-  const toggleBottomSheet = () => {
-    setBottomSheetVisible(!isBottomSheetVisible);
-  };
-  const items = ['Basic', 'Morning', 'Evening', 'General'];
-  // for background image
-  const [selectedItems, setSelectedItems] = useState<string[]>([]);
+  const selectedYoga = route.params?.selectedYoga || null;
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const likedItems = useSelector((state: RootState) => getLikes(state));
 
-  const handleItemSelect = (item: string) => {
-    if (selectedItems.includes(item)) {
-      setSelectedItems(
-        selectedItems.filter(selectedItem => selectedItem !== item),
-      );
+  const handleRefresh = () => {
+    setIsRefreshing(true);
+    dispatch(fetchSessionsAll()).then(() => {
+      setIsRefreshing(false);
+    });
+  };
+
+  useEffect(() => {
+    handleRefresh();
+  }, [dispatch]);
+
+  const isItemLiked = (item: Session) => {
+    return likedItems.some(likedItem => likedItem._id === item._id);
+  };
+
+  const handleLikeItem = (item: Session) => {
+    if (isItemLiked(item)) {
+      dispatch(removeItem(item._id));
     } else {
-      setSelectedItems([...selectedItems, item]);
+      dispatch(addItem(item));
     }
   };
 
@@ -102,18 +71,20 @@ const PracticesCollectionScreen = ({navigation, route}: any) => {
         <Text style={styles.titleColor}>{item.duration}</Text>
       </View>
       <View style={{flexDirection: 'row', columnGap: 15, marginHorizontal: 25}}>
-        <Image style={styles.imageFav} source={{uri: item.imgUrl}} />
+        <Image style={styles.imageFav} source={{uri: item.imageUrl}} />
         <View style={styles.favoritesItemSecondary}>
-          <Text style={styles.textFav}>{item.subtitle}</Text>
-          <Text style={styles.textType}>{item.activityLevel}</Text>
+          <Text style={styles.textFav}>{item.title}</Text>
           <View style={styles.favoritesItemSecondaryBottom}>
             <TouchableOpacity
               style={styles.btnFav}
               onPress={() => navigation.navigate('PracticePreview')}>
               <Text>Start</Text>
             </TouchableOpacity>
-            <TouchableOpacity>
-              <SvgLikeIcon fill="#815cff" />
+            <TouchableOpacity onPress={() => handleLikeItem(item)}>
+              <SvgLikeIcon
+                fill={isItemLiked(item) ? '#E5DEFF' : 'transparent'}
+                stroke={isItemLiked(item) ? '#815cff' : '#E5DEFF'}
+              />
             </TouchableOpacity>
           </View>
         </View>
@@ -123,13 +94,15 @@ const PracticesCollectionScreen = ({navigation, route}: any) => {
 
   return (
     <FlatList
-      data={dummydata}
+      data={sessions}
       renderItem={renderMeditationItem}
-      keyExtractor={item => item.id}
+      keyExtractor={item => item._id}
       style={styles.mainWrapper}
       showsVerticalScrollIndicator={false}
+      onRefresh={handleRefresh}
+      refreshing={isRefreshing}
       ListHeaderComponent={
-        <GestureHandlerRootView>
+        <>
           {selectedImageUrl && (
             <Image style={styles.image} source={{uri: selectedImageUrl}} />
           )}
@@ -139,50 +112,22 @@ const PracticesCollectionScreen = ({navigation, route}: any) => {
               onPress={() => navigation.goBack()}>
               <SvgBack stroke="#fff" />
             </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.settingsStyle}
-              onPress={toggleBottomSheet}>
-              <SvgSetting />
-            </TouchableOpacity>
           </View>
-          <View style={styles.secondaryCollectionWrapper}>
-            <Text style={styles.textCollFirst}>10 meditations</Text>
-            <Text style={styles.textCollSecond}>Remember to breathe</Text>
-            <Text style={styles.textCollThird}>
-              Bring awareness Back onto the menu. Reconnect with yourself
-            </Text>
-          </View>
-          <BottomSheetComponent
-            isVisible={isBottomSheetVisible}
-            toggleBottomSheet={toggleBottomSheet}
-            items={items}
-            selectedItems={selectedItems}
-            onItemSelect={handleItemSelect}>
-            <View style={styles.bottomSheetContent}>
-              {items.map(item => (
-                <Pressable
-                  key={item}
-                  style={styles.checkboxItem}
-                  onPress={() => handleItemSelect(item)}>
-                  <Text style={{fontSize: 16}}>{item}</Text>
-                  {selectedItems.includes(item) ? (
-                    <>
-                      <Text style={styles.selectedItem}>✓</Text>
-                      <SvgCheckBoxFill />
-                    </>
-                  ) : (
-                    <SvgCheckBox />
-                  )}
-                </Pressable>
-              ))}
-              <TouchableOpacity
-                onPress={toggleBottomSheet}
-                style={styles.continueBtn}>
-                <Text style={styles.closeButton}>Continue</Text>
-              </TouchableOpacity>
-            </View>
-          </BottomSheetComponent>
-        </GestureHandlerRootView>
+
+          {selectedYoga && (
+            <>
+              <View style={styles.secondaryCollectionWrapper}>
+                <Text style={styles.textCollFirst}>{selectedYoga.title}</Text>
+                <Text style={styles.textCollSecond}>
+                  {selectedYoga.subtitle}
+                </Text>
+                <Text style={styles.textCollThird}>
+                  {selectedYoga.description}
+                </Text>
+              </View>
+            </>
+          )}
+        </>
       }
     />
   );
@@ -202,7 +147,8 @@ const styles = StyleSheet.create({
   secondaryCollectionWrapper: {
     paddingHorizontal: 20,
     paddingVertical: 20,
-    rowGap: 5,
+    rowGap: 7,
+    width: '105%',
   },
   textCollFirst: {
     color: '#8F6FFE',
@@ -212,6 +158,7 @@ const styles = StyleSheet.create({
   textCollSecond: {
     fontSize: 18,
     fontWeight: '500',
+    marginBottom: 5,
   },
   textCollThird: {
     fontSize: 16,
@@ -246,8 +193,8 @@ const styles = StyleSheet.create({
     borderRadius: 15,
   },
   textFav: {
-    marginBottom: -5,
     fontSize: 16,
+    width: '90%',
   },
   titleColor: {
     color: '#fff',
@@ -260,8 +207,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
   },
   favoritesItemSecondary: {
-    justifyContent: 'center',
-    rowGap: 10,
+    justifyContent: 'space-between',
   },
   favoritesItemSecondaryBottom: {
     flexDirection: 'row',
@@ -292,42 +238,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255,255,255, 0.2)',
     borderColor: 'rgba(255,255,255, 0.1)',
     marginRight: 20,
-  },
-
-  // bottom sheet
-  bottomSheetContent: {
-    flexDirection: 'column',
-    marginTop: 20,
-  },
-  checkboxItem: {
-    paddingHorizontal: 15,
-    paddingVertical: 20,
-    marginHorizontal: 25,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    backgroundColor: '#f6f6f6',
-    borderRadius: 10,
-    marginBottom: 12,
-  },
-  selectedItem: {
-    position: 'absolute',
-    right: '7%',
-    zIndex: 999,
-    color: '#fff',
-  },
-  continueBtn: {
-    backgroundColor: '#8F6FFE',
-    marginHorizontal: 25,
-    borderRadius: 30,
-    marginTop: 20,
-  },
-  closeButton: {
-    fontSize: 16,
-    fontWeight: '500',
-    color: '#fff',
-    textAlign: 'center',
-    padding: 15,
   },
   topNav: {
     flexDirection: 'row',

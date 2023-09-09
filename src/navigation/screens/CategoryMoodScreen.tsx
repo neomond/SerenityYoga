@@ -19,7 +19,6 @@ import {fetchSessions, getSessions} from '../../redux/slices/SessionSlice';
 import {ActivityIndicator} from 'react-native-paper';
 
 import HeaderAnimation from '../../utils/HeaderAnimation';
-import {fetchCategories} from '../../redux/slices/CategoriesSlice';
 import {Session} from '../../models/Session';
 import {
   addItem,
@@ -62,14 +61,6 @@ const CategoryMoodScreen = ({navigation, route}: any) => {
   }, [navigation]);
   /////////////////////////////
 
-  //   console.log('Sessions:', sessions);
-
-  //   const categorySessions = sessions.filter(session => {
-  //     return session.categories.some(cat => cat._id === category._id);
-  //   });
-
-  //   console.log('Category Sessions:', categorySessions);
-
   if (isLoading) {
     return (
       <View
@@ -84,12 +75,33 @@ const CategoryMoodScreen = ({navigation, route}: any) => {
     );
   }
 
+  // Filter sessions based on category.sessions
+  const categorySessions = sessions.filter(session =>
+    category.sessions.includes(session._id),
+  );
+
+  const containsMeditation = categorySessions.some(session =>
+    session.title.toLowerCase().includes('meditation'),
+  );
+
+  const handleMoreButtonPress = () => {
+    if (containsMeditation) {
+      // Navigate to MeditationsCollection screen
+      navigation.navigate('MeditationsMain');
+    } else {
+      // Navigate to PracticeCollection screen or other screen as needed
+      navigation.navigate('PracticeCollection');
+    }
+  };
+
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
       <LinearGradient
-        colors={['#c47afb', '#A07AFA', '#8380fb', '#8866ff']}
-        start={{x: 0, y: 0.2}}
-        end={{x: 1, y: 0}}
+        colors={['#c47afb', '#A07AFA', '#8866ff']}
+        // start={{x: 0, y: 0.2}}
+        // end={{x: 1, y: 0}}
+        start={{x: 0, y: 0.5}}
+        end={{x: 1, y: 0.5}}
         style={styles.linearGradient}>
         <HeaderAnimation duration={1300}>
           <View style={styles.iconsHeader}>
@@ -117,9 +129,12 @@ const CategoryMoodScreen = ({navigation, route}: any) => {
                 <View style={styles.favoritesItemSecondary}>
                   <Text style={styles.textFav}>{c.title}</Text>
                   <View style={styles.favoritesItemSecondaryBottom}>
-                    <TouchableOpacity style={styles.btnFav}>
+                    <TouchableOpacity
+                      style={styles.btnFav}
+                      onPress={handleMoreButtonPress}>
                       <Text>
-                        {category.name === 'Meditation' ? 'Listen' : 'Play'}
+                        {/* {category.name === 'Meditation' ? 'Listen' : 'Play'} */}
+                        More
                       </Text>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={() => handleLikeItem(c)}>

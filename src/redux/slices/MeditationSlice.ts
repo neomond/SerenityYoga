@@ -43,7 +43,6 @@ export const meditationsSlice = createSlice({
       state.loading = false;
       state.error = null;
       state.meditations = action.payload;
-      console.log('mmememe');
     });
     builder.addCase(fetchMeditations.rejected, (state, action) => {
       state.loading = false;
@@ -54,3 +53,5 @@ export const meditationsSlice = createSlice({
 
 export default meditationsSlice.reducer;
 export const getMeditations = (state: RootState) => state.meditations;
+export const selectMeditationLoading = (state: RootState) =>
+  state.meditations.loading;

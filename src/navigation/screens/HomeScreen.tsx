@@ -45,10 +45,7 @@ const HomeScreen = ({navigation}: any) => {
     getRandomSessions(state),
   );
 
-  console.log('random', randomSessions);
-
   const enteredName = useSelector(selectEnteredName);
-  console.log('meh', enteredName);
 
   const isLoading = useSelector((state: RootState) => state.sessions.loading);
   const meditationSessions = useSelector(getMeditationSessions);
@@ -72,8 +69,6 @@ const HomeScreen = ({navigation}: any) => {
     dispatch(loadLikedItems());
   }, [dispatch]);
 
-  // console.log('isLoading:', isLoading);
-  // console.log('sessions:', sessions);
   const handleClearLikedItems = async () => {
     try {
       await dispatch(clearLikedItems());

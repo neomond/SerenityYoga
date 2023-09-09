@@ -52,7 +52,6 @@ const ProfileScreen = ({navigation}: any) => {
   const snapPoints = ['25%', '85%'];
   const animationDuration = 1000;
 
-  // Use useRef to store the animation function without triggering re-renders
   const animationRef = useRef<any>();
 
   const storeActiveDaysInLocalStorage = async (days: number) => {

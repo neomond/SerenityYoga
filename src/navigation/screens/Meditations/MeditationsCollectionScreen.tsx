@@ -29,7 +29,7 @@ const MeditationsCollectionScreen = ({navigation, route}: any) => {
   const selectedRelatedSessions = selectedMeditation?.relatedSessions || [];
 
   const likedItems = useSelector((state: RootState) => getLikes(state));
-  console.log(selectedRelatedSessions, 'RELATED MEDITATIONS');
+
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
@@ -156,7 +156,8 @@ const styles = StyleSheet.create({
   secondaryCollectionWrapper: {
     paddingHorizontal: 20,
     paddingVertical: 20,
-    rowGap: 5,
+    rowGap: 7,
+    width: '105%',
   },
   textCollFirst: {
     color: '#8F6FFE',
@@ -166,6 +167,7 @@ const styles = StyleSheet.create({
   textCollSecond: {
     fontSize: 18,
     fontWeight: '500',
+    marginBottom: 5,
   },
   textCollThird: {
     fontSize: 16,

@@ -50,7 +50,6 @@ const DetailsScreen = ({route, navigation}: any) => {
   const dispatch = useDispatch<AppDispatch>();
 
   const {randomSessions, meditationSessions} = route.params;
-  console.log('mmmeeeow', randomSessions);
 
   const renderItem = ({item, index}: {item: any; index: number}) => {
     const isFirstItem = index === 0;
@@ -303,42 +302,3 @@ const styles = StyleSheet.create({
   heartStyleMain: {left: 185},
   otherHeartStyleMain: {left: -110, top: 0},
 });
-
-// const likedItems = useSelector(
-//   (state: RootState) => state.likedItems.likedItems,
-// );
-// const [likedItemsState, setLikedItemsState] = useState<string[]>(likedItems);
-// useEffect(() => {
-//   setLikedItemsState(likedItems);
-// }, [likedItems]);
-// const isLiked = likedItems.some(likedItem => likedItem === item._id);
-
-// const handlePress = (dataItem: any) => {
-//   if (isLiked) {
-//     dispatch(removeItem(dataItem._id));
-//     AsyncStorage.setItem(
-//       'likedItems',
-//       JSON.stringify(likedItems.filter(item => item !== dataItem._id)),
-//     ).catch(error => console.log('Error removing item:', error));
-//   } else {
-//     dispatch(addItem(dataItem));
-//     AsyncStorage.setItem(
-//       'likedItems',
-//       JSON.stringify([...likedItems, dataItem]),
-//     ).catch(error => console.log('Error adding item:', error));
-//   }
-// };
-
-// const isItemLiked = (item: Session) => {
-//   const likedItems = useSelector(
-//     (state: RootState) => state.likedItems.likedItems,
-//   );
-//   return likedItems.some(likedItem => likedItem._id === item._id);
-// };
-// const handleLikeItem = (item: Session) => {
-//   if (isItemLiked(item)) {
-//     dispatch(removeItem(item._id));
-//   } else {
-//     dispatch(addItem(item));
-//   }
-// };

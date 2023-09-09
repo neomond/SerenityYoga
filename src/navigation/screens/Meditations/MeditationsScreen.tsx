@@ -14,13 +14,19 @@ import {AppDispatch, RootState} from '../../../redux';
 import {
   fetchMeditations,
   getMeditations,
+  selectMeditationLoading,
 } from '../../../redux/slices/MeditationSlice';
+import {ActivityIndicator} from 'react-native-paper';
+import HeaderAnimation from '../../../utils/HeaderAnimation';
 
 const MeditationsScreen = ({navigation}: any) => {
   const dispatch = useDispatch<AppDispatch>();
   const meditations = useSelector((state: RootState) => getMeditations(state));
 
   const [selectedImageUrl, setSelectedImageUrl] = useState<string | null>(null);
+  const isLoading = useSelector((state: RootState) =>
+    selectMeditationLoading(state),
+  );
 
   useEffect(() => {
     dispatch(fetchMeditations());
@@ -61,7 +67,13 @@ const MeditationsScreen = ({navigation}: any) => {
           <Text style={styles.textCategory}>Meditations 🧘‍♀️</Text>
         </View>
         <View style={styles.primaryContent}>
-          {meditations.meditations.map(item => renderItem({item}))}
+          {isLoading ? (
+            <ActivityIndicator />
+          ) : (
+            <HeaderAnimation duration={1300}>
+              {meditations.meditations.map(item => renderItem({item}))}
+            </HeaderAnimation>
+          )}
         </View>
       </LinearGradient>
     </ScrollView>
@@ -86,7 +98,7 @@ const styles = StyleSheet.create({
     borderColor: '#fff',
     backgroundColor: '#fff',
     paddingVertical: 30,
-    height: '100%',
+    height: '1000%',
   },
   textCategory: {
     marginBottom: 20,
@@ -101,6 +113,7 @@ const styles = StyleSheet.create({
     borderColor: '#f5f5f5',
     backgroundColor: '#f5f5f5',
     paddingBottom: 8,
+    marginBottom: 15,
   },
   image: {
     width: '100%',
@@ -127,7 +140,6 @@ const styles = StyleSheet.create({
   textCollThird: {
     fontSize: 15,
   },
-
   textType: {
     alignItems: 'center',
     color: 'gray',
