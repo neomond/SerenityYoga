@@ -36,6 +36,7 @@ export const OTPStepTwo = ({navigation, route}: any) => {
 
     console.log('successsssssssss');
     console.log('Received OTP code:', enteredOtp);
+    console.log('enteredOtp', expectedOtp);
 
     if (enteredOtp === expectedOtp) {
       navigation.navigate('OtpThird', {email, otpCode: enteredOtp});

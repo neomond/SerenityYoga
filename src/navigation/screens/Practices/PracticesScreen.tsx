@@ -24,10 +24,17 @@ import SvgSetting from '../../../assets/SettingsIcon';
 import BottomSheetComponent from '../../../components/bottomsheet/BottomSheet';
 import SvgCheckBox from '../../../assets/CheckBoxicon';
 import SvgCheckBoxFill from '../../../assets/CheckBoxiconFilled';
+import {
+  fetchSessionsByType,
+  setFilterType,
+} from '../../../redux/slices/SessionSlice';
 
 const PracticesScreen = ({navigation}: any) => {
   const [selectedImageUrl, setSelectedImageUrl] = useState<string | null>(null);
   const dispatch = useDispatch<AppDispatch>();
+  const filterType = useSelector(
+    (state: RootState) => state.sessions.filterType,
+  );
 
   const yogas = useSelector((state: RootState) => getYogas(state));
 
@@ -38,15 +45,22 @@ const PracticesScreen = ({navigation}: any) => {
     setBottomSheetVisible(!isBottomSheetVisible);
   };
   const items = ['Basic', 'Morning', 'Evening', 'General'];
-  const [selectedItems, setSelectedItems] = useState<string[]>([]);
+
+  const selectedItems = filterType ? [filterType] : [];
+
+  const filteredYogas = useSelector((state: RootState) => {
+    if (filterType) {
+      return yogas.filter(yoga => yoga.type.toLowerCase() === filterType);
+    }
+    return yogas;
+  });
 
   const handleItemSelect = (item: string) => {
-    if (selectedItems.includes(item)) {
-      setSelectedItems(
-        selectedItems.filter(selectedItem => selectedItem !== item),
-      );
+    if (filterType === item.toLowerCase()) {
+      dispatch(setFilterType(null));
     } else {
-      setSelectedItems([...selectedItems, item]);
+      dispatch(setFilterType(item.toLowerCase()));
+      dispatch(fetchSessionsByType(item.toLowerCase()));
     }
   };
 
@@ -99,7 +113,7 @@ const PracticesScreen = ({navigation}: any) => {
               <ActivityIndicator />
             ) : (
               <HeaderAnimation duration={1300}>
-                {yogas.map(item => renderItem({item}))}
+                {filteredYogas.map(item => renderItem({item}))}
               </HeaderAnimation>
             )}
           </View>
@@ -117,7 +131,7 @@ const PracticesScreen = ({navigation}: any) => {
                 style={styles.checkboxItem}
                 onPress={() => handleItemSelect(item)}>
                 <Text style={{fontSize: 16}}>{item}</Text>
-                {selectedItems.includes(item) ? (
+                {selectedItems.includes(item.toLowerCase()) ? (
                   <>
                     <Text style={styles.selectedItem}>✓</Text>
                     <SvgCheckBoxFill />
@@ -173,6 +187,7 @@ const styles = StyleSheet.create({
     borderColor: '#f5f5f5',
     backgroundColor: '#f5f5f5',
     paddingBottom: 8,
+    marginBottom: 20,
   },
   image: {
     width: '100%',
@@ -181,6 +196,7 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 20,
     borderBottomLeftRadius: 0,
     borderBottomRightRadius: 0,
+    resizeMode: 'cover',
   },
   secondaryCollectionWrapper: {
     paddingHorizontal: 20,
@@ -268,46 +284,3 @@ const styles = StyleSheet.create({
 });
 
 export default PracticesScreen;
-
-// const dummydata = [
-//   {
-//     id: '1',
-//     title: '10 sessions',
-//     subtitle: 'Remember to breathe',
-//     type: 'basic',
-//     description:
-//       'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus, doloribus',
-//     imgUrl:
-//       'https://img.freepik.com/premium-photo/abstract-creative-background-using-your-project-ui-ux-design_155807-1066.jpg',
-//   },
-//   {
-//     id: '2',
-//     title: '5 sessions',
-//     subtitle: 'Remember to sleep',
-//     type: 'evening',
-//     description:
-//       'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus, doloribus',
-//     imgUrl:
-//       'https://img.freepik.com/premium-photo/abstract-creative-background-using-your-project-ui-ux-design_155807-1066.jpg',
-//   },
-//   {
-//     id: '3',
-//     title: '8 sessions',
-//     subtitle: 'Remember to live',
-//     type: 'morning',
-//     description:
-//       'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus, doloribus',
-//     imgUrl:
-//       'https://img.freepik.com/premium-photo/abstract-creative-background-using-your-project-ui-ux-design_155807-1066.jpg',
-//   },
-//   {
-//     id: '4',
-//     title: '3 sessions',
-//     subtitle: 'Remember to be special',
-//     type: 'special',
-//     description:
-//       'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus, doloribus',
-//     imgUrl:
-//       'https://img.freepik.com/premium-photo/abstract-creative-background-using-your-project-ui-ux-design_155807-1066.jpg',
-//   },
-// ];

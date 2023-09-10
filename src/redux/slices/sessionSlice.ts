@@ -7,14 +7,31 @@ import API_URL from '../../utils/apiConfig';
 interface SessionState {
   sessions: Session[];
   loading: boolean;
+  selectedSessions: any;
   error: string | null;
+  filterType: string;
 }
 
 const initialState: SessionState = {
   sessions: [],
   loading: false,
+  selectedSessions: [],
   error: null,
+  filterType: '',
 };
+
+export const fetchSessionsByType = createAsyncThunk(
+  'api/sessions/fetchSessionsByType',
+  async (type: string) => {
+    try {
+      const response = await axios.get(`${API_URL}/sessions?type=${type}`);
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching sessions by type:', error);
+      throw error;
+    }
+  },
+);
 
 export const fetchSessions = createAsyncThunk(
   'api/sessions/fetchSessions',
@@ -24,6 +41,24 @@ export const fetchSessions = createAsyncThunk(
       return response.data;
     } catch (error) {
       console.error('Error fetching sessions:', error);
+      throw error;
+    }
+  },
+);
+
+export const fetchSessionsByIds = createAsyncThunk(
+  'api/sessions/fetchSessionsByIds',
+  async (sessionIds: string[]) => {
+    try {
+      // Construct a comma-separated string of session IDs
+      const sessionIdsString = sessionIds.join(',');
+
+      const response = await axios.get(
+        `${API_URL}/sessions/${sessionIdsString}`,
+      );
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching sessions by IDs:', error);
       throw error;
     }
   },
@@ -45,7 +80,11 @@ export const fetchSessionsAll = createAsyncThunk(
 export const sessionSlice = createSlice({
   name: 'sessions',
   initialState,
-  reducers: {},
+  reducers: {
+    setFilterType: (state, action) => {
+      state.filterType = action.payload;
+    },
+  },
   extraReducers: builder => {
     builder.addCase(fetchSessionsAll.fulfilled, (state, action) => {
       state.sessions = action.payload;
@@ -65,6 +104,12 @@ export const sessionSlice = createSlice({
       state.error = action.error.message ?? 'Error fetching sessions';
     });
     // for all sessions
+    builder.addCase(fetchSessionsByIds.fulfilled, (state, action) => {
+      state.selectedSessions = action.payload;
+    });
+    builder.addCase(fetchSessionsByType.fulfilled, (state, action) => {
+      state.sessions = action.payload;
+    });
   },
 });
 
@@ -75,6 +120,8 @@ export const getSessions = (state: RootState) => state.sessions.sessions;
 export const getMeditationSessions = createSelector(getSessions, sessions =>
   sessions.filter(session => session.title.includes('Meditation')),
 );
+
+export const {setFilterType} = sessionSlice.actions;
 
 // Fisher-Yates shuffle algorithm to shuffle an array randomly
 const shuffleArray = (array: any[]) => {
@@ -106,3 +153,21 @@ export const getRandomSessions = createSelector(
     return shuffledSessions.slice(0, 5);
   },
 );
+
+export const getNonMeditationSessions = createSelector(
+  (state: RootState) => state.sessions.sessions,
+  sessions => sessions.filter(session => !session.title.includes('Meditation')),
+);
+
+export const getRandomNonMeditationSessions = createSelector(
+  getNonMeditationSessions,
+  sessions => {
+    // Shuffle the sessions array
+    const shuffledSessions = shuffleArray(sessions);
+    // Return the first 3 sessions (or fewer if there are less than 3)
+    return shuffledSessions.slice(0, 5);
+  },
+);
+
+export const getSelectedSessions = (state: RootState) =>
+  state.sessions.selectedSessions;

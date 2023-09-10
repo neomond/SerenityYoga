@@ -14,7 +14,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {AppDispatch, RootState} from '../../../redux';
 import {
   fetchSessionsAll,
-  getSessions,
+  getRandomNonMeditationSessions,
 } from '../../../redux/slices/SessionSlice';
 import {Session} from '../../../models/Session';
 import {
@@ -35,17 +35,18 @@ const PracticesCollectionScreen = ({navigation, route}: any) => {
   }, [navigation]);
 
   const dispatch = useDispatch<AppDispatch>();
-  const sessions = useSelector((state: RootState) => getSessions(state));
-  const selectedImageUrl = route.params?.selectedImageUrl || null;
-  const selectedYoga = route.params?.selectedYoga || null;
+  const sessions = useSelector((state: RootState) =>
+    getRandomNonMeditationSessions(state),
+  );
+
   const [isRefreshing, setIsRefreshing] = useState(false);
   const likedItems = useSelector((state: RootState) => getLikes(state));
+  const {selectedImageUrl, selectedYoga} = route.params || {};
 
   const handleRefresh = () => {
     setIsRefreshing(true);
-    dispatch(fetchSessionsAll()).then(() => {
-      setIsRefreshing(false);
-    });
+    dispatch(fetchSessionsAll());
+    setIsRefreshing(false);
   };
 
   useEffect(() => {
@@ -143,12 +144,13 @@ const styles = StyleSheet.create({
   image: {
     width: '100%',
     height: 300,
+    resizeMode: 'cover',
   },
   secondaryCollectionWrapper: {
     paddingHorizontal: 20,
     paddingVertical: 20,
     rowGap: 7,
-    width: '105%',
+    textAlign: 'center',
   },
   textCollFirst: {
     color: '#8F6FFE',
@@ -162,6 +164,8 @@ const styles = StyleSheet.create({
   },
   textCollThird: {
     fontSize: 16,
+    width: '100%',
+    textAlign: 'justify',
   },
   secondaryWrapper: {
     paddingVertical: 20,
@@ -191,6 +195,7 @@ const styles = StyleSheet.create({
     width: 150,
     height: 100,
     borderRadius: 15,
+    // resizeMode: 'center',
   },
   textFav: {
     fontSize: 16,
