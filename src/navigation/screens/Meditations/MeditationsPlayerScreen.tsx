@@ -20,6 +20,7 @@ import SvgPause from '../../../assets/PauseIcon';
 import SvgRotateLeft from '../../../assets/RotateLeft';
 import SvgRotateRight from '../../../assets/RotateRight';
 import SvgBack from '../../../assets/BackIcon';
+import {useNavigation} from '@react-navigation/native';
 
 const MeditationsPlayerScreen = ({navigation, route}: any) => {
   const {selectedMeditation} = route.params;
@@ -105,10 +106,10 @@ const MeditationsPlayerScreen = ({navigation, route}: any) => {
 
     return isPlayerInitialized;
   }
-
+  const parentNavigation = useNavigation();
   const handleClosePlayer = () => {
     TrackPlayer.stop();
-    navigation.goBack();
+    parentNavigation.goBack();
   };
 
   const handleRotate = async (seconds: number) => {
@@ -159,7 +160,9 @@ const MeditationsPlayerScreen = ({navigation, route}: any) => {
       <View style={styles.container}>
         <View style={styles.dataCont}>
           <Text style={styles.title}>{selectedMeditation.title}</Text>
-          <Text style={styles.subtitle}>{selectedMeditation.subtitle}</Text>
+          <Text style={styles.subtitle}>
+            {selectedMeditation.subtitle || selectedMeditation.description}
+          </Text>
           <Text style={styles.authortext}>by Buddha</Text>
         </View>
         <Slider

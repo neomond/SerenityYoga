@@ -7,4 +7,6 @@ export interface Session {
   duration: string;
   imageUrl: string;
   category: string;
+  description: string;
+  youtube_id: string;
 }

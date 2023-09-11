@@ -1,4 +1,5 @@
 import {
+  FlatList,
   Image,
   Platform,
   ScrollView,
@@ -80,77 +81,81 @@ const CategoryMoodScreen = ({navigation, route}: any) => {
     category.sessions.includes(session._id),
   );
 
-  const containsMeditation = categorySessions.some(session =>
-    session.title.toLowerCase().includes('meditation'),
-  );
+  // const containsMeditation = categorySessions.some(session =>
+  //   session.title.toLowerCase().includes('meditation'),
+  // );
 
-  const handleMoreButtonPress = () => {
-    if (containsMeditation) {
-      // Navigate to MeditationsCollection screen
-      navigation.navigate('MeditationsMain');
+  const handleMoreButtonPress = (session: Session) => {
+    if (session.title.toLowerCase().includes('meditation')) {
+      navigation.navigate('MeditationsPlayer', {
+        selectedMeditation: session,
+        randomTrack: true,
+      });
     } else {
-      // Navigate to PracticeCollection screen or other screen as needed
-      navigation.navigate('PracticeCollection');
+      navigation.navigate('PracticePreview', {
+        session: session,
+      });
     }
   };
 
-  return (
-    <ScrollView showsVerticalScrollIndicator={false}>
-      <LinearGradient
-        colors={['#c47afb', '#A07AFA', '#8866ff']}
-        // start={{x: 0, y: 0.2}}
-        // end={{x: 1, y: 0}}
-        start={{x: 0, y: 0.5}}
-        end={{x: 1, y: 0.5}}
-        style={styles.linearGradient}>
-        <HeaderAnimation duration={1300}>
-          <View style={styles.iconsHeader}>
-            <TouchableOpacity
-              onPress={() => navigation.goBack()}
-              style={styles.profileStyle}>
-              <SvgCloseIcon stroke="#E5DEFF" fill="transparent" />
-            </TouchableOpacity>
-          </View>
-          <Text style={styles.headerText}>
-            {category.name} {''}
-            {getEmojiForCategory(category.name)}
-          </Text>
-          <Text style={styles.subheaderText}>{category.description}</Text>
-        </HeaderAnimation>
-        <View style={[styles.primaryContent]}>
-          <HeaderAnimation duration={2000}>
-            {sessions.map(c => (
-              <View style={styles.favoritesItem} key={c._id}>
-                <View style={styles.imageContentSubtop}>
-                  <SvgDuration />
-                  <Text style={styles.titleColor}>{c.duration}</Text>
-                </View>
-                <Image style={styles.imageFav} source={{uri: c.imageUrl}} />
-                <View style={styles.favoritesItemSecondary}>
-                  <Text style={styles.textFav}>{c.title}</Text>
-                  <View style={styles.favoritesItemSecondaryBottom}>
-                    <TouchableOpacity
-                      style={styles.btnFav}
-                      onPress={handleMoreButtonPress}>
-                      <Text>
-                        {/* {category.name === 'Meditation' ? 'Listen' : 'Play'} */}
-                        More
-                      </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={() => handleLikeItem(c)}>
-                      <SvgLikeIcon
-                        fill={isItemLiked(c) ? '#E5DEFF' : 'transparent'}
-                        stroke={isItemLiked(c) ? '#815cff' : '#E5DEFF'}
-                      />
-                    </TouchableOpacity>
-                  </View>
-                </View>
-              </View>
-            ))}
-          </HeaderAnimation>
+  const renderItem = ({item}: {item: Session}) => (
+    <View style={styles.favoritesItem}>
+      <View style={styles.imageContentSubtop}>
+        <SvgDuration />
+        <Text style={styles.titleColor}>{item.duration}</Text>
+      </View>
+      <Image style={styles.imageFav} source={{uri: item.imageUrl}} />
+      <View style={styles.favoritesItemSecondary}>
+        <Text style={styles.textFav}>{item.title}</Text>
+        <View style={styles.favoritesItemSecondaryBottom}>
+          <TouchableOpacity
+            style={styles.btnFav}
+            onPress={() => handleMoreButtonPress(item)}>
+            <Text>More</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => handleLikeItem(item)}>
+            <SvgLikeIcon
+              fill={isItemLiked(item) ? '#E5DEFF' : 'transparent'}
+              stroke={isItemLiked(item) ? '#815cff' : '#E5DEFF'}
+            />
+          </TouchableOpacity>
         </View>
-      </LinearGradient>
-    </ScrollView>
+      </View>
+    </View>
+  );
+
+  return (
+    <LinearGradient
+      colors={['#c47afb', '#A07AFA', '#8866ff']}
+      start={{x: 0, y: 0.5}}
+      end={{x: 1, y: 0.5}}
+      style={styles.linearGradient}>
+      <HeaderAnimation duration={1300}>
+        <View style={styles.iconsHeader}>
+          <TouchableOpacity
+            onPress={() => navigation.goBack()}
+            style={styles.profileStyle}>
+            <SvgCloseIcon stroke="#E5DEFF" fill="transparent" />
+          </TouchableOpacity>
+        </View>
+        <Text style={styles.headerText}>
+          {category.name} {''}
+          {getEmojiForCategory(category.name)}
+        </Text>
+        <Text style={styles.subheaderText}>{category.description}</Text>
+      </HeaderAnimation>
+      <View style={styles.primaryContent}>
+        <HeaderAnimation duration={2000}>
+          <FlatList
+            data={categorySessions}
+            renderItem={renderItem}
+            // style={{flexGrow: 0}}
+            showsVerticalScrollIndicator={false}
+            keyExtractor={item => item._id}
+          />
+        </HeaderAnimation>
+      </View>
+    </LinearGradient>
   );
 };
 
@@ -158,7 +163,7 @@ export default CategoryMoodScreen;
 
 const styles = StyleSheet.create({
   linearGradient: {
-    paddingTop: Platform.OS === 'ios' ? 35 : 30,
+    paddingTop: Platform.OS === 'ios' ? 5 : 30,
   },
   primaryContent: {
     rowGap: 8,
@@ -167,7 +172,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#fff',
     backgroundColor: '#fff',
-    height: '200%',
+    // height: '110%',
+    paddingBottom: 400,
   },
   iconsHeader: {
     flexDirection: 'row',
@@ -176,6 +182,7 @@ const styles = StyleSheet.create({
   },
   profileStyle: {
     marginBottom: Platform.OS === 'ios' ? 20 : 0,
+    marginTop: 20,
     marginRight: 20,
     borderRadius: 80,
     borderWidth: 1,

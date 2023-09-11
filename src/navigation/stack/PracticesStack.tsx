@@ -25,7 +25,8 @@ export const PracticesStackNavigator: React.FC = () => {
         component={PracticesCollectionScreen}
         options={{
           headerShown: false,
-          // presentation: 'modal',
+          // animation: 'slide_from_bottom',
+          presentation: 'modal',
           // ...Platform.select({
           //   android: {
           //     animation: 'slide_from_bottom',
@@ -44,7 +45,7 @@ export const PracticesStackNavigator: React.FC = () => {
         component={PracticePreviewScreen}
         options={{
           headerShown: false,
-          // presentation: 'modal',
+          presentation: 'modal',
         }}
       />
     </PracticesStack.Navigator>

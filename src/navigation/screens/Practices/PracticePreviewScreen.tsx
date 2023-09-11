@@ -1,13 +1,12 @@
 import {
   Image,
-  ImageBackground,
   Platform,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import SvgBack from '../../../assets/BackIcon';
 import BottomSheetComponentWithoutOverlay from '../../../components/bottomsheet/BottomSheetComponentWithoutOverlay';
@@ -16,17 +15,25 @@ import SvgActivity from '../../../assets/Activity';
 import SvgActivityActive from '../../../assets/ActivityActive';
 import YoutubePlayer from 'react-native-youtube-iframe';
 import SvgFlower from '../../../assets/Flower';
+import {useDispatch} from 'react-redux';
+import {AppDispatch} from '../../../redux';
+import {fetchSessionsAll} from '../../../redux/slices/SessionSlice';
 
-const PracticePreviewScreen = ({navigation}: any) => {
+const PracticePreviewScreen = ({navigation, route}: any) => {
   const [playing, setPlaying] = useState(false);
+  const dispatch = useDispatch<AppDispatch>();
+  const {session} = route.params || {};
+
   const togglePlaying = useCallback(() => {
     setPlaying(prev => !prev);
   }, []);
+
+  useEffect(() => {
+    dispatch(fetchSessionsAll());
+  }, []);
+
   return (
     <GestureHandlerRootView style={styles.container}>
-      {/* <ImageBackground
-        source={require('../../../assets/test.png')}
-        style={styles.backgroundImage}> */}
       <View style={styles.topBackBtn}>
         <TouchableOpacity
           style={styles.goBackBtnStyle}
@@ -40,24 +47,28 @@ const PracticePreviewScreen = ({navigation}: any) => {
           paddingVertical: 100,
           marginBottom: 80,
         }}>
-        <YoutubePlayer height={230} videoId={'reASzZP63HQ'} play={playing} />
+        <YoutubePlayer
+          height={230}
+          videoId={session.youtube_id}
+          play={playing}
+        />
         <View style={styles.flowerIcon}>
           <SvgFlower />
         </View>
       </View>
-      {/* </ImageBackground> */}
+
       <BottomSheetComponentWithoutOverlay
         isVisible={true}
         snapPoints={['25%', '26%', '88%']}>
         <View style={styles.bottomSheetContent}>
           <View style={styles.bottomshtopCont}>
             <View>
-              <Text style={styles.bottomshHeaderText}>Morning Yoga Flow</Text>
-              <Text>with Elly</Text>
+              <Text style={styles.bottomshHeaderText}>{session.title}</Text>
+              <Text>with Adriene</Text>
             </View>
             <Image
               style={{width: 50, height: 50, borderRadius: 25}}
-              source={require('../../../assets/test.png')}
+              source={{uri: session.imageUrl}}
             />
           </View>
           <TouchableOpacity style={styles.startBtn} onPress={togglePlaying}>
@@ -70,7 +81,7 @@ const PracticePreviewScreen = ({navigation}: any) => {
           <View style={styles.descFirst}>
             <View style={styles.descSubWrapper}>
               <SvgClock />
-              <Text>10 min</Text>
+              <Text>{session.duration} min</Text>
             </View>
             <View
               style={{
@@ -88,11 +99,7 @@ const PracticePreviewScreen = ({navigation}: any) => {
             </View>
           </View>
           <Text style={{marginHorizontal: 20, fontSize: 16}}>
-            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Iusto
-            sequi nisi illum quisquam doloribus quasi ut, eos deleniti
-            recusandae natus magnam, corporis quaerat commodi numquam
-            blanditiis, nobis a impedit dolor. Lorem ipsum dolor sit amet
-            consectetur adipisicing elit.Namaste
+            {session.description}
           </Text>
           <View style={{marginHorizontal: 20, marginTop: 20}}>
             <Text style={[styles.bottomshHeaderText, {paddingBottom: 15}]}>
@@ -101,11 +108,11 @@ const PracticePreviewScreen = ({navigation}: any) => {
             <View>
               <View style={styles.workoutSctruct}>
                 <Text>🧘‍♀️ Workout</Text>
-                <Text>10 min</Text>
+                <Text>{session.duration}</Text>
               </View>
               <View style={styles.workoutSctruct}>
                 <Text>😌 Shavasana meditation</Text>
-                <Text>5 min</Text>
+                <Text>5:00</Text>
               </View>
             </View>
           </View>

@@ -3,16 +3,16 @@ import HomeScreen from '../screens/HomeScreen';
 import ProfileScreen from '../screens/Profile/ProfileScreen';
 import DetailsScreen from '../screens/DetailsScreen';
 import CategoryMoodScreen from '../screens/CategoryMoodScreen';
-import MeditationsCollectionScreen from '../screens/Meditations/MeditationsCollectionScreen';
-import PracticesCollectionScreen from '../screens/Practices/PracticeCollectionScreen';
+import PracticePreviewScreen from '../screens/Practices/PracticePreviewScreen';
+import MeditationsPlayerScreen from '../screens/Meditations/MeditationsPlayerScreen';
 
 type HomeStackParamList = {
   HomeScreen: undefined;
   ProfileScreen: undefined;
   DetailsScreen: undefined;
   CategoryMoodScreen: undefined;
-  MeditationsCollection: undefined;
-  PracticeCollection: undefined;
+  MeditationsPlayer: undefined;
+  PracticePreview: undefined;
 };
 
 const HomeStack = createNativeStackNavigator<HomeStackParamList>();
@@ -48,16 +48,24 @@ export const HomeStackNavigator: React.FC = () => {
       <HomeStack.Screen
         name="DetailsScreen"
         component={DetailsScreen}
-        options={{headerShown: false}}
+        options={{
+          headerShown: false,
+          animation: 'slide_from_bottom',
+          presentation: 'modal',
+        }}
       />
       <HomeStack.Screen
-        name="MeditationsCollection"
-        component={MeditationsCollectionScreen}
-        options={{headerShown: false}}
+        name="MeditationsPlayer"
+        component={MeditationsPlayerScreen}
+        options={{
+          headerShown: false,
+          animation: 'slide_from_bottom',
+          presentation: 'modal',
+        }}
       />
       <HomeStack.Screen
-        name="PracticeCollection"
-        component={PracticesCollectionScreen}
+        name="PracticePreview"
+        component={PracticePreviewScreen}
         options={{headerShown: false}}
       />
       <HomeStack.Screen
@@ -66,6 +74,7 @@ export const HomeStackNavigator: React.FC = () => {
         options={{
           headerShown: false,
           animation: 'slide_from_bottom',
+          presentation: 'modal',
           // ...Platform.select({
           //   android: {
           //     animation: 'slide_from_bottom',

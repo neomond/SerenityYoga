@@ -7,6 +7,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   Platform,
+  ScrollView,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import SvgDuration from '../../assets/DurationIcon';
@@ -47,6 +48,22 @@ const DetailsScreen = ({route, navigation}: any) => {
   }, [navigation]);
   /////////////////////////////
 
+  // const handleItemPress = (item: Session) => {
+  //   navigation.navigate('PracticePreview', {session: item});
+  // };
+  const handleItemPress = (item: Session) => {
+    if (item.title.toLowerCase().includes('meditation')) {
+      navigation.navigate('MeditationsPlayer', {
+        selectedMeditation: item,
+        randomTrack: true,
+      });
+    } else {
+      navigation.navigate('PracticePreview', {
+        session: item,
+      });
+    }
+  };
+
   const dispatch = useDispatch<AppDispatch>();
 
   const {randomSessions, meditationSessions} = route.params;
@@ -54,7 +71,7 @@ const DetailsScreen = ({route, navigation}: any) => {
   const renderItem = ({item, index}: {item: any; index: number}) => {
     const isFirstItem = index === 0;
     return (
-      <View
+      <ScrollView
         style={[
           styles.mainWrapper,
           isFirstItem ? styles.mainWrapper : styles.otherItemsWrapper,
@@ -79,7 +96,8 @@ const DetailsScreen = ({route, navigation}: any) => {
           style={[
             styles.playBtn,
             isFirstItem ? styles.playBtn : styles.otherPlayBtn,
-          ]}>
+          ]}
+          onPress={() => handleItemPress(item)}>
           {randomSessions ? (
             <Text style={{fontSize: 14}}>Play</Text>
           ) : (
@@ -114,12 +132,11 @@ const DetailsScreen = ({route, navigation}: any) => {
             />
           </TouchableOpacity>
         </View>
-      </View>
+      </ScrollView>
     );
   };
 
   return (
-    // <ScrollView showsVerticalScrollIndicator={false}>
     <LinearGradient
       colors={['#c47afb', '#A07AFA', '#8380fb', '#8866ff']}
       start={{x: 0, y: 0.2}}
@@ -140,15 +157,14 @@ const DetailsScreen = ({route, navigation}: any) => {
 
       <View style={styles.primaryContent}>
         <FlatList
+          // style={{height: '100%'}}
           data={randomSessions ? randomSessions : meditationSessions}
           renderItem={renderItem}
-          style={{marginBottom: 100}}
           keyExtractor={(item: Session) => item._id}
           showsVerticalScrollIndicator={false}
         />
       </View>
     </LinearGradient>
-    // </ScrollView>
   );
 };
 
@@ -160,19 +176,17 @@ const styles = StyleSheet.create({
     paddingBottom: 15,
   },
   linearGradient: {
-    paddingTop: Platform.OS === 'ios' ? 60 : 30,
+    paddingTop: Platform.OS === 'ios' ? 25 : 30,
   },
   primaryContent: {
-    rowGap: 8,
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
     borderWidth: 1,
     borderColor: '#fff',
     backgroundColor: '#fff',
     paddingTop: 40,
+    paddingBottom: 80,
     alignItems: 'center',
-    justifyContent: 'center',
-    height: '200%',
   },
   textCategory: {
     marginBottom: 20,
@@ -195,21 +209,21 @@ const styles = StyleSheet.create({
   imageTitle: {
     marginTop: 5,
     position: 'absolute',
-    bottom: 28,
+    bottom: 20,
     left: 15,
     color: '#fff',
-    fontSize: 13,
+    fontSize: 14,
     width: 135,
     textAlign: 'center',
-    fontWeight: '500',
-    letterSpacing: 1,
+    fontWeight: '400',
+    letterSpacing: 0.5,
     alignItems: 'center',
     backgroundColor: 'rgba(229,222,255, 0.3)',
     borderColor: 'rgba(229,222,255, 0)',
     borderRadius: 5,
     borderWidth: 1,
     paddingVertical: 2,
-    paddingHorizontal: 8,
+    // paddingHorizontal: 8,
     overflow: 'hidden',
   },
   otherImageTitle: {
@@ -217,8 +231,8 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
     left: 170,
     top: -8,
-    fontSize: 14,
-    width: 160,
+    fontSize: 15,
+    width: 150,
     textAlign: 'left',
   },
   imageContentTop: {
@@ -245,7 +259,6 @@ const styles = StyleSheet.create({
     fontSize: 15,
     marginRight: 12,
   },
-
   playBtn: {
     position: 'absolute',
     right: 10,
@@ -259,7 +272,7 @@ const styles = StyleSheet.create({
   },
   otherPlayBtn: {
     right: 30,
-    bottom: 12,
+    bottom: 0,
     backgroundColor: '#f0f0f0',
   },
   closeIconStyle: {

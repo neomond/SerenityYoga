@@ -65,6 +65,10 @@ const PracticesCollectionScreen = ({navigation, route}: any) => {
     }
   };
 
+  const handleItemClick = (item: Session) => {
+    navigation.navigate('PracticePreview', {session: item});
+  };
+
   const renderMeditationItem = ({item}: any) => (
     <View key={item.id} style={styles.favoritesItem}>
       <View style={styles.imageContentSubtop}>
@@ -78,7 +82,7 @@ const PracticesCollectionScreen = ({navigation, route}: any) => {
           <View style={styles.favoritesItemSecondaryBottom}>
             <TouchableOpacity
               style={styles.btnFav}
-              onPress={() => navigation.navigate('PracticePreview')}>
+              onPress={() => handleItemClick(item)}>
               <Text>Start</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => handleLikeItem(item)}>
