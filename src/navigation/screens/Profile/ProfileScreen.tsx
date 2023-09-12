@@ -1,11 +1,5 @@
-import {
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
 import React, {useEffect, useRef, useState} from 'react';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import BottomSheetComponent from '../../../components/bottomsheet/BottomSheet';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
@@ -16,10 +10,7 @@ import {ProfileHeader} from './Header';
 import WeeklyGoal from './WeeklyGoal';
 import {ProgressBar} from './ProgressBar';
 import BottomSheetDays from './BottomSheetDays';
-import {LogoutConfirmationModal} from './LogoutConfirmationModal';
-
 import {debounce} from 'lodash';
-import {useUnsubscribe} from '../../../utils/unsubscribe';
 
 // motivational words
 const motivationalPhrases = [
@@ -32,7 +23,6 @@ const motivationalPhrases = [
 ];
 
 const ProfileScreen = ({navigation}: any) => {
-  useUnsubscribe();
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       navigation.getParent()?.setOptions({tabBarStyle: {display: 'none'}});
@@ -42,8 +32,9 @@ const ProfileScreen = ({navigation}: any) => {
       unsubscribe();
     };
   }, [navigation]);
+
+  const [activeDays, setActiveDays] = useState(0);
   const [selectedDays, setSelectedDays] = useState<number[]>([]);
-  const [activeDays, setActiveDays] = useState(0); // for active days out of selected from bottom sheeet's circular bar
   const [isLogoutModalVisible, setIsLogoutModalVisible] = useState(false);
   const [isBottomSheetVisible, setIsBottomSheetVisible] = useState(false);
   const [currentFill, setCurrentFill] = useState(0);
@@ -74,8 +65,8 @@ const ProfileScreen = ({navigation}: any) => {
   // func to get the number of days that have passed in the current week
   const getDaysPassedInCurrentWeek = () => {
     const currentDate = new Date();
-    const dayOfWeek = currentDate.getDay(); // Sunday - 0, Monsday - 1
-    return dayOfWeek === 0 ? 7 : dayOfWeek; // if its sunday then it is 7th day
+    const dayOfWeek = currentDate.getDay(); // Sunday - 0, Monday - 1
+    return dayOfWeek === 0 ? 7 : dayOfWeek; // if it's Sunday then it is the 7th day
   };
 
   // Use the calculated activeDays based on the real-world week
@@ -136,6 +127,15 @@ const ProfileScreen = ({navigation}: any) => {
         ? prevSelectedDays.filter(selectedDay => selectedDay !== day)
         : [...prevSelectedDays, day],
     );
+
+    // Store the updated selectedDays in AsyncStorage
+    AsyncStorage.setItem('@selectedDays', JSON.stringify(selectedDays))
+      .then(() => {
+        console.log('Selected Days Stored:', selectedDays);
+      })
+      .catch(error => {
+        console.error('Error storing selected days:', error);
+      });
   }, 200);
 
   const toggleBottomSheet = () => {
@@ -154,95 +154,113 @@ const ProfileScreen = ({navigation}: any) => {
     };
   }, []);
 
+  const handleLogout = () => {
+    navigation.navigate('Login');
+  };
+
+  // Load selectedDays from local storage on component mount
+  useEffect(() => {
+    const loadSelectedDays = async () => {
+      try {
+        const storedSelectedDays = await AsyncStorage.getItem('@selectedDays');
+        if (storedSelectedDays !== null) {
+          setSelectedDays(JSON.parse(storedSelectedDays));
+        } else {
+          setSelectedDays([]);
+        }
+      } catch (error) {
+        console.error('Error loading selected days:', error);
+      }
+    };
+
+    loadSelectedDays();
+  }, []);
+
+  // Save selectedDays to local storage whenever it changes
+  useEffect(() => {
+    const saveSelectedDays = async () => {
+      try {
+        await AsyncStorage.setItem(
+          '@selectedDays',
+          JSON.stringify(selectedDays),
+        );
+      } catch (error) {
+        console.error('Error storing selected days:', error);
+      }
+    };
+
+    saveSelectedDays();
+  }, [selectedDays]);
+
   return (
     <GestureHandlerRootView>
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <LinearGradient
-          colors={['#62CBF7', '#6FBBFE', '#6DB9FE']}
-          start={{x: 0, y: 0.2}}
-          end={{x: 1, y: 0}}
-          style={styles.linearGradient}>
-          <ProfileHeader navigation={navigation} />
-
-          <View style={styles.primaryContent}>
-            <WeeklyGoal
+      <LinearGradient
+        colors={['#62CBF7', '#6FBBFE', '#6DB9FE']}
+        start={{x: 0, y: 0.2}}
+        end={{x: 1, y: 0}}
+        style={styles.linearGradient}>
+        <ProfileHeader
+          navigation={navigation}
+          onLogout={() => handleLogout()}
+          isLogoutModalVisible={isLogoutModalVisible}
+          toggleLogoutModal={() =>
+            setIsLogoutModalVisible(!isLogoutModalVisible)
+          }
+        />
+        <View style={styles.primaryContent}>
+          <WeeklyGoal
+            activeDays={activeDays}
+            selectedDays={selectedDays}
+            toggleBottomSheet={toggleBottomSheet}
+            CircularProgress={AnimatedCircularProgress}
+          />
+          <Text style={[styles.firstSectionHeadtext, {paddingBottom: -20}]}>
+            Calendar
+          </Text>
+          <ProfileCalendar activeDays={selectedDays} />
+        </View>
+        <BottomSheetComponent
+          isVisible={isBottomSheetVisible}
+          toggleBottomSheet={toggleBottomSheet}
+          showHandleIndicator={false}
+          snapPoints={snapPoints}>
+          <View>
+            <View>
+              <Text style={[styles.firstSectionHeadtext, {paddingTop: 8}]}>
+                Set your weekly goal!
+              </Text>
+              <Text
+                style={[
+                  styles.firstSectionSubHeadtext,
+                  {paddingHorizontal: 10},
+                ]}>
+                To keep you motivated, now you can set your personal goal for
+                your week. Edit your goal anytime later.
+              </Text>
+            </View>
+            <ProgressBar selectedDays={selectedDays} />
+            <View style={styles.motivationalPhraseContainer}>
+              {selectedDays.length > 0 && (
+                <View style={styles.motivsubtext}>
+                  <Text>🚀</Text>
+                  <Text style={styles.motivationalPhraseText}>
+                    {motivationalPhrase}
+                  </Text>
+                </View>
+              )}
+            </View>
+            <BottomSheetDays
               selectedDays={selectedDays}
-              activeDays={activeDays}
-              toggleBottomSheet={toggleBottomSheet}
-              CircularProgress={AnimatedCircularProgress}
-            />
-            <Text style={[styles.firstSectionHeadtext, {paddingBottom: -20}]}>
-              Calendar
-            </Text>
-            <ProfileCalendar activeDays={selectedDays} />
-            <TouchableOpacity
-              style={styles.logOutBtn}
-              onPress={() => {
-                setIsLogoutModalVisible(true);
-                // navigation.reset({
-                //   index: 0,
-                //   routes: [{name: 'Login'}],
-                // });
-              }}>
-              <Text>Log Out</Text>
-            </TouchableOpacity>
-            <LogoutConfirmationModal
-              isVisible={isLogoutModalVisible}
-              onClose={() => setIsLogoutModalVisible(false)}
-              onLogout={() => {
-                setIsLogoutModalVisible(false);
-                navigation.popToTop();
-                navigation.navigate('Login');
-                // navigation.reset({
-                //   index: 0,
-                //   routes: [{name: 'Login'}],
-                // });
-              }}
+              handleSelectDays={handleSelectDays}
             />
           </View>
-          <BottomSheetComponent
-            isVisible={isBottomSheetVisible}
-            toggleBottomSheet={toggleBottomSheet}
-            showHandleIndicator={false}
-            snapPoints={snapPoints}>
-            <View>
-              <View>
-                <Text style={[styles.firstSectionHeadtext, {paddingTop: 8}]}>
-                  Set your weekly goal!
-                </Text>
-                <Text
-                  style={[
-                    styles.firstSectionSubHeadtext,
-                    {paddingHorizontal: 10},
-                  ]}>
-                  To keep you motivated, now you can set your personal goal for
-                  your week. Edit your goal anytime later.
-                </Text>
-              </View>
-              <ProgressBar selectedDays={selectedDays} />
-              <View style={styles.motivationalPhraseContainer}>
-                {selectedDays.length > 0 && (
-                  <View style={styles.motivsubtext}>
-                    <Text>🚀</Text>
-                    <Text style={styles.motivationalPhraseText}>
-                      {motivationalPhrase}
-                    </Text>
-                  </View>
-                )}
-              </View>
-              <BottomSheetDays
-                selectedDays={selectedDays}
-                handleSelectDays={handleSelectDays}
-              />
-            </View>
-            <TouchableOpacity
-              onPress={toggleBottomSheet}
-              style={styles.continueBtn}>
-              <Text style={styles.closeButton}>Done</Text>
-            </TouchableOpacity>
-          </BottomSheetComponent>
-        </LinearGradient>
-      </ScrollView>
+          <TouchableOpacity
+            onPress={toggleBottomSheet}
+            style={styles.continueBtn}>
+            <Text style={styles.closeButton}>Done</Text>
+          </TouchableOpacity>
+        </BottomSheetComponent>
+      </LinearGradient>
     </GestureHandlerRootView>
   );
 };
@@ -251,7 +269,7 @@ export default ProfileScreen;
 
 const styles = StyleSheet.create({
   linearGradient: {
-    paddingTop: 40,
+    paddingTop: 50,
   },
   continueBtn: {
     backgroundColor: '#8F6FFE',
@@ -267,6 +285,7 @@ const styles = StyleSheet.create({
     padding: 15,
   },
   primaryContent: {
+    height: '100%',
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
     borderWidth: 1,

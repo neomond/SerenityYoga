@@ -32,7 +32,7 @@ const BottomSheetComponent: React.FC<BottomSheetProps> = ({
   }, [isVisible]);
 
   const handleSheetChange = (index: number) => {
-    console.log('Sheet index:', index);
+    // console.log('Sheet index:', index);
   };
 
   const handleBackdropPress = () => {

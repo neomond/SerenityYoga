@@ -30,9 +30,7 @@ export const HomeStackNavigator: React.FC = () => {
         component={ProfileScreen}
         options={{
           headerShown: false,
-          // presentation: 'modal',
           animation: 'slide_from_bottom',
-
           // ...Platform.select({
           //   android: {
           //     animation: 'slide_from_bottom',
@@ -66,7 +64,7 @@ export const HomeStackNavigator: React.FC = () => {
       <HomeStack.Screen
         name="PracticePreview"
         component={PracticePreviewScreen}
-        options={{headerShown: false}}
+        options={{headerShown: false, presentation: 'modal'}}
       />
       <HomeStack.Screen
         name="CategoryMoodScreen"

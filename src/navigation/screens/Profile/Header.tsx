@@ -1,9 +1,15 @@
 import React from 'react';
 import {TouchableOpacity, View, Text, StyleSheet} from 'react-native';
 import SvgBack from '../../../assets/BackIcon';
-import SvgProfSettingsIcn from '../../../assets/ProfSettingsIcn';
+import SvgSignOut from '../../../assets/SignoutIcon';
+import {LogoutConfirmationModal} from './LogoutConfirmationModal';
 
-export const ProfileHeader = ({navigation}: any) => {
+export const ProfileHeader = ({
+  navigation,
+  onLogout,
+  isLogoutModalVisible,
+  toggleLogoutModal,
+}: any) => {
   return (
     <View style={styles.iconsHeader}>
       <TouchableOpacity
@@ -13,10 +19,15 @@ export const ProfileHeader = ({navigation}: any) => {
       </TouchableOpacity>
       <Text style={styles.headerText}>Profile</Text>
       <View style={styles.favoritesMainContent}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <SvgProfSettingsIcn stroke="#fff" />
+        <TouchableOpacity onPress={toggleLogoutModal}>
+          <SvgSignOut stroke="#fff" />
         </TouchableOpacity>
       </View>
+      <LogoutConfirmationModal
+        isVisible={isLogoutModalVisible}
+        onClose={toggleLogoutModal}
+        onLogout={onLogout}
+      />
     </View>
   );
 };

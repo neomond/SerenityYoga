@@ -1,4 +1,6 @@
-import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
+import LottieView from 'lottie-react-native';
+import {useEffect, useState} from 'react';
+import {View, Text, TouchableOpacity, StyleSheet, Modal} from 'react-native';
 
 export const WeeklyGoal = ({
   selectedDays,
@@ -6,6 +8,15 @@ export const WeeklyGoal = ({
   toggleBottomSheet,
   CircularProgress,
 }: any) => {
+  const [isCongratsModalVisible, setIsCongratsModalVisible] = useState(false);
+  const isAllDaysSelected = selectedDays.length === 7;
+
+  useEffect(() => {
+    if (selectedDays.length === 7) {
+      setIsCongratsModalVisible(true);
+    }
+  }, [selectedDays]);
+
   return (
     <View>
       <Text style={styles.firstSectionHeadtext}>Weekly Goal</Text>
@@ -35,10 +46,34 @@ export const WeeklyGoal = ({
       <TouchableOpacity onPress={toggleBottomSheet}>
         <Text style={styles.editWeeklyGoalBtn}>Edit</Text>
       </TouchableOpacity>
+
+      <Modal
+        visible={isCongratsModalVisible && isAllDaysSelected}
+        animationType="slide"
+        transparent={true}>
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalText}>Congrats!</Text>
+            <Text style={styles.modalSubText}>
+              You have completed your goal for the week!
+            </Text>
+            <LottieView
+              style={{width: 320, height: 300, marginBottom: 30}}
+              source={require('../../../assets/lottie/congrats.json')}
+              autoPlay
+            />
+            <TouchableOpacity
+              onPress={() => {
+                setIsCongratsModalVisible(false);
+              }}>
+              <Text style={styles.closeButton}>Close</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 };
-
 const styles = StyleSheet.create({
   firstSectionHeadtext: {
     fontSize: 18,
@@ -85,6 +120,33 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: -25,
     left: '47%',
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  modalContent: {
+    backgroundColor: '#fff',
+    padding: 20,
+    borderRadius: 30,
+    alignItems: 'center',
+    marginHorizontal: 50,
+  },
+  modalText: {
+    fontSize: 20,
+    fontWeight: '600',
+    marginBottom: 10,
+  },
+  modalSubText: {
+    fontSize: 16,
+    textAlign: 'center',
+  },
+  closeButton: {
+    color: '#815cff',
+    fontSize: 16,
+    fontWeight: '600',
   },
 });
 
