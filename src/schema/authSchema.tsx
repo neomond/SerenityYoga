@@ -18,7 +18,7 @@ export const signUpSchema = yup.object().shape({
 
 export const signInInitialValues = {
   email: '',
-  password: '',
+  password: ' ',
 };
 
 export const signUpInitialValues = {

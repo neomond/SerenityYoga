@@ -15,7 +15,7 @@ import {Auth} from '../../models/Auth';
 import {useDispatch} from 'react-redux';
 import {loginUser} from '../../redux/slices/AuthSlice';
 import {AppDispatch} from '../../redux';
-import {Formik} from 'formik';
+import {Formik, FormikHelpers} from 'formik';
 import {signInSchema, signInInitialValues} from '../../schema/authSchema';
 import SvgViewEye from '../../assets/ViewEyeIcon';
 import SvgHideEye from '../../assets/HideEyeIcon';
@@ -31,7 +31,7 @@ const SignInScreen = ({navigation}: any) => {
   };
   //const token = useSelector((state: RootState) => state.authSlice.token);
 
-  const handleSignIn = (values: any) => {
+  const handleSignIn = (values: any, {resetForm}: FormikHelpers<any>) => {
     const {email, password} = values;
     const user: Auth = {
       email,
@@ -42,6 +42,8 @@ const SignInScreen = ({navigation}: any) => {
     dispatch(loginUser(user))
       .unwrap()
       .then(() => {
+        resetForm();
+        setError('');
         navigation.navigate('HomeMain');
       })
       .catch((error: any) => {
@@ -260,17 +262,3 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
-
-//   const formik = useFormik({
-//     initialValues: signInInitialValues,
-//     validationSchema: signInSchema,
-//     onSubmit: values => {
-//       const user: Auth = {
-//         email: values.email,
-//         password: values.password,
-//         confirmPassword: undefined,
-//       };
-//       dispatch(loginUser(user));
-//       navigation.navigate('Onboarding');
-//     },
-//   });

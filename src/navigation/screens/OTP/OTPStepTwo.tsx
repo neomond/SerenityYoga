@@ -31,15 +31,16 @@ export const OTPStepTwo = ({navigation, route}: any) => {
   const handleContinue = () => {
     const {email} = route.params;
     const enteredOtp = otp;
-
     const expectedOtp = route.params.otpCode;
 
     console.log('successsssssssss');
-    console.log('Received OTP code:', enteredOtp);
-    console.log('enteredOtp', expectedOtp);
+    console.log('enteredOtp:', enteredOtp);
+    console.log('expectedOtp:', expectedOtp);
 
     if (enteredOtp === expectedOtp) {
-      navigation.navigate('OtpThird', {email, otpCode: enteredOtp});
+      console.log('Received OTP code:', enteredOtp);
+      console.log('enteredOtp', expectedOtp);
+      navigation.navigate('OtpThird', {email, otpCode: expectedOtp});
     } else {
       setOtpError('Entered OTP is incorrect.');
     }

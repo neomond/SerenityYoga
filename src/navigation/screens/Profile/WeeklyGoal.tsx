@@ -12,8 +12,10 @@ export const WeeklyGoal = ({
   const isAllDaysSelected = selectedDays.length === 7;
 
   useEffect(() => {
-    if (selectedDays.length === 7) {
+    if (isAllDaysSelected) {
       setIsCongratsModalVisible(true);
+    } else {
+      setIsCongratsModalVisible(false);
     }
   }, [selectedDays]);
 
@@ -74,6 +76,7 @@ export const WeeklyGoal = ({
     </View>
   );
 };
+
 const styles = StyleSheet.create({
   firstSectionHeadtext: {
     fontSize: 18,

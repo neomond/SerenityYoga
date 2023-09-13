@@ -1,12 +1,13 @@
-import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
+import {createSlice, createAsyncThunk, createAction} from '@reduxjs/toolkit';
 import axios from 'axios';
-import {RootState} from '..';
+import {AppDispatch, RootState} from '..';
 import {
   Auth,
   ConfirmAndResetPasswordParams,
   SendOtpParams,
 } from '../../models/Auth';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import API_URL from '../../utils/apiConfig';
 
 interface InitialStateType {
   loading: 'rejected' | 'fulfilled' | 'pending' | null;
@@ -14,6 +15,7 @@ interface InitialStateType {
   error: any | null;
   user: Auth | null;
   token: string | null;
+  otp: string;
 }
 
 const initialState: any = {
@@ -22,7 +24,7 @@ const initialState: any = {
   error: null,
   user: null,
   token: null,
-  otpCode: '',
+  otp: '',
 };
 
 export const loginUser = createAsyncThunk(
@@ -40,6 +42,7 @@ export const loginUser = createAsyncThunk(
           password,
         },
       );
+      AsyncStorage.setItem('token', response.data.token);
 
       return response.data;
     } catch (error: any) {
@@ -85,10 +88,7 @@ export const sendOtp = createAsyncThunk(
   'auth/sendOtp',
   async ({email}: SendOtpParams, {rejectWithValue}) => {
     try {
-      const response = await axios.post(
-        'http://localhost:8080/api/auth/send-otp',
-        {email},
-      );
+      const response = await axios.post(`${API_URL}/auth/send-otp`, {email});
       return response.data;
     } catch (error: any) {
       return rejectWithValue(error.response.data);
@@ -114,12 +114,25 @@ export const confirmAndResetPassword = createAsyncThunk(
   },
 );
 
+// ---------------------------------------- SIGNOUT USER
+export const signOutUser = createAction('auth/signOutUser');
+export const signOut = () => (dispatch: AppDispatch) => {
+  AsyncStorage.removeItem('token').then(() => {
+    dispatch(signOutUser());
+  });
+};
+
 const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
     setAuthenticated: (state, action) => {
       state.isAuthenticated = action.payload;
+    },
+    signOut: state => {
+      state.user = null;
+      state.token = null;
+      state.isAuthenticated = false;
     },
   },
   extraReducers: (builder: any) => {
@@ -175,7 +188,8 @@ const authSlice = createSlice({
         state.loading = 'fulfilled';
         state.error = null;
         state.password = action.payload.password;
-        state.otpCode = action.payload.otpCode;
+        state.otp = action.payload.otp;
+        console.log('Received OTP code:', action.payload.otp);
       })
       .addCase(sendOtp.rejected, (state: InitialStateType, action: any) => {
         state.loading = 'rejected';
@@ -188,9 +202,11 @@ const authSlice = createSlice({
         state.loading = 'pending';
         state.error = null;
       })
-      .addCase(confirmAndResetPassword.fulfilled, (state: any) => {
+      .addCase(confirmAndResetPassword.fulfilled, (state: any, action: any) => {
         state.loading = 'fulfilled';
         state.error = null;
+        state.otp = action.payload.otp;
+        console.log('Received OTP code:', action.payload.otp);
       })
       .addCase(
         confirmAndResetPassword.rejected,

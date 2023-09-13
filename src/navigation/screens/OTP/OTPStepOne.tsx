@@ -7,8 +7,8 @@ import {
 } from 'react-native';
 import SvgLogo from '../../../assets/Logo';
 import LinearGradient from 'react-native-linear-gradient';
-import {useDispatch} from 'react-redux';
-import {AppDispatch} from '../../../redux';
+import {useDispatch, useSelector} from 'react-redux';
+import {AppDispatch, RootState} from '../../../redux';
 import {sendOtp} from '../../../redux/slices/AuthSlice';
 import {useState} from 'react';
 

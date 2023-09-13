@@ -32,15 +32,17 @@ import {
   fetchSessionsAll,
   getMeditationSessions,
   getRandomSessions,
-  // getSessions,
 } from '../../redux/slices/SessionSlice';
 import {Session} from '../../models/Session';
-import {selectEnteredName} from '../../redux/slices/OnboardingSlice';
+import {
+  selectEnteredName,
+  setEnteredName,
+} from '../../redux/slices/OnboardingSlice';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const HomeScreen = ({navigation}: any) => {
   const dispatch = useDispatch<AppDispatch>();
   const {categories} = useSelector(getCategories);
-  // const sessions = useSelector(getSessions);
   const randomSessions = useSelector((state: RootState) =>
     getRandomSessions(state),
   );
@@ -49,6 +51,7 @@ const HomeScreen = ({navigation}: any) => {
 
   const isLoading = useSelector((state: RootState) => state.sessions.loading);
   const meditationSessions = useSelector(getMeditationSessions);
+
   // for favorites startttsss
   const likedItems = useSelector(getLikes);
   const isSessionLiked = (session: Session) =>
@@ -61,12 +64,24 @@ const HomeScreen = ({navigation}: any) => {
       dispatch(addItem(session));
     }
   };
-
   // for favorites endsss
   useEffect(() => {
     dispatch(fetchCategories());
     dispatch(fetchSessionsAll());
     dispatch(loadLikedItems());
+
+    const setUserNameFromStorage = async () => {
+      try {
+        const storedName = await AsyncStorage.getItem('enteredName');
+        if (storedName) {
+          dispatch(setEnteredName(storedName));
+        }
+      } catch (error) {
+        console.error('Failed to retrieve and set entered name:', error);
+      }
+    };
+
+    setUserNameFromStorage();
   }, [dispatch]);
 
   const handleClearLikedItems = async () => {

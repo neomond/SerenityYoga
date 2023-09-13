@@ -6,6 +6,7 @@ export type Auth = {
 
 export interface SendOtpParams {
   email: string;
+  otp?: string;
 }
 
 export interface ConfirmAndResetPasswordParams {

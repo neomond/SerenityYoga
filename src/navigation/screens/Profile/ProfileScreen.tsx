@@ -11,6 +11,9 @@ import WeeklyGoal from './WeeklyGoal';
 import {ProgressBar} from './ProgressBar';
 import BottomSheetDays from './BottomSheetDays';
 import {debounce} from 'lodash';
+import {useDispatch} from 'react-redux';
+import {AppDispatch} from '../../../redux';
+import {signOut} from '../../../redux/slices/AuthSlice';
 
 // motivational words
 const motivationalPhrases = [
@@ -40,6 +43,7 @@ const ProfileScreen = ({navigation}: any) => {
   const [currentFill, setCurrentFill] = useState(0);
   const [motivationalPhrase, setMotivationalPhrase] = useState('');
 
+  const dispatch = useDispatch<AppDispatch>();
   const snapPoints = ['25%', '85%'];
   const animationDuration = 1000;
 
@@ -155,7 +159,8 @@ const ProfileScreen = ({navigation}: any) => {
   }, []);
 
   const handleLogout = () => {
-    navigation.navigate('Login');
+    dispatch(signOut());
+    navigation.navigate('AuthMain');
   };
 
   // Load selectedDays from local storage on component mount

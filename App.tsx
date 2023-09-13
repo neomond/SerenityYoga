@@ -21,6 +21,7 @@ import {Text, View} from 'react-native';
 import {OnboardingStackNavigator} from './src/navigation/stack/OnboardingStack';
 
 import LottieView from 'lottie-react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 type RootStackParamList = {
   AuthMain: undefined;
@@ -36,7 +37,6 @@ type BottomTabParamList = {
   Liked: undefined;
   Meditations: undefined;
   Practices: undefined;
-  // Onboarding:undefined
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -150,17 +150,31 @@ const HomeTabNavigator: React.FC = () => {
 };
 
 const App: React.FC = () => {
+  const [initialRoute, setInitialRoute] = useState<string | null>(null);
+
   useEffect(() => {
     SplashScreen.hide();
+    AsyncStorage.getItem('token').then(token => {
+      console.log('Retrieved token:', token);
+      if (token) {
+        setInitialRoute('HomeMain');
+        console.log('Initial route set to HomeMain');
+      } else {
+        setInitialRoute('AuthMain');
+        console.log('Initial route set to AuthMain');
+      }
+    });
   }, []);
-  // const isLoggedIn = useSelector((state: RootState) => state.authSlice.token);
+
+  if (initialRoute === null) {
+    return null;
+  }
 
   return (
     <Provider store={store}>
       <NavigationContainer>
         <Stack.Navigator
-          // initialRouteName={isLoggedIn ? 'HomeMain' : 'AuthMain'}
-          initialRouteName={'AuthMain'}>
+          initialRouteName={initialRoute as keyof RootStackParamList}>
           <Stack.Screen
             name="AuthMain"
             component={AuthStack}

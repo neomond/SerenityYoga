@@ -50,7 +50,6 @@ export const fetchSessionsByIds = createAsyncThunk(
   'api/sessions/fetchSessionsByIds',
   async (sessionIds: string[]) => {
     try {
-      // Construct a comma-separated string of session IDs
       const sessionIdsString = sessionIds.join(',');
 
       const response = await axios.get(
