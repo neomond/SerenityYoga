@@ -1,10 +1,10 @@
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import ProfileScreen from '../screens/Profile/ProfileScreen';
-import AuthStack from './AuthStack';
+import SignInScreen from '../screens/SignInScreen';
 
 type ProfileStackParamList = {
   Profile: undefined;
-  AuthMain: undefined;
+  Login: undefined;
 };
 
 const ProfileStack = createNativeStackNavigator<ProfileStackParamList>();
@@ -18,8 +18,8 @@ export const ProfileStackNavigator: React.FC = () => {
         options={{headerShown: false}}
       />
       <ProfileStack.Screen
-        name="AuthMain"
-        component={AuthStack}
+        name="Login"
+        component={SignInScreen}
         options={{headerShown: false}}
       />
     </ProfileStack.Navigator>

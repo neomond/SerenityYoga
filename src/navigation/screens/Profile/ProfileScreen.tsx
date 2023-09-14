@@ -160,7 +160,7 @@ const ProfileScreen = ({navigation}: any) => {
 
   const handleLogout = () => {
     dispatch(signOut());
-    navigation.navigate('AuthMain');
+    navigation.navigate('Login');
   };
 
   // Load selectedDays from local storage on component mount
