@@ -1,5 +1,12 @@
 import React, {useState, useEffect} from 'react';
-import {View, Text, TouchableOpacity, StyleSheet, Image} from 'react-native';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  Image,
+  Platform,
+} from 'react-native';
 import TrackPlayer, {useProgress} from 'react-native-track-player';
 import tracks from '../../models/tracks';
 import LinearGradient from 'react-native-linear-gradient';
@@ -46,8 +53,8 @@ const AudioPlayer = ({selectedItem, onClose}: any) => {
         style={{
           zIndex: 9,
           position: 'absolute',
-          bottom: 70,
-          left: -3,
+          bottom: Platform.OS === 'ios' ? 70 : 80,
+          left: Platform.OS === 'ios' ? -3 : -10,
           width: '100%',
         }}>
         <Slider

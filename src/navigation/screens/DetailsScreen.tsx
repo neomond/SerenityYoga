@@ -187,6 +187,7 @@ const styles = StyleSheet.create({
     paddingTop: 40,
     paddingBottom: 80,
     alignItems: 'center',
+    height: '100%',
   },
   textCategory: {
     marginBottom: 20,

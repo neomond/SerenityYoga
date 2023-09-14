@@ -175,6 +175,7 @@ const MeditationsPlayerScreen = ({navigation, route}: any) => {
           thumbTintColor="#FFF"
           onSlidingComplete={async value => {
             await TrackPlayer.seekTo(value);
+            // TrackPlayer.play();
           }}
         />
         <View style={styles.timeWrapper}>

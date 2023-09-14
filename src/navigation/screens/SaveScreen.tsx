@@ -81,7 +81,7 @@ const SaveScreen = ({navigation}: any) => {
                   handleListenPress(item);
                 } else {
                   // Navigate to PracticePreviewScreen for sessions
-                  navigation.navigate('PracticePreviewScreen', {item});
+                  navigation.navigate('PracticePreview', {session: item});
                 }
               }}>
               <Text>

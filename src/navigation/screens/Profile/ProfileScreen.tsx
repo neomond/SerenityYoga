@@ -1,5 +1,5 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {Platform, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import BottomSheetComponent from '../../../components/bottomsheet/BottomSheet';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
@@ -274,7 +274,7 @@ export default ProfileScreen;
 
 const styles = StyleSheet.create({
   linearGradient: {
-    paddingTop: 50,
+    paddingTop: Platform.OS === 'ios' ? 50 : 10,
   },
   continueBtn: {
     backgroundColor: '#8F6FFE',

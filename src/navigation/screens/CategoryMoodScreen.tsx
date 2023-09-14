@@ -163,7 +163,7 @@ export default CategoryMoodScreen;
 
 const styles = StyleSheet.create({
   linearGradient: {
-    paddingTop: Platform.OS === 'ios' ? 5 : 30,
+    paddingTop: Platform.OS === 'ios' ? 5 : 0,
   },
   primaryContent: {
     rowGap: 8,
@@ -172,8 +172,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#fff',
     backgroundColor: '#fff',
-    // height: '110%',
-    paddingBottom: 400,
+    height: Platform.OS === 'ios' ? '100%' : '100%',
+    paddingBottom: Platform.OS === 'ios' ? 400 : 30,
   },
   iconsHeader: {
     flexDirection: 'row',
