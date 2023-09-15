@@ -14,11 +14,12 @@ import {PracticesStackNavigator} from './src/navigation/stack/PracticesStack';
 import {MeditationsStackNavigator} from './src/navigation/stack/MeditationsStack';
 import {SaveStackNavigator} from './src/navigation/stack/SaveStack';
 import AuthStack from './src/navigation/stack/AuthStack';
-import {Text, View} from 'react-native';
+import {View} from 'react-native';
 import {OnboardingStackNavigator} from './src/navigation/stack/OnboardingStack';
 
 import LottieView from 'lottie-react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {FocusedText} from './src/utils/FocusedTextAnimation';
 
 type RootStackParamList = {
   AuthMain: undefined;
@@ -80,16 +81,17 @@ const HomeTabNavigator: React.FC = () => {
               style={{
                 flexDirection: 'row',
                 alignItems: 'center',
+                backgroundColor: focused ? '#E5DEFF' : 'transparent',
+                borderRadius: focused ? 25 : 0,
+                paddingHorizontal: 10,
+                paddingVertical: 6,
+                marginLeft: 20,
               }}>
               <SvgHomeIcon
                 stroke={focused ? '#815CFF' : '#444444'}
                 fill={focused ? '#E5DEFF' : '#fff'}
               />
-              {focused ? (
-                <Text style={{marginLeft: 5, fontSize: 12, color: '#815CFF'}}>
-                  Home
-                </Text>
-              ) : null}
+              {focused ? <FocusedText focused={focused} label="Home" /> : null}
             </View>
           ),
         }}
@@ -99,13 +101,18 @@ const HomeTabNavigator: React.FC = () => {
         name="Practices"
         options={{
           tabBarIcon: ({focused}) => (
-            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                backgroundColor: focused ? '#E5DEFF' : 'transparent',
+                borderRadius: focused ? 25 : 0,
+                paddingHorizontal: 10,
+                paddingVertical: 6,
+                marginLeft: 20,
+              }}>
               <SvgPractices stroke={focused ? '#815CFF' : '#444444'} />
-              {focused ? (
-                <Text style={{marginLeft: 5, fontSize: 12, color: '#815CFF'}}>
-                  Practices
-                </Text>
-              ) : null}
+              {focused ? <FocusedText focused={focused} label="Yoga" /> : null}
             </View>
           ),
         }}
@@ -115,13 +122,18 @@ const HomeTabNavigator: React.FC = () => {
         name="Meditations"
         options={{
           tabBarIcon: ({focused}) => (
-            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                backgroundColor: focused ? '#E5DEFF' : 'transparent',
+                borderRadius: focused ? 25 : 0,
+                paddingHorizontal: 10,
+                paddingVertical: 6,
+                marginLeft: 20,
+              }}>
               <SvgMeditations stroke={focused ? '#815CFF' : '#444444'} />
-              {focused ? (
-                <Text style={{marginLeft: 5, fontSize: 12, color: '#815CFF'}}>
-                  Meditations
-                </Text>
-              ) : null}
+              {focused ? <FocusedText focused={focused} label="Medi" /> : null}
             </View>
           ),
         }}
@@ -131,16 +143,20 @@ const HomeTabNavigator: React.FC = () => {
         name="Favorites"
         options={{
           tabBarIcon: ({focused}) => (
-            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                backgroundColor: focused ? '#E5DEFF' : 'transparent',
+                borderRadius: focused ? 25 : 0,
+                paddingHorizontal: 10,
+                paddingVertical: 6,
+              }}>
               <SvgLiked
                 stroke={focused ? '#815CFF' : '#444444'}
                 fill={focused ? '#E5DEFF' : '#fff'}
               />
-              {focused ? (
-                <Text style={{marginLeft: 5, fontSize: 12, color: '#815CFF'}}>
-                  Liked
-                </Text>
-              ) : null}
+              {focused ? <FocusedText focused={focused} label="Favs" /> : null}
             </View>
           ),
         }}
