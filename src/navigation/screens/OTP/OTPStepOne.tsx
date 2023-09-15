@@ -33,7 +33,10 @@ export const OTPStepOne = ({navigation}: any) => {
         setError('Email not found in the database');
       } else {
         setError('');
-        navigation.navigate('OtpSecond', {email});
+        navigation.navigate('OtpSecond', {
+          email,
+          otpCode: response.payload.otp,
+        });
       }
     } catch (err) {
       console.log('Error sending OTP:', err);

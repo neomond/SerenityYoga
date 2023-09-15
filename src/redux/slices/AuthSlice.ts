@@ -85,10 +85,11 @@ export const signupUser = createAsyncThunk(
 );
 
 export const sendOtp = createAsyncThunk(
-  'auth/sendOtp',
+  'auth/send-otp',
   async ({email}: SendOtpParams, {rejectWithValue}) => {
     try {
       const response = await axios.post(`${API_URL}/auth/send-otp`, {email});
+      console.log('Received OTP responseeeeeee:', response.data);
       return response.data;
     } catch (error: any) {
       return rejectWithValue(error.response.data);
@@ -189,7 +190,7 @@ const authSlice = createSlice({
         state.error = null;
         state.password = action.payload.password;
         state.otp = action.payload.otp;
-        console.log('Received OTP code:', action.payload.otp);
+        console.log('Received OTP codeeee:', action.payload.otp);
       })
       .addCase(sendOtp.rejected, (state: InitialStateType, action: any) => {
         state.loading = 'rejected';
