@@ -21,6 +21,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {AppDispatch, RootState} from '../../redux';
 import SvgCloseIcon from '../../assets/CloseIcon';
 import {Session} from '../../models/Session';
+import HeaderAnimation from '../../utils/HeaderAnimation';
 
 const DetailsScreen = ({route, navigation}: any) => {
   const likedItems = useSelector((state: RootState) => getLikes(state));
@@ -156,13 +157,15 @@ const DetailsScreen = ({route, navigation}: any) => {
       </View>
 
       <View style={styles.primaryContent}>
-        <FlatList
-          // style={{height: '100%'}}
-          data={randomSessions ? randomSessions : meditationSessions}
-          renderItem={renderItem}
-          keyExtractor={(item: Session) => item._id}
-          showsVerticalScrollIndicator={false}
-        />
+        <HeaderAnimation duration={2000}>
+          <FlatList
+            // style={{height: '100%'}}
+            data={randomSessions ? randomSessions : meditationSessions}
+            renderItem={renderItem}
+            keyExtractor={(item: Session) => item._id}
+            showsVerticalScrollIndicator={false}
+          />
+        </HeaderAnimation>
       </View>
     </LinearGradient>
   );

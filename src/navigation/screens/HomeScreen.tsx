@@ -39,6 +39,7 @@ import {
   setEnteredName,
 } from '../../redux/slices/OnboardingSlice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import HeaderAnimation from '../../utils/HeaderAnimation';
 
 const HomeScreen = ({navigation}: any) => {
   const dispatch = useDispatch<AppDispatch>();
@@ -107,7 +108,6 @@ const HomeScreen = ({navigation}: any) => {
   }
 
   return (
-    // <HeaderAnimation duration={1300}>
     <LinearGradient
       colors={['#c47afb', '#A07AFA', '#8380fb', '#8866ff']}
       start={{x: 0, y: 0.2}}
@@ -121,94 +121,107 @@ const HomeScreen = ({navigation}: any) => {
           <SvgProfile stroke="#E5DEFF" fill="transparent" />
         </TouchableOpacity>
       </View>
-      <Text style={styles.headerText}>Welcome, {enteredName}!</Text>
-      <Text style={styles.subheaderText}>How are you feeling today?</Text>
-      <View>
-        <ScrollView
-          style={styles.scrollCategories}
-          showsHorizontalScrollIndicator={false}
-          horizontal={true}>
-          {categories.map(category => (
-            <TouchableOpacity
-              key={category._id}
-              onPress={() =>
-                navigation.navigate('CategoryMoodScreen', {category})
-              }>
-              <Text style={styles.categoryText}>
-                {getEmojiForCategory(category.name)} {category.name}
-              </Text>
-            </TouchableOpacity>
-          ))}
-        </ScrollView>
-      </View>
+      <HeaderAnimation duration={1000}>
+        <Text style={styles.headerText}>Welcome, {enteredName}!</Text>
+        <Text style={styles.subheaderText}>How are you feeling today?</Text>
+        <View>
+          <ScrollView
+            style={styles.scrollCategories}
+            showsHorizontalScrollIndicator={false}
+            horizontal={true}>
+            {categories.map(category => (
+              <TouchableOpacity
+                key={category._id}
+                onPress={() =>
+                  navigation.navigate('CategoryMoodScreen', {category})
+                }>
+                <Text style={styles.categoryText}>
+                  {getEmojiForCategory(category.name)} {category.name}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </ScrollView>
+        </View>
+      </HeaderAnimation>
       <View style={styles.primaryContent}>
-        <View style={styles.renderItemCont}>
-          <View style={styles.renderItemContSecond}>
-            <Text style={styles.categoryHeader}>Try this</Text>
-            <TouchableOpacity
-              onPress={() =>
-                navigation.navigate('DetailsScreen', {randomSessions})
-              }>
-              <Text style={styles.categoryHeaderSecond}>View All</Text>
-            </TouchableOpacity>
-          </View>
-          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            {randomSessions.map((session: Session) => (
-              <View style={styles.imageContainer} key={session._id}>
-                <Image style={styles.image} source={{uri: session.imageUrl}} />
-                <Text style={styles.imageTitle}>{session.title}</Text>
-                <View style={styles.imageContentTop}>
-                  <View style={styles.imageContentSubtop}>
-                    <SvgDuration />
-                    <Text style={styles.titleColor}>{session.duration}</Text>
+        <HeaderAnimation duration={2000}>
+          <View style={styles.renderItemCont}>
+            <View style={styles.renderItemContSecond}>
+              <Text style={styles.categoryHeader}>Try this</Text>
+              <TouchableOpacity
+                onPress={() =>
+                  navigation.navigate('DetailsScreen', {randomSessions})
+                }>
+                <Text style={styles.categoryHeaderSecond}>View All</Text>
+              </TouchableOpacity>
+            </View>
+            <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+              {randomSessions.map((session: Session) => (
+                <View style={styles.imageContainer} key={session._id}>
+                  <Image
+                    style={styles.image}
+                    source={{uri: session.imageUrl}}
+                  />
+                  <Text style={styles.imageTitle}>{session.title}</Text>
+                  <View style={styles.imageContentTop}>
+                    <View style={styles.imageContentSubtop}>
+                      <SvgDuration />
+                      <Text style={styles.titleColor}>{session.duration}</Text>
+                    </View>
+                    <TouchableOpacity
+                      onPress={() => handleLikeSession(session)}>
+                      <SvgLikeIcon
+                        fill={
+                          isSessionLiked(session) ? '#815cff' : 'transparent'
+                        }
+                        stroke={isSessionLiked(session) ? '#fff' : '#fff'}
+                      />
+                    </TouchableOpacity>
                   </View>
-                  <TouchableOpacity onPress={() => handleLikeSession(session)}>
-                    <SvgLikeIcon
-                      fill={isSessionLiked(session) ? '#815cff' : 'transparent'}
-                      stroke={isSessionLiked(session) ? '#fff' : '#fff'}
-                    />
-                  </TouchableOpacity>
                 </View>
-              </View>
-            ))}
-          </ScrollView>
-        </View>
-        <View style={styles.renderItemCont}>
-          <View style={styles.renderItemContSecond}>
-            <Text style={styles.categoryHeader}>Meditate</Text>
-            <TouchableOpacity
-              onPress={() =>
-                navigation.navigate('DetailsScreen', {meditationSessions})
-              }>
-              <Text style={styles.categoryHeaderSecond}>View All</Text>
-            </TouchableOpacity>
+              ))}
+            </ScrollView>
           </View>
-          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            {meditationSessions.map((meditate: Session) => (
-              <View style={styles.imageContainer} key={meditate._id}>
-                <Image style={styles.image} source={{uri: meditate.imageUrl}} />
-                <Text style={styles.imageTitle}>{meditate.title}</Text>
-                <View style={styles.imageContentTop}>
-                  <View style={styles.imageContentSubtop}>
-                    <SvgDuration />
-                    <Text style={styles.titleColor}>{meditate.duration}</Text>
+          <View style={styles.renderItemCont}>
+            <View style={styles.renderItemContSecond}>
+              <Text style={styles.categoryHeader}>Meditate</Text>
+              <TouchableOpacity
+                onPress={() =>
+                  navigation.navigate('DetailsScreen', {meditationSessions})
+                }>
+                <Text style={styles.categoryHeaderSecond}>View All</Text>
+              </TouchableOpacity>
+            </View>
+            <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+              {meditationSessions.map((meditate: Session) => (
+                <View style={styles.imageContainer} key={meditate._id}>
+                  <Image
+                    style={styles.image}
+                    source={{uri: meditate.imageUrl}}
+                  />
+                  <Text style={styles.imageTitle}>{meditate.title}</Text>
+                  <View style={styles.imageContentTop}>
+                    <View style={styles.imageContentSubtop}>
+                      <SvgDuration />
+                      <Text style={styles.titleColor}>{meditate.duration}</Text>
+                    </View>
+                    <TouchableOpacity
+                      onPress={() => handleLikeSession(meditate)}>
+                      <SvgLikeIcon
+                        fill={
+                          isSessionLiked(meditate) ? '#815cff' : 'transparent'
+                        }
+                        stroke={isSessionLiked(meditate) ? '#fff' : '#fff'}
+                      />
+                    </TouchableOpacity>
                   </View>
-                  <TouchableOpacity onPress={() => handleLikeSession(meditate)}>
-                    <SvgLikeIcon
-                      fill={
-                        isSessionLiked(meditate) ? '#815cff' : 'transparent'
-                      }
-                      stroke={isSessionLiked(meditate) ? '#fff' : '#fff'}
-                    />
-                  </TouchableOpacity>
                 </View>
-              </View>
-            ))}
-          </ScrollView>
-        </View>
+              ))}
+            </ScrollView>
+          </View>
+        </HeaderAnimation>
       </View>
     </LinearGradient>
-    // </HeaderAnimation>
   );
 };
 

@@ -14,6 +14,7 @@ import {debounce} from 'lodash';
 import {useDispatch} from 'react-redux';
 import {AppDispatch} from '../../../redux';
 import {signOut} from '../../../redux/slices/AuthSlice';
+import HeaderAnimation from '../../../utils/HeaderAnimation';
 
 // motivational words
 const motivationalPhrases = [
@@ -213,16 +214,18 @@ const ProfileScreen = ({navigation}: any) => {
           }
         />
         <View style={styles.primaryContent}>
-          <WeeklyGoal
-            activeDays={activeDays}
-            selectedDays={selectedDays}
-            toggleBottomSheet={toggleBottomSheet}
-            CircularProgress={AnimatedCircularProgress}
-          />
-          <Text style={[styles.firstSectionHeadtext, {paddingBottom: -20}]}>
-            Calendar
-          </Text>
-          <ProfileCalendar activeDays={selectedDays} />
+          <HeaderAnimation duration={2000}>
+            <WeeklyGoal
+              activeDays={activeDays}
+              selectedDays={selectedDays}
+              toggleBottomSheet={toggleBottomSheet}
+              CircularProgress={AnimatedCircularProgress}
+            />
+            <Text style={[styles.firstSectionHeadtext, {paddingBottom: -20}]}>
+              Calendar
+            </Text>
+            <ProfileCalendar activeDays={selectedDays} />
+          </HeaderAnimation>
         </View>
         <BottomSheetComponent
           isVisible={isBottomSheetVisible}

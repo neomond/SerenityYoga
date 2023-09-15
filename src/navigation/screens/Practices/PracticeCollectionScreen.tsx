@@ -22,6 +22,7 @@ import {
   getLikes,
   removeItem,
 } from '../../../redux/slices/LikedItemsSlice';
+import HeaderAnimation from '../../../utils/HeaderAnimation';
 
 const PracticesCollectionScreen = ({navigation, route}: any) => {
   useEffect(() => {
@@ -70,31 +71,34 @@ const PracticesCollectionScreen = ({navigation, route}: any) => {
   };
 
   const renderMeditationItem = ({item}: any) => (
-    <View key={item.id} style={styles.favoritesItem}>
-      <View style={styles.imageContentSubtop}>
-        <SvgDuration />
-        <Text style={styles.titleColor}>{item.duration}</Text>
-      </View>
-      <View style={{flexDirection: 'row', columnGap: 15, marginHorizontal: 25}}>
-        <Image style={styles.imageFav} source={{uri: item.imageUrl}} />
-        <View style={styles.favoritesItemSecondary}>
-          <Text style={styles.textFav}>{item.title}</Text>
-          <View style={styles.favoritesItemSecondaryBottom}>
-            <TouchableOpacity
-              style={styles.btnFav}
-              onPress={() => handleItemClick(item)}>
-              <Text>Start</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => handleLikeItem(item)}>
-              <SvgLikeIcon
-                fill={isItemLiked(item) ? '#E5DEFF' : 'transparent'}
-                stroke={isItemLiked(item) ? '#815cff' : '#E5DEFF'}
-              />
-            </TouchableOpacity>
+    <HeaderAnimation duration={2000}>
+      <View key={item.id} style={styles.favoritesItem}>
+        <View style={styles.imageContentSubtop}>
+          <SvgDuration />
+          <Text style={styles.titleColor}>{item.duration}</Text>
+        </View>
+        <View
+          style={{flexDirection: 'row', columnGap: 15, marginHorizontal: 25}}>
+          <Image style={styles.imageFav} source={{uri: item.imageUrl}} />
+          <View style={styles.favoritesItemSecondary}>
+            <Text style={styles.textFav}>{item.title}</Text>
+            <View style={styles.favoritesItemSecondaryBottom}>
+              <TouchableOpacity
+                style={styles.btnFav}
+                onPress={() => handleItemClick(item)}>
+                <Text>Start</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => handleLikeItem(item)}>
+                <SvgLikeIcon
+                  fill={isItemLiked(item) ? '#E5DEFF' : 'transparent'}
+                  stroke={isItemLiked(item) ? '#815cff' : '#E5DEFF'}
+                />
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
       </View>
-    </View>
+    </HeaderAnimation>
   );
 
   return (
@@ -107,7 +111,7 @@ const PracticesCollectionScreen = ({navigation, route}: any) => {
       onRefresh={handleRefresh}
       refreshing={isRefreshing}
       ListHeaderComponent={
-        <>
+        <HeaderAnimation duration={1000}>
           {selectedImageUrl && (
             <Image style={styles.image} source={{uri: selectedImageUrl}} />
           )}
@@ -132,7 +136,7 @@ const PracticesCollectionScreen = ({navigation, route}: any) => {
               </View>
             </>
           )}
-        </>
+        </HeaderAnimation>
       }
     />
   );

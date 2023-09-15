@@ -19,6 +19,7 @@ import SvgFlower from '../../../assets/Flower';
 import {useDispatch} from 'react-redux';
 import {AppDispatch} from '../../../redux';
 import {fetchSessionsAll} from '../../../redux/slices/SessionSlice';
+import HeaderAnimation from '../../../utils/HeaderAnimation';
 
 const PracticePreviewScreen = ({navigation, route}: any) => {
   const [playing, setPlaying] = useState(false);
@@ -42,17 +43,20 @@ const PracticePreviewScreen = ({navigation, route}: any) => {
           <SvgBack stroke="#fff" />
         </TouchableOpacity>
       </View>
+
       <View
         style={{
           width: '100%',
           paddingVertical: 100,
           marginBottom: 80,
         }}>
-        <YoutubePlayer
-          height={230}
-          videoId={session.youtube_id}
-          play={playing}
-        />
+        <HeaderAnimation duration={2000}>
+          <YoutubePlayer
+            height={230}
+            videoId={session.youtube_id}
+            play={playing}
+          />
+        </HeaderAnimation>
         <View style={styles.flowerIcon}>
           <SvgFlower />
         </View>
@@ -61,65 +65,67 @@ const PracticePreviewScreen = ({navigation, route}: any) => {
       <BottomSheetComponentWithoutOverlay
         isVisible={true}
         snapPoints={['25%', '27%', '100%']}>
-        <ScrollView>
-          <View style={styles.bottomSheetContent}>
-            <View style={styles.bottomshtopCont}>
-              <View>
-                <Text style={styles.bottomshHeaderText}>{session.title}</Text>
-                <Text>with Adriene</Text>
+        <HeaderAnimation duration={2000}>
+          <ScrollView showsVerticalScrollIndicator={false}>
+            <View style={styles.bottomSheetContent}>
+              <View style={styles.bottomshtopCont}>
+                <View>
+                  <Text style={styles.bottomshHeaderText}>{session.title}</Text>
+                  <Text>with Adriene</Text>
+                </View>
+                <Image
+                  style={{width: 50, height: 50, borderRadius: 25}}
+                  source={{uri: session.imageUrl}}
+                />
               </View>
-              <Image
-                style={{width: 50, height: 50, borderRadius: 25}}
-                source={{uri: session.imageUrl}}
-              />
+              <TouchableOpacity style={styles.startBtn} onPress={togglePlaying}>
+                <Text style={styles.startBtnText}>
+                  {playing ? 'Stop' : 'Start Workout'}
+                </Text>
+              </TouchableOpacity>
             </View>
-            <TouchableOpacity style={styles.startBtn} onPress={togglePlaying}>
-              <Text style={styles.startBtnText}>
-                {playing ? 'Stop' : 'Start Workout'}
-              </Text>
-            </TouchableOpacity>
-          </View>
-          <View style={styles.descWrapper}>
-            <View style={styles.descFirst}>
-              <View style={styles.descSubWrapper}>
-                <SvgClock />
-                <Text>{session.duration} min</Text>
-              </View>
-              <View
-                style={{
-                  borderLeftWidth: 1,
-                  borderLeftColor: '#d9d9d9',
-                }}>
-                <View style={styles.activityMain}>
-                  <View style={styles.activityDots}>
-                    <SvgActivityActive />
-                    <SvgActivity />
-                    <SvgActivity />
+            <View style={styles.descWrapper}>
+              <View style={styles.descFirst}>
+                <View style={styles.descSubWrapper}>
+                  <SvgClock />
+                  <Text>{session.duration} min</Text>
+                </View>
+                <View
+                  style={{
+                    borderLeftWidth: 1,
+                    borderLeftColor: '#d9d9d9',
+                  }}>
+                  <View style={styles.activityMain}>
+                    <View style={styles.activityDots}>
+                      <SvgActivityActive />
+                      <SvgActivity />
+                      <SvgActivity />
+                    </View>
+                    <Text>Low intensity</Text>
                   </View>
-                  <Text>Low intensity</Text>
                 </View>
               </View>
-            </View>
-            <Text style={{marginHorizontal: 20, fontSize: 16}}>
-              {session.description}
-            </Text>
-            <View style={{marginHorizontal: 20, marginTop: 20}}>
-              <Text style={[styles.bottomshHeaderText, {paddingBottom: 15}]}>
-                Workout Structure
+              <Text style={{marginHorizontal: 20, fontSize: 16}}>
+                {session.description}
               </Text>
-              <View>
-                <View style={styles.workoutSctruct}>
-                  <Text>🧘‍♀️ Workout</Text>
-                  <Text>{session.duration}</Text>
-                </View>
-                <View style={styles.workoutSctruct}>
-                  <Text>😌 Shavasana meditation</Text>
-                  <Text>5:00</Text>
+              <View style={{marginHorizontal: 20, marginTop: 20}}>
+                <Text style={[styles.bottomshHeaderText, {paddingBottom: 15}]}>
+                  Workout Structure
+                </Text>
+                <View>
+                  <View style={styles.workoutSctruct}>
+                    <Text>🧘‍♀️ Workout</Text>
+                    <Text>{session.duration}</Text>
+                  </View>
+                  <View style={styles.workoutSctruct}>
+                    <Text>😌 Shavasana meditation</Text>
+                    <Text>5:00</Text>
+                  </View>
                 </View>
               </View>
             </View>
-          </View>
-        </ScrollView>
+          </ScrollView>
+        </HeaderAnimation>
       </BottomSheetComponentWithoutOverlay>
     </GestureHandlerRootView>
   );
@@ -193,6 +199,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#f5f5f5',
     width: '100%',
     height: '100%',
+    paddingBottom: 20,
   },
   descSubWrapper: {
     flexDirection: 'row',

@@ -9,7 +9,6 @@ import {
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import SvgLikeIcon from '../../assets/LikeIcon';
-import SvgDownload from '../../assets/DownloadIcon';
 import {useDispatch, useSelector} from 'react-redux';
 import {AppDispatch, RootState} from '../../redux';
 import {
@@ -22,6 +21,7 @@ import SvgFlower from '../../assets/Flower';
 import SvgDuration from '../../assets/DurationIcon';
 import {Session} from '../../models/Session';
 import AudioPlayer from '../../components/musicPlayer/AudioPlayer';
+import HeaderAnimation from '../../utils/HeaderAnimation';
 
 const SaveScreen = ({navigation}: any) => {
   const dispatch = useDispatch<AppDispatch>();
@@ -63,45 +63,45 @@ const SaveScreen = ({navigation}: any) => {
 
   const renderItem = ({item}: {item: any}) => {
     return (
-      <View key={item._id} style={styles.favoritesItem}>
-        <View style={styles.imageContentSubtop}>
-          <SvgDuration />
-          <Text style={styles.titleColor}>{item.duration}</Text>
-        </View>
-        <Image style={styles.imageFav} source={{uri: item.imageUrl}} />
-        <View style={styles.favoritesItemSecondary}>
-          <Text style={styles.textFav}>{item.title}</Text>
-          <View style={styles.favoritesItemSecondaryBottom}>
-            <TouchableOpacity
-              style={styles.btnFav}
-              onPress={() => {
-                if (item.title.toLowerCase().includes('meditation')) {
-                  // Navigate to MeditationsPlayer for meditations
-                  // navigation.navigate('MeditationsPlayer', {item});
-                  handleListenPress(item);
-                } else {
-                  // Navigate to PracticePreviewScreen for sessions
-                  navigation.navigate('PracticePreview', {session: item});
-                }
-              }}>
-              <Text>
-                {item.title.toLowerCase().includes('meditation')
-                  ? 'Listen'
-                  : 'Play'}
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity>
-              <SvgDownload />
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => handleLikeItem(item)}>
-              <SvgLikeIcon
-                fill={isItemLiked(item) ? '#E5DEFF' : 'transparent'}
-                stroke={isItemLiked(item) ? '#815cff' : '#E5DEFF'}
-              />
-            </TouchableOpacity>
+      <HeaderAnimation duration={1000}>
+        <View key={item._id} style={styles.favoritesItem}>
+          <View style={styles.imageContentSubtop}>
+            <SvgDuration />
+            <Text style={styles.titleColor}>{item.duration}</Text>
+          </View>
+          <Image style={styles.imageFav} source={{uri: item.imageUrl}} />
+          <View style={styles.favoritesItemSecondary}>
+            <Text style={styles.textFav}>{item.title}</Text>
+            <View style={styles.favoritesItemSecondaryBottom}>
+              <TouchableOpacity
+                style={styles.btnFav}
+                onPress={() => {
+                  if (item.title.toLowerCase().includes('meditation')) {
+                    // Navigate to MeditationsPlayer for meditations
+                    // navigation.navigate('MeditationsPlayer', {item});
+                    handleListenPress(item);
+                  } else {
+                    // Navigate to PracticePreviewScreen for sessions
+                    navigation.navigate('PracticePreview', {session: item});
+                  }
+                }}>
+                <Text>
+                  {item.title.toLowerCase().includes('meditation')
+                    ? 'Listen'
+                    : 'Play'}
+                </Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity onPress={() => handleLikeItem(item)}>
+                <SvgLikeIcon
+                  fill={isItemLiked(item) ? '#E5DEFF' : 'transparent'}
+                  stroke={isItemLiked(item) ? '#815cff' : '#E5DEFF'}
+                />
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
-      </View>
+      </HeaderAnimation>
     );
   };
 
@@ -195,7 +195,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1.2,
     paddingBottom: 20,
     paddingTop: 15,
-    marginBottom: 20,
+    marginBottom: 10,
   },
   imageFav: {
     width: 150,
@@ -248,7 +248,7 @@ const styles = StyleSheet.create({
     columnGap: 3,
     alignItems: 'center',
     position: 'absolute',
-    top: 35,
+    top: 30,
     left: 10,
     zIndex: 1,
   },

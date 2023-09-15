@@ -3,11 +3,8 @@ import {NavigationContainer} from '@react-navigation/native';
 import {Provider} from 'react-redux';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-
 import store from './src/redux';
-
 import SplashScreen from 'react-native-splash-screen';
-
 import SvgHomeIcon from './src/assets/HomeIcon';
 import SvgMeditations from './src/assets/MeditationsIcon';
 import SvgPractices from './src/assets/VideosIcon';
@@ -34,7 +31,7 @@ type RootStackParamList = {
 type BottomTabParamList = {
   Home: undefined;
   Profile: undefined;
-  Liked: undefined;
+  Favorites: undefined;
   Meditations: undefined;
   Practices: undefined;
 };
@@ -79,7 +76,11 @@ const HomeTabNavigator: React.FC = () => {
         name="Home"
         options={{
           tabBarIcon: ({focused}) => (
-            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+              }}>
               <SvgHomeIcon
                 stroke={focused ? '#815CFF' : '#444444'}
                 fill={focused ? '#E5DEFF' : '#fff'}
@@ -127,7 +128,7 @@ const HomeTabNavigator: React.FC = () => {
         component={MeditationsStackNavigator}
       />
       <Tab.Screen
-        name="Liked"
+        name="Favorites"
         options={{
           tabBarIcon: ({focused}) => (
             <View style={{flexDirection: 'row', alignItems: 'center'}}>

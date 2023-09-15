@@ -20,6 +20,7 @@ import {
   removeItem,
 } from '../../../redux/slices/LikedItemsSlice';
 import {Session} from '../../../models/Session';
+import HeaderAnimation from '../../../utils/HeaderAnimation';
 
 const MeditationsCollectionScreen = ({navigation, route}: any) => {
   const dispatch = useDispatch<AppDispatch>();
@@ -29,7 +30,6 @@ const MeditationsCollectionScreen = ({navigation, route}: any) => {
   const selectedRelatedSessions = selectedMeditation?.relatedSessions || [];
 
   const likedItems = useSelector((state: RootState) => getLikes(state));
-
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
@@ -67,36 +67,39 @@ const MeditationsCollectionScreen = ({navigation, route}: any) => {
   const [isRefreshing, setIsRefreshing] = useState(false);
 
   const renderMeditationItem = ({item}: any) => (
-    <View key={item._id} style={styles.favoritesItem}>
-      <View style={styles.imageContentSubtop}>
-        <SvgDuration />
-        <Text style={styles.titleColor}>{item.duration}</Text>
-      </View>
-      <View style={{flexDirection: 'row', columnGap: 15, marginHorizontal: 25}}>
-        <Image style={styles.imageFav} source={{uri: item.imageUrl}} />
-        <View style={styles.favoritesItemSecondary}>
-          <Text style={styles.textFav}>{item.title}</Text>
-          <View style={styles.favoritesItemSecondaryBottom}>
-            <TouchableOpacity
-              style={styles.btnFav}
-              onPress={() =>
-                navigation.navigate('MeditationsPlayer', {
-                  selectedMeditation: item,
-                  randomTrack: true,
-                })
-              }>
-              <Text>Listen</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => handleLikeItem(item)}>
-              <SvgLikeIcon
-                fill={isItemLiked(item) ? '#E5DEFF' : 'transparent'}
-                stroke={isItemLiked(item) ? '#815cff' : '#E5DEFF'}
-              />
-            </TouchableOpacity>
+    <HeaderAnimation duration={2000}>
+      <View key={item._id} style={styles.favoritesItem}>
+        <View style={styles.imageContentSubtop}>
+          <SvgDuration />
+          <Text style={styles.titleColor}>{item.duration}</Text>
+        </View>
+        <View
+          style={{flexDirection: 'row', columnGap: 15, marginHorizontal: 25}}>
+          <Image style={styles.imageFav} source={{uri: item.imageUrl}} />
+          <View style={styles.favoritesItemSecondary}>
+            <Text style={styles.textFav}>{item.title}</Text>
+            <View style={styles.favoritesItemSecondaryBottom}>
+              <TouchableOpacity
+                style={styles.btnFav}
+                onPress={() =>
+                  navigation.navigate('MeditationsPlayer', {
+                    selectedMeditation: item,
+                    randomTrack: true,
+                  })
+                }>
+                <Text>Listen</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => handleLikeItem(item)}>
+                <SvgLikeIcon
+                  fill={isItemLiked(item) ? '#E5DEFF' : 'transparent'}
+                  stroke={isItemLiked(item) ? '#815cff' : '#E5DEFF'}
+                />
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
       </View>
-    </View>
+    </HeaderAnimation>
   );
 
   return (
@@ -109,7 +112,7 @@ const MeditationsCollectionScreen = ({navigation, route}: any) => {
       onRefresh={handleRefresh}
       refreshing={isRefreshing}
       ListHeaderComponent={
-        <>
+        <HeaderAnimation duration={1000}>
           {selectedImageUrl && (
             <Image style={styles.image} source={{uri: selectedImageUrl}} />
           )}
@@ -136,7 +139,7 @@ const MeditationsCollectionScreen = ({navigation, route}: any) => {
               </View>
             </>
           )}
-        </>
+        </HeaderAnimation>
       }
     />
   );
