@@ -115,11 +115,11 @@ const PracticePreviewScreen = ({navigation, route}: any) => {
                 <View>
                   <View style={styles.workoutSctruct}>
                     <Text>🧘‍♀️ Workout</Text>
-                    <Text>{session.duration}</Text>
+                    <Text>{session.duration} mins</Text>
                   </View>
                   <View style={styles.workoutSctruct}>
                     <Text>😌 Shavasana meditation</Text>
-                    <Text>5:00</Text>
+                    <Text>5 mins</Text>
                   </View>
                 </View>
               </View>

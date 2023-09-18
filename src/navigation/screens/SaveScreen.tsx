@@ -67,7 +67,7 @@ const SaveScreen = ({navigation}: any) => {
         <View key={item._id} style={styles.favoritesItem}>
           <View style={styles.imageContentSubtop}>
             <SvgDuration />
-            <Text style={styles.titleColor}>{item.duration}</Text>
+            <Text style={styles.titleColor}>{item.duration} mins</Text>
           </View>
           <Image style={styles.imageFav} source={{uri: item.imageUrl}} />
           <View style={styles.favoritesItemSecondary}>
@@ -77,11 +77,8 @@ const SaveScreen = ({navigation}: any) => {
                 style={styles.btnFav}
                 onPress={() => {
                   if (item.title.toLowerCase().includes('meditation')) {
-                    // Navigate to MeditationsPlayer for meditations
-                    // navigation.navigate('MeditationsPlayer', {item});
                     handleListenPress(item);
                   } else {
-                    // Navigate to PracticePreviewScreen for sessions
                     navigation.navigate('PracticePreview', {session: item});
                   }
                 }}>

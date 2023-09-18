@@ -44,7 +44,7 @@ export const OTPStepThree = ({navigation, route}: any) => {
       confirmAndResetPassword({email, otp: otpCode, newPassword: password}),
     )
       .then(() => {
-        navigation.navigate('HomeMain');
+        navigation.navigate('Login');
       })
       .catch(error => {
         console.log('Error resetting password:', error);

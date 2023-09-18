@@ -166,10 +166,13 @@ const HomeScreen = ({navigation}: any) => {
                   <View style={styles.imageContentTop}>
                     <View style={styles.imageContentSubtop}>
                       <SvgDuration />
-                      <Text style={styles.titleColor}>{session.duration}</Text>
+                      <Text style={styles.titleColor}>
+                        {session.duration} mins
+                      </Text>
                     </View>
                     <TouchableOpacity
-                      onPress={() => handleLikeSession(session)}>
+                      onPress={() => handleLikeSession(session)}
+                      style={{paddingLeft: 130}}>
                       <SvgLikeIcon
                         fill={
                           isSessionLiked(session) ? '#815cff' : 'transparent'
@@ -203,10 +206,13 @@ const HomeScreen = ({navigation}: any) => {
                   <View style={styles.imageContentTop}>
                     <View style={styles.imageContentSubtop}>
                       <SvgDuration />
-                      <Text style={styles.titleColor}>{meditate.duration}</Text>
+                      <Text style={styles.titleColor}>
+                        {meditate.duration} mins
+                      </Text>
                     </View>
                     <TouchableOpacity
-                      onPress={() => handleLikeSession(meditate)}>
+                      onPress={() => handleLikeSession(meditate)}
+                      style={{paddingLeft: 140}}>
                       <SvgLikeIcon
                         fill={
                           isSessionLiked(meditate) ? '#815cff' : 'transparent'
@@ -326,7 +332,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     top: 15,
     left: 15,
-    columnGap: 160,
+    // columnGap: 140,
   },
   imageContentSubtop: {
     flexDirection: 'row',

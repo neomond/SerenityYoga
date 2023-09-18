@@ -115,9 +115,10 @@ const DetailsScreen = ({route, navigation}: any) => {
           ]}>
           <View style={styles.imageContentSubtop}>
             <SvgDuration />
-            <Text style={styles.titleColor}>{item.duration}</Text>
+            <Text style={styles.titleColor}>{item.duration} mins</Text>
           </View>
           <TouchableOpacity
+            // style={{position: 'absolute', left: -20}}
             onPress={() => {
               handleLikeItem(item);
             }}>
@@ -245,7 +246,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     top: 18,
     left: 15,
-    columnGap: 140,
+    // columnGap: 100,
   },
   imageContentSubtop: {
     flexDirection: 'row',
@@ -260,7 +261,7 @@ const styles = StyleSheet.create({
   },
   titleColor: {
     color: '#fff',
-    fontSize: 15,
+    fontSize: 14,
     marginRight: 12,
   },
   playBtn: {
@@ -316,6 +317,6 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     paddingBottom: 15,
   },
-  heartStyleMain: {left: 185},
-  otherHeartStyleMain: {left: -110, top: 0},
+  heartStyleMain: {left: 155},
+  otherHeartStyleMain: {position: 'absolute', left: 175, top: 50},
 });

@@ -71,7 +71,7 @@ const MeditationsCollectionScreen = ({navigation, route}: any) => {
       <View key={item._id} style={styles.favoritesItem}>
         <View style={styles.imageContentSubtop}>
           <SvgDuration />
-          <Text style={styles.titleColor}>{item.duration}</Text>
+          <Text style={styles.titleColor}>{item.duration} mins</Text>
         </View>
         <View
           style={{flexDirection: 'row', columnGap: 15, marginHorizontal: 25}}>

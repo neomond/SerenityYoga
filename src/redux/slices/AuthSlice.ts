@@ -35,13 +35,10 @@ export const loginUser = createAsyncThunk(
   ) => {
     try {
       console.log('teeestt', email + password);
-      const response = await axios.post(
-        'http://localhost:8080/api/auth/login',
-        {
-          email,
-          password,
-        },
-      );
+      const response = await axios.post(`${API_URL}/auth/login`, {
+        email,
+        password,
+      });
       AsyncStorage.setItem('token', response.data.token);
 
       return response.data;
@@ -65,13 +62,10 @@ export const signupUser = createAsyncThunk(
       return rejectWithValue('Passwords do not match');
     }
     try {
-      const response = await axios.post(
-        'http://localhost:8080/api/auth/signup',
-        {
-          email,
-          password,
-        },
-      );
+      const response = await axios.post(`${API_URL}/auth/signup`, {
+        email,
+        password,
+      });
       console.log('sa;a', response.data);
 
       return response.data;
@@ -105,7 +99,7 @@ export const confirmAndResetPassword = createAsyncThunk(
   ) => {
     try {
       const response = await axios.post(
-        'http://localhost:8080/api/auth/confirm-reset-password',
+        `${API_URL}/auth/confirm-reset-password`,
         {email, otp, newPassword},
       );
       return response.data;

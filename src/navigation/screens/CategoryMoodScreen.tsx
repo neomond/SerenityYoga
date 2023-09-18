@@ -102,7 +102,7 @@ const CategoryMoodScreen = ({navigation, route}: any) => {
     <View style={styles.favoritesItem}>
       <View style={styles.imageContentSubtop}>
         <SvgDuration />
-        <Text style={styles.titleColor}>{item.duration}</Text>
+        <Text style={styles.titleColor}>{item.duration} mins</Text>
       </View>
       <Image style={styles.imageFav} source={{uri: item.imageUrl}} />
       <View style={styles.favoritesItemSecondary}>
